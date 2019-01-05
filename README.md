@@ -17,3 +17,9 @@ improve upon the existing software (perhaps address some of [these](https://gith
 
 [@yinny](https://github.com/@yinny)
 
+![Project Outline](https://github.com/onyiny-ang/chloroplasts/blob/master/ProjectStatement.jpeg)
+
+![UML1](https://github.com/onyiny-ang/chloroplasts/blob/master/UML1.jpeg)
+![UML2](https://github.com/onyiny-ang/chloroplasts/blob/master/UML.jpeg)
+
+
