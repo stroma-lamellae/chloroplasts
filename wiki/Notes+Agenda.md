@@ -28,7 +28,7 @@ Zoom: https://zoom.us/j/4409978940
 | ------ | ----------- |
 |  | |
 
-## March 18 
+## March 18
 | Present | Absent |
 | ------ | ----------- |
 |  | |
@@ -81,10 +81,15 @@ READING WEEK (Possible Remote Meeting)
 |  | |
 
 
-- Group Expectations
+- [Group Expectations](/group-expectations.md) (.5 - 1 hour)
     - Agree upon common goals/expectations for the project (workload, marks, availability)
     - Outline guidelines and responsbilities that we will hold each other to
     - Determine some effective ways to address issues
-- Architecture Deliverable (UML or other Diagram of Tool)
-- Requirements Specification Deliverable: same as above with even less urgency
+- Details of program and establishing domain experts (15 min)
+    - Language (C#, web based?)
+    - Storage/Repo
+    - Tools to parse and identify similar code
+    - etc?
+- Architecture Deliverable (UML or other Diagram of Tool): not especially urgent (20 min)
+
 
