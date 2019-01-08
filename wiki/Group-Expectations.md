@@ -15,7 +15,7 @@ Group Expectations
 Consensus to be reached on:
 =
 
-- How should group members who are not meeting expectations be handled?
+- How should group members who are not meeting expectations be handled? 
  Lets come to consensus on a formal process for handling this.
 ![From Seeds for Change: https://www.seedsforchange.org.uk/consensus](https://i.imgur.com/a5CQt2T.jpg)
 
