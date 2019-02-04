@@ -11,11 +11,11 @@ improve upon the existing software (perhaps address some of [these](https://gith
 
 [@Jesse-longname](https://github.com/Jesse-longname)
 
-[@onyiny-ang](https://github.com/@onyiny-ang)
+[@onyiny-ang](https://github.com/onyiny-ang)
 
-[@tvand08](https://github.com/@tvand08)
+[@tvand08](https://github.com/tvand08)
 
-[@yinny](https://github.com/@yinny)
+[@yinny](https://github.com/yinny)
 
 ## Project Statement
 
