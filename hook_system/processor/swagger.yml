@@ -1,0 +1,74 @@
+swagger: "2.0"
+info:
+  description: "This is the Hooks API Backend"
+  version: "1.0.0"
+  title: "Hook API"
+
+basePath: /api
+
+# Paths supported by the server application
+paths:
+  /submit: # Path for submit request
+    post:
+      tags:
+        - "Submit" #Header group for swagger page
+      summary: Submits a submission
+      operationId: apiRoutes.submit # Where the package should look for the function to call
+                                    # for example this will look in a file called submit.py
+                                    # for a function named "submission" and call it when a request is made
+      produces: # what the request returns 
+        - text/plain 
+      responses:
+        200:
+          description: Submission Received
+        403:
+          description: Unauthorized to Submit
+        400:
+          description: Error Submitting Request
+      consumes:
+        - multipart/form-data      
+      parameters: # List of parameters that the request has
+        - name: userId
+          in: query
+          description: The User's ID
+          required: true
+          type: string
+
+        - name: email
+          in: query
+          description: The Email to Notify
+          required: true
+          type: string
+
+        # NOTE: only one body parameter per route
+        - name: data
+          in: formData
+          description: The source code to check
+          required: true
+          type: file
+
+  /results:
+    post:
+      tags:
+        - "Results"
+      summary: Gets results from server
+      operationId: apiRoutes.fetch
+      produces:
+        - text/plain
+      responses:
+        200:
+          description: Result data if job was found, if not it returns empty results
+        403:
+          description: Unauthorized to view results
+      parameters:
+        - name: userId
+          in: query
+          description: The User's ID
+          required: true
+          type: string
+        
+        - name: jobId
+          in: query
+          description: The Job to return
+          required: true
+          type: string
