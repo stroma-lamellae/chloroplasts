@@ -19,3 +19,4 @@ After launching the virtual enviroment you will need to install the dependencies
 The package being used to run the REST server is called *Connexion*, the list of API calls are defined in the *swagger.yml* file and the comments in the file should be sufficient enough to understand on how to modify or create new ones as needed.
 
 To access the UI page for the API go open up the following link **http://\<ip-address>:\<port>/api/ui** where the ip address and port are specified in the *server.py* file
+
