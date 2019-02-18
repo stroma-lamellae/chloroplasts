@@ -4,6 +4,9 @@ Base overview of how to structure the api:
 Querying Related Data:
     https://docs.microsoft.com/en-us/ef/core/querying/related-data
 
+HTTP Requests:
+    https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-2.2
+
 
 # Setup:
 - Install dotnet core version 2.2
