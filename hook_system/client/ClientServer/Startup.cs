@@ -39,6 +39,9 @@ namespace ClientServer
             var connection = "Data Source=clientserver.db";
             services.AddDbContext<ClientServerContext>
                 (options => options.UseSqlite(connection));
+
+            // For communicating with the Processing Server
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
