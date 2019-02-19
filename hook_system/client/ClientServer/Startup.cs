@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using ClientServer.Models;
 using Newtonsoft.Json;
+
+using ClientServer.Models;
+using ClientServer.Services;
 
 namespace ClientServer
 {
@@ -26,9 +28,13 @@ namespace ClientServer
                     .AddJsonOptions(options => {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
+            // Database Connection
             var connection = "Data Source=clientserver.db";
             services.AddDbContext<ClientServerContext>
                 (options => options.UseSqlite(connection));
+
+            // Make our ProcessingService Injectable
+            services.AddScoped<IProcessingService, ProcessingService>();
 
             // For communicating with the Processing Server
             services.AddHttpClient();
