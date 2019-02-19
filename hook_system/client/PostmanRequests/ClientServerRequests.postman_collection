@@ -1,0 +1,353 @@
+{
+	"info": {
+		"_postman_id": "20893929-87b8-4836-aa0e-391ad2b46a78",
+		"name": "ClientServer Requests",
+		"description": "This contains all api requests possible for the Client Server api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://localhost:5001/api/course",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/course",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"course"
+					]
+				},
+				"description": "Gets a list of all courses"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/course/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/course/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"course",
+						"1"
+					]
+				},
+				"description": "Gets details for a specific course."
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/course/2/assignments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/course/2/assignments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"course",
+						"2",
+						"assignments"
+					]
+				},
+				"description": "Gets all assignment ids for a specific course"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/course",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"OwnerId\": 1234,\n\t\"Year\": 2019,\n\t\"Semester\": 1,\n\t\"Name\": \"COSC2P05\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/course",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"course"
+					]
+				},
+				"description": "Creates a course"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/assignment/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/assignment/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"assignment",
+						"1"
+					]
+				},
+				"description": "Gets a specific assignment"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/assignment/1/submissions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/assignment/1/submissions",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"assignment",
+						"1",
+						"submissions"
+					]
+				},
+				"description": "Gets the ids for all submissions for an assignment"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/assignment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Name\": \"Assigment1\",\n\t\"Location\": \"????\",\n\t\"CourseId\": 1\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/assignment",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"assignment"
+					]
+				},
+				"description": "Creates an assignment"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/submission/2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/submission/2",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"submission",
+						"2"
+					]
+				},
+				"description": "Gets a specific submission"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/submission",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"AssignmentId\": 1\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/submission",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"submission"
+					]
+				},
+				"description": "Creates a submission"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/package",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/package",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"package"
+					]
+				},
+				"description": "Get all packages"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/package/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/package/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"package",
+						"1"
+					]
+				},
+				"description": "Gets a specific package"
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5001/api/package",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"CurrentAssignmentId\": 1\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/package",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"package"
+					]
+				},
+				"description": "Adds a package"
+			},
+			"response": []
+		}
+	]
+}
