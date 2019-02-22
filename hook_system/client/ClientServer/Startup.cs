@@ -52,7 +52,6 @@ namespace ClientServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // app.json.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -87,7 +86,10 @@ namespace ClientServer
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+<<<<<<< HEAD
             app.UseDefaultFiles();
+=======
+>>>>>>> 6f89a01... Changed the client server to use angular as part of the server
         }
     }
 }
