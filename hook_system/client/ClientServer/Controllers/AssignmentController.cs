@@ -56,7 +56,7 @@ namespace ClientServer.Controllers
             }
 
             var submissions =   await (from a in _context.Submissions
-                                select a).ToListAsync();
+                select a).ToListAsync();
 
             var ids = submissions.Where(x => x.Assignment == assignment).Select(x => x.SubmissionId).ToList();
 
