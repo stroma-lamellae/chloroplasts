@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="$USER_HOME$/.Rider2018.3/system/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.Rider2018.3/system/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_ClientServer.-878160280.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.3/system/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_ClientServer.-153117921.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p=".gitignore" t="Include" />
       <e p="ClientApp" t="Include">
@@ -95,6 +95,8 @@
           <e p="typescript/lib/lib.es2017.typedarrays.d.ts" t="IncludeRecursive" />
           <e p="typescript/lib/lib.es2018.d.ts" t="IncludeRecursive" />
           <e p="typescript/lib/lib.es2018.full.d.ts" t="IncludeRecursive" />
+          <e p="typescript/lib/lib.es2018.promise.d.ts" t="IncludeRecursive" />
+          <e p="typescript/lib/lib.es2018.regexp.d.ts" t="IncludeRecursive" />
           <e p="typescript/lib/lib.es5.d.ts" t="IncludeRecursive" />
           <e p="typescript/lib/lib.es6.d.ts" t="IncludeRecursive" />
           <e p="typescript/lib/lib.esnext.array.d.ts" t="IncludeRecursive" />
@@ -156,9 +158,9 @@
         <e p="tslint.json" t="Include" />
       </e>
       <e p="ClientServer.csproj" t="IncludeRecursive" />
-      <e p="ClientServer.sln" t="IncludeFlat" />
       <e p="Controllers" t="Include">
         <e p="AssignmentController.cs" t="Include" />
+        <e p="AuthenticationController.cs" t="Include" />
         <e p="CourseController.cs" t="Include" />
         <e p="PackageController.cs" t="Include" />
         <e p="SampleDataController.cs" t="Include" />
@@ -168,8 +170,16 @@
         <e p="Assignment.cs" t="Include" />
         <e p="ClientServerContext.cs" t="Include" />
         <e p="Course.cs" t="Include" />
+        <e p="Exclusion.cs" t="Include" />
+        <e p="Line.cs" t="Include" />
+        <e p="Match.cs" t="Include" />
         <e p="Package.cs" t="Include" />
+        <e p="PackageExclusion.cs" t="Include" />
+        <e p="PreviousAssignment.cs" t="Include" />
+        <e p="Result.cs" t="Include" />
+        <e p="Role.cs" t="Include" />
         <e p="Submission.cs" t="Include" />
+        <e p="User.cs" t="Include" />
       </e>
       <e p="Pages" t="Include">
         <e p="Error.cshtml" t="Include" />
@@ -180,16 +190,20 @@
       <e p="Properties" t="Include">
         <e p="launchSettings.json" t="Include" />
       </e>
+      <e p="README.md" t="Include" />
       <e p="Services" t="Include">
+        <e p="Authenticator.cs" t="Include" />
         <e p="ProcessingService.cs" t="Include" />
       </e>
       <e p="Startup.cs" t="Include" />
+      <e p="TODO" t="Include" />
       <e p="UploadFiles" t="Include">
         <e p="FakeData.tar.gz" t="Include" />
       </e>
       <e p="appsettings.Development.json" t="Include" />
       <e p="appsettings.json" t="Include" />
       <e p="bin" t="ExcludeRecursive" />
+      <e p="clientserver.db" t="Include" />
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">
           <e p="netcoreapp2.2" t="Include">
