@@ -15,11 +15,9 @@ namespace ClientServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authenticate(Credentials credentials)
+        public async Task<IActionResult> Authenticate()
         {
-            
+            return null;
         }
-        
-        
     }
 }
