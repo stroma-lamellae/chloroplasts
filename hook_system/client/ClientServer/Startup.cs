@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using ClientServer.Models;
 
 namespace ClientServer
 {
@@ -24,6 +27,12 @@ namespace ClientServer
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+            
+            // Add the database context
+            services.AddEntityFrameworkNpgsql()
+               .AddDbContext<ClientServerContext>(options =>
+                    options.UseNpgsql(Configuration.GetConnectionString("ClientServerDatabase")))
+               .BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
