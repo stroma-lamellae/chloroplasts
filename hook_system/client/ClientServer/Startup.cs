@@ -10,6 +10,8 @@ using ClientServer.Models;
 using Newtonsoft.Json;
 using ClientServer.Services;
 
+using ClientServer.Models;
+
 namespace ClientServer
 {
     public class Startup
@@ -86,10 +88,7 @@ namespace ClientServer
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-<<<<<<< HEAD
             app.UseDefaultFiles();
-=======
->>>>>>> 6f89a01... Changed the client server to use angular as part of the server
         }
     }
 }
