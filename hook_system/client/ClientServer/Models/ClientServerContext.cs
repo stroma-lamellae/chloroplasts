@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace ClientServer.Models
 {
@@ -8,6 +9,14 @@ namespace ClientServer.Models
         public ClientServerContext(DbContextOptions<ClientServerContext> options): base (options)
         {
 
+        }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Package>()
+                .HasOne(a => a.Result)
+                .WithOne(b => b.Package)
+                .HasForeignKey<Result>(b => b.PackageId);
         }
 
         public DbSet<Assignment> Assignments { get; set; }
