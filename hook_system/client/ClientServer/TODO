@@ -1,3 +1,5 @@
 - Add data validation to any incoming api request.
     - This will probably have to be done using the database ([NotNull]). Or at least,
         that's the easiest way to do it
+- Use AuthService to get the user id, then only select database documents based on that
+- Look up return types, so we can get a status code with the ids
