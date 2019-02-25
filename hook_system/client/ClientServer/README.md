@@ -27,6 +27,9 @@
         - `dotnet ef migrations add InitialCreate`
     - Create the tables in the database: 
         - `dotnet ef database update`
+
+## Angular App
+- Trevor, fill this in
     
 
 # Dotnet Core Helpful Links

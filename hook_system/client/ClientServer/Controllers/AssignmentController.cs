@@ -20,6 +20,7 @@ namespace ClientServer.Controllers
         }
 
         // GET: api/assignment/#
+        // Gets the assignment with the given id
         [HttpGet("{id}")]
         public async Task<ActionResult<Assignment>> GetAssignment(long id)
         {
@@ -33,7 +34,7 @@ namespace ClientServer.Controllers
         }
 
         // POST: api/assignment
-        // Creates an assignment
+        // Creates an assignment, and returns where it can be found.
         [HttpPost]
         public async Task<IActionResult> PostAssignment(Assignment assignment)
         {
@@ -43,24 +44,52 @@ namespace ClientServer.Controllers
             return CreatedAtAction(nameof(GetAssignment), new { id = assignment.AssignmentId }, assignment);
         }
 
-        // GET: api/assignment/#/submissions
-        // Returns the submission ids for an assignment
-        [HttpGet("{id}/submissions")]
-        public async Task<ActionResult<IEnumerable<long>>> GetSubmissionIds(long id)
+        // PUT: api/assignment/{id}
+        // Update the assignment with the given id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAssignment(long id, Assignment assignment)
         {
-            var assignment = _context.Assignments.Find(id);
+            if (id != assignment.AssignmentId)
+            {
+                return BadRequest();
+            } 
+
+            _context.Entry(assignment).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/assignment/{id}
+        // Removes an assignment and all of the children items
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAssignment(long id)
+        {
+            var assignment = await _context.Assignments.FindAsync(id);
 
             if (assignment == null)
             {
                 return NotFound();
             }
 
-            var submissions =   await (from a in _context.Submissions
-                select a).ToListAsync();
+            _context.Assignments.Remove(assignment);
+            await _context.SaveChangesAsync();
 
-            var ids = submissions.Where(x => x.Assignment == assignment).Select(x => x.SubmissionId).ToList();
+            return NoContent();
+        }
 
-            return ids;
+        // GET: api/assignment/#/submissions
+        // Returns the submissions for an assignment
+        [HttpGet("{id}/submissions")]
+        public async Task<ActionResult<Assignment>> GetSubmissions(long id)
+        {
+            // Get the submissions for this assignment
+            var submissions = await _context.Assignments
+                .Where(a => a.AssignmentId == id)
+                .Include(a => a.Submissions)
+                .FirstAsync();
+
+            return submissions;
         }
     }
 }

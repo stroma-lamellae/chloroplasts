@@ -63,5 +63,23 @@ namespace ClientServer.Controllers
 
             return CreatedAtAction(nameof(GetPackage), new { id = package.PackageId }, package);
         }
+
+        // DELETE: api/package/{id}
+        // Deletes a package and all of it's associated information
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePackage(long id)
+        {
+            var package = await _context.Packages.FindAsync(id);
+
+            if (package == null)
+            {
+                return NotFound();
+            }
+
+            _context.Packages.Remove(package);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

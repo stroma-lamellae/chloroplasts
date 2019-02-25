@@ -42,5 +42,39 @@ namespace ClientServer.Controllers
 
             return CreatedAtAction(nameof(GetSubmission), new { id = submission.SubmissionId }, submission);
         }
+
+        // PUT: api/submission/{id}
+        // Update the submission with the given id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSubmission(long id, Submission submission)
+        {
+            if (id != submission.SubmissionId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(submission).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/submission/{id}
+        // Deletes a submission
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSubmission(long id)
+        {
+            var submission = await _context.Submissions.FindAsync(id);
+
+            if (submission == null)
+            {
+                return NotFound();
+            }
+
+            _context.Submissions.Remove(submission);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
