@@ -30,8 +30,18 @@
         - `dotnet ef database update`
 
 ## Angular App
-- Trevor, fill this in
-    
+- Navigate to the `ClientServer/ClientApp` directory in a terminal. Install the dependencies:
+    - `npm install`
+
+# Running the Client Server + Client Portal
+- In the `ClientServer` directory, open a terminal to run the project.
+    - `dotnet run`
+    - This serves the api on [http://localhost:5000](http://localhost:5000) and [https://localhost:5001](https://localhost:5001)
+    - The port for the client portal changes every time, so watch for that when the app starts
+        - Look for a line that says `> ng serve "--port" "#####"`
+    - If you are actively developing the api, you can use the file watcher to automatically reload the app when you save a file
+        - Instead of `dotnet run` use `dotnet watch run`
+        - This means your app will always be up to date with the filesystem, however the build process does take a while
 
 # Dotnet Core Helpful Links
 - Base overview of how to structure the api:
