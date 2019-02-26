@@ -1,0 +1,13 @@
+<h1>Submit Assignment</h1>
+
+<form id="form" name="form">
+  <div class="buttons">
+    <div class="upload-button">
+      <div class="label">Click me!</div>
+      <input id="files" name="files" type="file" (change)="fileChange($event)" webkitdirectory mozdirectory multiple />
+    </div>
+    <div class="submit-button">
+      <button type="submit" (click)="uploadSubmission()">Submit</button>
+    </div>
+  </div>
+</form>
