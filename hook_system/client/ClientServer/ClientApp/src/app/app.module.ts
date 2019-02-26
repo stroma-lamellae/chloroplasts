@@ -10,11 +10,15 @@ import { LoginComponent } from './login/login.component';
 import { ErrorInterceptor } from './shared/helpers/error.interceptor';
 import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
 
+import { SubmissionService } from './submission/submission.service';
+import { SubmissionComponent } from './submission/submission.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    SubmissionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
