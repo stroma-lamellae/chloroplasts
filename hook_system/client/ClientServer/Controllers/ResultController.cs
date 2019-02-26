@@ -24,7 +24,7 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Result>>> GetResults()
         {
-            return await _context.Results.ToListAsync();
+            return await _context.Result.ToListAsync();
         }
 
         // GET: api/result/#
@@ -32,7 +32,7 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Result>> GetResult(long id)
         {
-            var result = await _context.Results.FindAsync(id);
+            var result = await _context.Result.FindAsync(id);
 
             if (result == null)
             {
@@ -46,7 +46,7 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Result>> GetMatches(long id)
         {
-            var result = await _context.Results
+            var result = await _context.Result
                 .Where(r => r.ResultId == id)
                 .Include(r => r.Matches)
                 .FirstAsync();
