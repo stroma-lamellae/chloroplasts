@@ -24,7 +24,7 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Exclusion>>> GetExclusions()
         {
-            return await _context.Exclusions.ToListAsync();
+            return await _context.Exclusion.ToListAsync();
         }
 
         // GET: api/exclusion/#
@@ -32,7 +32,7 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Exclusion>> GetExclusion(long id)
         {
-            var exclusion = await _context.Exclusions.FindAsync(id);
+            var exclusion = await _context.Exclusion.FindAsync(id);
 
             if (exclusion == null)
             {
@@ -46,7 +46,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostExclusion(Exclusion exclusion)
         {
-            _context.Exclusions.Add(exclusion);
+            _context.Exclusion.Add(exclusion);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetExclusion), new { id = exclusion.ExclusionId }, exclusion);
@@ -73,14 +73,14 @@ namespace ClientServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExclusion(long id)
         {
-            var exclusion = await _context.Exclusions.FindAsync(id);
+            var exclusion = await _context.Exclusion.FindAsync(id);
 
             if (exclusion == null)
             {
                 return NotFound();
             }
 
-            _context.Exclusions.Remove(exclusion);
+            _context.Exclusion.Remove(exclusion);
             await _context.SaveChangesAsync();
 
             return NoContent();

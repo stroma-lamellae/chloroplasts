@@ -20,17 +20,17 @@ namespace ClientServer.Controllers
         }
         // GET api/course
         // Gets all of the courses
-        [HttpGet]
+        [HttpGet()]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            return await _context.Courses.ToListAsync();
+            return await _context.Course.ToListAsync();
         }
 
         // GET: api/course/#
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(long id)
         {
-            var course = await (_context.Courses.FindAsync(id));
+            var course = await (_context.Course.FindAsync(id));
 
             // Enable below to do load sublist of assignments
             // _context.Entry(course).Collection(x => x.Assignments).Load(); 
@@ -47,7 +47,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCourse(Course course)
         {
-            _context.Courses.Add(course);
+            _context.Course.Add(course);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetCourse), new { id = course.CourseId }, course);
@@ -74,14 +74,14 @@ namespace ClientServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(long id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _context.Course.FindAsync(id);
 
             if (course == null)
             {
                 return NotFound();
             }
 
-            _context.Courses.Remove(course);
+            _context.Course.Remove(course);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -93,7 +93,7 @@ namespace ClientServer.Controllers
         public async Task<ActionResult<Course>> GetAssignments(long id)
         {
             // Get the assignment ids for this course
-            var assignments = await _context.Courses
+            var assignments = await _context.Course
                 .Where(c => c.CourseId == id)
                 .Include(c => c.Assignments)
                 .FirstAsync();

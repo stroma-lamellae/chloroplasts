@@ -24,7 +24,7 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Match>>> GetMatches()
         {
-            return await _context.Matches.ToListAsync();
+            return await _context.Match.ToListAsync();
         }
 
         // GET: api/match/#
@@ -32,7 +32,7 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Match>> GetMatch(long id)
         {
-            var match = await _context.Matches
+            var match = await _context.Match
                 .Where(m => m.MatchId == id)
                 .Include(m => m.Lines)
                 .FirstAsync();

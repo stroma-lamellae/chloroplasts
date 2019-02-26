@@ -4,8 +4,6 @@
 - postgresql 10
     - You'll also need the npgsql driver, available through the dependency installer
 - npm
-<<<<<<< HEAD
-=======
 # Setup
 ## Database
 - Make note of the port you set for the database (default is 5432)
@@ -56,8 +54,6 @@ Base overview of how to structure the api:
 
 Querying Related Data:
     https://docs.microsoft.com/en-us/ef/core/querying/related-data
-=======
->>>>>>> 56a1269... Added a bunch of controllers. They'll need to be updated as we find out more of what we need.
 
 # Setup
 ## Database

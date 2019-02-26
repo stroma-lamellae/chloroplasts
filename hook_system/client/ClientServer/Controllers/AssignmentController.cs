@@ -24,7 +24,7 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Assignment>> GetAssignment(long id)
         {
-            var assignment = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignment.FindAsync(id);
 
             if (assignment == null)
             {
@@ -38,7 +38,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAssignment(Assignment assignment)
         {
-            _context.Assignments.Add(assignment);
+            _context.Assignment.Add(assignment);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetAssignment), new { id = assignment.AssignmentId }, assignment);
@@ -65,14 +65,14 @@ namespace ClientServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAssignment(long id)
         {
-            var assignment = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignment.FindAsync(id);
 
             if (assignment == null)
             {
                 return NotFound();
             }
 
-            _context.Assignments.Remove(assignment);
+            _context.Assignment.Remove(assignment);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -84,7 +84,7 @@ namespace ClientServer.Controllers
         public async Task<ActionResult<Assignment>> GetSubmissions(long id)
         {
             // Get the submissions for this assignment
-            var submissions = await _context.Assignments
+            var submissions = await _context.Assignment
                 .Where(a => a.AssignmentId == id)
                 .Include(a => a.Submissions)
                 .FirstAsync();

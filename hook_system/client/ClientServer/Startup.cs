@@ -3,15 +3,17 @@ using System.Text;
 using ClientServer.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using ClientServer.Models;
+using Newtonsoft.Json;
 using ClientServer.Services;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +38,12 @@ namespace ClientServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IJwtFactory, JwtFactory>();
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options => {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });;
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
             
@@ -93,6 +101,16 @@ namespace ClientServer
                     o.Password.RequiredLength = 6;
                 }).AddEntityFrameworkStores<ClientServerContext>()
                 .AddDefaultTokenProviders();
+
+            // Remove content length limit. This is for our submission uploading
+            services.Configure<FormOptions>(x => {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
+            });
+
+            // Add our custom services so they are injectable
+            services.AddScoped<IProcessingService, ProcessingService>();
+            services.AddScoped<IFileService, FileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

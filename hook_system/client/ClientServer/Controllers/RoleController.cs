@@ -24,7 +24,7 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.Role.ToListAsync();
         }
 
         // GET: api/role/#
@@ -32,7 +32,7 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Role>> GetRole(long id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Role.FindAsync(id);
 
             if (role == null)
             {
@@ -46,7 +46,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostRole(Role role)
         {
-            _context.Roles.Add(role);
+            _context.Role.Add(role);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetRole), new { id = role.RoleId }, role);
@@ -73,14 +73,14 @@ namespace ClientServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(long id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Role.FindAsync(id);
 
             if (role == null)
             {
                 return NotFound();
             }
 
-            _context.Roles.Remove(role);
+            _context.Role.Remove(role);
             await _context.SaveChangesAsync();
 
             return NoContent();
