@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ClientServer.Models
 {
     public class Submission
@@ -11,5 +15,8 @@ namespace ClientServer.Models
         public string StudentLastname { get; set; }
         public long StudentId { get; set; }
         public Assignment Assignment { get; set; }
+
+        [NotMapped]
+        public List<IFormFile> Files { get; set; }
     }
 }

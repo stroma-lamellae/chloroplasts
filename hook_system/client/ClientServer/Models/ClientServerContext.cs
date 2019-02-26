@@ -19,17 +19,17 @@ namespace ClientServer.Models
                 .HasForeignKey<Result>(b => b.PackageId);
         }
 
-        public DbSet<Assignment> Assignments { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Exclusion> Exclusions { get; set; }
-        public DbSet<Line> Lines { get; set; }
-        public DbSet<Match> Matches { get; set; }
-        public DbSet<Package> Packages { get; set; }
-        public DbSet<PackageExclusion> PackageExclusions { get; set; }
-        public DbSet<PreviousAssignment> PreviousAssignments { get; set; }
-        public DbSet<Result> Results { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Submission> Submissions { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Assignment> Assignment { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Exclusion> Exclusion { get; set; }
+        public DbSet<Line> Line { get; set; }
+        public DbSet<Match> Match { get; set; }
+        public DbSet<Package> Package { get; set; }
+        public DbSet<PackageExclusion> PackageExclusion { get; set; }
+        public DbSet<PreviousAssignment> PreviousAssignment { get; set; }
+        public DbSet<Result> Result { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<Submission> Submission { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }

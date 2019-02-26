@@ -33,14 +33,14 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Package>>> GetPackages()
         {
-            return await _context.Packages.ToListAsync();
+            return await _context.Package.ToListAsync();
         }
 
         // GET: api/package/#
         [HttpGet("{id}")]
         public async Task<ActionResult<Package>> GetPackage(long id)
         {
-            var package = await _context.Packages.FindAsync(id);
+            var package = await _context.Package.FindAsync(id);
 
             if (package == null)
             {
@@ -54,7 +54,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostPackage(Package package)
         {
-            _context.Packages.Add(package);
+            _context.Package.Add(package);
             await _context.SaveChangesAsync();
 
             // Below initiates the upload. Maybe we don't want this to await?
@@ -69,14 +69,14 @@ namespace ClientServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePackage(long id)
         {
-            var package = await _context.Packages.FindAsync(id);
+            var package = await _context.Package.FindAsync(id);
 
             if (package == null)
             {
                 return NotFound();
             }
 
-            _context.Packages.Remove(package);
+            _context.Package.Remove(package);
             await _context.SaveChangesAsync();
 
             return NoContent();
