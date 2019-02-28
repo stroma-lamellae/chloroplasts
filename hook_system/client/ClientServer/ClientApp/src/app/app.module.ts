@@ -12,13 +12,20 @@ import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
 
 import { SubmissionService } from './submission/submission.service';
 import { SubmissionComponent } from './submission/submission.component';
+import { CourseComponent } from './course/course.component';
+import { CourseService } from './course/course.service';
+import { CourseDetailComponent } from './course/course-detail/course-detail.component';
+import { AssignmentDetailComponent } from './course/assignment-detail/assignment-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    SubmissionComponent
+    SubmissionComponent,
+    CourseComponent,
+    CourseDetailComponent,
+    AssignmentDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
