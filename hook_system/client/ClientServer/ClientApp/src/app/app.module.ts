@@ -12,6 +12,10 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
 import { SubmissionService } from './submission/submission.service';
 import { SubmissionComponent } from './submission/submission.component';
+import { CourseComponent } from './course/course.component';
+import { CourseService } from './course/course.service';
+import { CourseDetailComponent } from './course/course-detail/course-detail.component';
+import { AssignmentDetailComponent } from './course/assignment-detail/assignment-detail.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,10 @@ import { SubmissionComponent } from './submission/submission.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    SubmissionComponent
+    SubmissionComponent,
+    CourseComponent,
+    CourseDetailComponent,
+    AssignmentDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,10 +37,11 @@ import { SubmissionComponent } from './submission/submission.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'submit', component: SubmissionComponent }
+      { path: 'submit', component: SubmissionComponent },
+      { path: 'course', component: CourseComponent}
     ])
   ],
-  providers: [SubmissionService],
+  providers: [SubmissionService, CourseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
