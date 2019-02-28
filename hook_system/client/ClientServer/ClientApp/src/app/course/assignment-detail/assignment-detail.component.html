@@ -1,0 +1,31 @@
+<div>
+  <div>
+    <label>Assignment Name:
+      <input [(ngModel)]="assignment.name" />
+    </label>
+  </div>
+  <div>
+    <label>Open Date:
+      <input [(ngModel)]="assignment.openDate" />
+    </label>
+  </div>
+  <div>
+    <label>Close Date:
+      <input [(ngModel)]="assignment.closeDate" />
+    </label>
+  </div>
+  <div>
+    <label>Status:
+      <input [(ngModel)]="assignment.status" type="checkbox" />
+    </label>
+  </div>
+  <div id="buttons">
+    <div *ngIf="assignment.assignmentId">
+      <button (click)="update()">Update</button>
+      <button (click)="delete()">Delete</button>
+    </div>
+    <div *ngIf="!assignment.assignmentId">
+      <button (click)="update()">Create</button>
+    </div>
+  </div>
+</div>
