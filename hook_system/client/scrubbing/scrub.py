@@ -1,7 +1,9 @@
 #!/usr/bin/python3
-import console
+import ctypes
 import sys
 import os
+import psycopg2
+
 from os import listdir
 
 folder = sys.argv[1]
@@ -9,10 +11,14 @@ folder = sys.argv[1]
 destinationFolder = 'C:\\Users\\Emilia\\Documents\\ScrubbedData' #can be read from the datababase, initialized to the professors home directory
 os.mkdir(destinationFolder)
 
-#The structure of the folder is Main -> Current , Previous, Whitelist - > student submit file **Get name and student number here** -> java file
+unScrubbedFolders = ""
+
 #save hash in the database
-#remember to hash both the current year and the previous year
-#send an alert if any folder is unable to get scrubbed (filename is not scrubbed)
+try:
+    conn = psycopg2.connect(host="localhost", database="clientserver", user="clientserver", password="password")
+    cursor = conn.cursor()
+except:
+    print("error connecting to the database")
 
 for section in listdir(folder):
     os.mkdir(destinationFolder+"\\"+section)
@@ -21,6 +27,7 @@ for section in listdir(folder):
             try:
                 firstName, lastName, stdNum = studentSubmission.split("-")
                 #save hash in the database HERE
+                #cur.execute("INSERT INTO table_name_here (column_names_here) VALUES (values_here)")
                 scrubbedStudentFolder = destinationFolder+"\\"+section+"\\"+str(hash(firstName))+"-"+str(hash(lastName))+"-"+str(hash(stdNum))
                 os.mkdir(scrubbedStudentFolder)
 
@@ -33,7 +40,14 @@ for section in listdir(folder):
                         newF.write(replace)
                         newF.close()
             except:
-                #save data
-                os.remove(destinationFolder)
+                #this code will be executed if the folder is not named properly
+                unScrubbedFolders = "\t" + studentSubmission + "\n"
 
 #if any folder causes an exception, then show an alert at the end with the summary
+if unScrubbedFolders != "":
+    alertMessage = "Some submissions were not able to be scrubbed. They are listed below:\n"
+    alertMessage = alertMessage + unScrubbedFolders
+    ctypes.windll.user32.MessageBoxW(0, alertMessage, "Alert", 1)
+
+if conn is not None:
+    conn.close()
