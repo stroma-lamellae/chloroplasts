@@ -10,20 +10,6 @@
         <e p=".gitignore" t="Include" />
         <e p="README.md" t="Include" />
         <e p="angular.json" t="Include" />
-        <e p="dist" t="Include">
-          <e p="3rdpartylicenses.txt" t="Include" />
-          <e p="index.html" t="Include" />
-          <e p="main.js" t="Include" />
-          <e p="main.js.map" t="Include" />
-          <e p="polyfills.js" t="Include" />
-          <e p="polyfills.js.map" t="Include" />
-          <e p="runtime.js" t="Include" />
-          <e p="runtime.js.map" t="Include" />
-          <e p="styles.css" t="Include" />
-          <e p="styles.css.map" t="Include" />
-          <e p="vendor.js" t="Include" />
-          <e p="vendor.js.map" t="Include" />
-        </e>
         <e p="e2e" t="Include">
           <e p="protractor.conf.js" t="Include" />
           <e p="src" t="Include">
@@ -68,6 +54,7 @@
           <e p="popper.js" t="IncludeRecursive" />
           <e p="protractor" t="IncludeRecursive" />
           <e p="rxjs" t="IncludeRecursive" />
+          <e p="rxjs-compat" t="IncludeRecursive" />
           <e p="ts-node" t="IncludeRecursive" />
           <e p="tslint" t="IncludeRecursive" />
           <e p="typescript/lib/lib.d.ts" t="IncludeRecursive" />
@@ -115,11 +102,14 @@
             <e p="app.component.html" t="Include" />
             <e p="app.component.ts" t="Include" />
             <e p="app.module.ts" t="Include" />
+            <e p="app.routing.ts" t="Include" />
             <e p="app.server.module.ts" t="Include" />
+            <e p="auth.guard.ts" t="Include" />
             <e p="counter" t="Include">
               <e p="counter.component.html" t="Include" />
               <e p="counter.component.spec.ts" t="Include" />
               <e p="counter.component.ts" t="Include" />
+              <e p="rxjs-operators.js" t="Include" />
             </e>
             <e p="fetch-data" t="Include">
               <e p="fetch-data.component.html" t="Include" />
@@ -128,11 +118,33 @@
             <e p="home" t="Include">
               <e p="home.component.html" t="Include" />
               <e p="home.component.ts" t="Include" />
+              <e p="home.module.spec.ts" t="Include" />
+              <e p="home.module.ts" t="Include" />
+            </e>
+            <e p="login" t="Include">
+              <e p="login.component.css" t="Include" />
+              <e p="login.component.html" t="Include" />
+              <e p="login.component.spec.ts" t="Include" />
+              <e p="login.component.ts" t="Include" />
+              <e p="login.module.spec.ts" t="Include" />
+              <e p="login.module.ts" t="Include" />
             </e>
             <e p="nav-menu" t="Include">
               <e p="nav-menu.component.css" t="Include" />
               <e p="nav-menu.component.html" t="Include" />
               <e p="nav-menu.component.ts" t="Include" />
+            </e>
+            <e p="shared" t="Include">
+              <e p="services" t="Include">
+                <e p="base.service.spec.ts" t="Include" />
+                <e p="base.service.ts" t="Include" />
+                <e p="user.service.spec.ts" t="Include" />
+                <e p="user.service.ts" t="Include" />
+              </e>
+              <e p="utils" t="Include">
+                <e p="config.service.spec.ts" t="Include" />
+                <e p="config.service.ts" t="Include" />
+              </e>
             </e>
           </e>
           <e p="assets" t="Include">
@@ -158,13 +170,24 @@
         <e p="tslint.json" t="Include" />
       </e>
       <e p="ClientServer.csproj" t="IncludeRecursive" />
+      <e p="Configurations.cs" t="Include" />
       <e p="Controllers" t="Include">
+        <e p="AccountsController.cs" t="Include" />
         <e p="AssignmentController.cs" t="Include" />
-        <e p="AuthenticationController.cs" t="Include" />
+        <e p="AuthController.cs" t="Include" />
         <e p="CourseController.cs" t="Include" />
         <e p="PackageController.cs" t="Include" />
         <e p="SampleDataController.cs" t="Include" />
         <e p="SubmissionController.cs" t="Include" />
+      </e>
+      <e p="Helpers" t="Include">
+        <e p="Constants.cs" t="Include" />
+        <e p="Errors.cs" t="Include" />
+      </e>
+      <e p="Migrations" t="Include">
+        <e p="20190226011108_InitialCreate.Designer.cs" t="Include" />
+        <e p="20190226011108_InitialCreate.cs" t="Include" />
+        <e p="ClientServerContextModelSnapshot.cs" t="Include" />
       </e>
       <e p="Models" t="Include">
         <e p="Assignment.cs" t="Include" />
@@ -192,7 +215,11 @@
       </e>
       <e p="README.md" t="Include" />
       <e p="Services" t="Include">
+        <e p="AppUser.cs" t="Include" />
         <e p="Authenticator.cs" t="Include" />
+        <e p="IJwtFactory.cs" t="Include" />
+        <e p="JwtFactory.cs" t="Include" />
+        <e p="JwtIssuerOptions.cs" t="Include" />
         <e p="ProcessingService.cs" t="Include" />
       </e>
       <e p="Startup.cs" t="Include" />
@@ -200,10 +227,16 @@
       <e p="UploadFiles" t="Include">
         <e p="FakeData.tar.gz" t="Include" />
       </e>
+      <e p="ViewModels" t="Include">
+        <e p="CredentialsViewModel.cs" t="Include" />
+        <e p="RegistrationViewModel.cs" t="Include" />
+        <e p="Validations" t="Include">
+          <e p="CredentialsViewModelValidator.cs" t="Include" />
+        </e>
+      </e>
       <e p="appsettings.Development.json" t="Include" />
       <e p="appsettings.json" t="Include" />
       <e p="bin" t="ExcludeRecursive" />
-      <e p="clientserver.db" t="Include" />
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">
           <e p="netcoreapp2.2" t="Include">

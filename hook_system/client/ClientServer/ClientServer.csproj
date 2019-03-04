@@ -24,6 +24,18 @@
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
         <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\src\app\app.routing.ts" />
+        <Content Include="ClientApp\src\app\auth.guard.ts" />
+        <Content Include="ClientApp\src\app\login\login.component.css" />
+        <Content Include="ClientApp\src\app\login\login.component.html" />
+        <Content Include="ClientApp\src\app\login\login.component.spec.ts" />
+        <Content Include="ClientApp\src\app\login\login.component.ts" />
+        <Content Include="ClientApp\src\app\login\login.module.spec.ts" />
+        <Content Include="ClientApp\src\app\login\login.module.ts" />
+        <Content Include="ClientApp\src\app\shared\services\base.service.spec.ts" />
+        <Content Include="ClientApp\src\app\shared\services\base.service.ts" />
+        <Content Include="ClientApp\src\app\shared\services\user.service.spec.ts" />
+        <Content Include="ClientApp\src\app\shared\services\user.service.ts" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>
