@@ -12,11 +12,10 @@ destinationFolder = 'C:\\Users\\Emilia\\Documents\\ScrubbedData' #can be read fr
 os.mkdir(destinationFolder)
 
 unScrubbedFolders = ""
-
-#save hash in the database
+numOfUnscrubbedFolders = 0
 try:
     conn = psycopg2.connect(host="localhost", database="clientserver", user="clientserver", password="password")
-    cursor = conn.cursor()
+    cur = conn.cursor()
 except:
     print("error connecting to the database")
 
@@ -26,10 +25,13 @@ for section in listdir(folder):
         for studentSubmission in listdir(folder+"\\"+section):
             try:
                 firstName, lastName, stdNum = studentSubmission.split("-")
-                #save hash in the database HERE
-                #cur.execute("INSERT INTO table_name_here (column_names_here) VALUES (values_here)")
-                scrubbedStudentFolder = destinationFolder+"\\"+section+"\\"+str(hash(firstName))+"-"+str(hash(lastName))+"-"+str(hash(stdNum))
+                hashFirstName = str(hash(firstName))
+                hashLastName = str(hash(lastName))
+                hashStdNum = str(hash(stdNum))
+                scrubbedStudentFolder = destinationFolder+"\\"+section+"\\"+hashFirstName+"-"+hashLastName+"-"+hashStdNum)
                 os.mkdir(scrubbedStudentFolder)
+                # save hash in the database HERE
+                cur.execute("INSERT INTO table_name_here SET firstName = "+hashFirstName+" lastName = "+hashLastName+" stdNum = " + hashStdNum +" WHERE stdName = " + stdNum)
 
                 for filename in listdir(folder+"\\"+section+"\\"+studentSubmission):
                     if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") or filename.endswith(".hpp") or filename.endswith(".h"):
@@ -42,10 +44,15 @@ for section in listdir(folder):
             except:
                 #this code will be executed if the folder is not named properly
                 unScrubbedFolders = "\t" + studentSubmission + "\n"
+                numOfUnscrubbedFolders = numOfUnscrubbedFolders + 1
 
 #if any folder causes an exception, then show an alert at the end with the summary
-if unScrubbedFolders != "":
-    alertMessage = "Some submissions were not able to be scrubbed. They are listed below:\n"
+if numOfUnscrubbedFolders == 1:
+    alertMessage = "A submission were not able to be scrubbed. It is listed below:\n"
+    alertMessage = alertMessage + unScrubbedFolders
+    ctypes.windll.user32.MessageBoxW(0, alertMessage, "Alert", 1)
+elif numOfUnscrubbedFolders > 1:
+    alertMessage = str(numOfUnscrubbedFolders)+" submissions were not able to be scrubbed. They are listed below:\n"
     alertMessage = alertMessage + unScrubbedFolders
     ctypes.windll.user32.MessageBoxW(0, alertMessage, "Alert", 1)
 
