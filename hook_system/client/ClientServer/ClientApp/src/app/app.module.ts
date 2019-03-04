@@ -10,12 +10,15 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
-import { SubmissionService } from './submission/submission.service';
-import { SubmissionComponent } from './submission/submission.component';
+import { SubmissionComponent } from './course/submission/submission.component';
 import { CourseComponent } from './course/course.component';
 import { CourseService } from './course/course.service';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
-import { AssignmentDetailComponent } from './course/assignment-detail/assignment-detail.component';
+import { AssignmentComponent } from './course/assignment/assignment.component';
+import { PackageComponent } from './package/package.component';
+import { PackageService } from './package/package.service';
+import { SubmissionService } from './course/submission/submission.service';
+import { AssignmentService } from './course/assignment/assignment.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { AssignmentDetailComponent } from './course/assignment-detail/assignment
     SubmissionComponent,
     CourseComponent,
     CourseDetailComponent,
-    AssignmentDetailComponent
+    AssignmentComponent,
+    PackageComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,11 +41,11 @@ import { AssignmentDetailComponent } from './course/assignment-detail/assignment
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'submit', component: SubmissionComponent },
-      { path: 'course', component: CourseComponent}
+      { path: 'course', component: CourseComponent},
+      { path: 'package', component: PackageComponent}
     ])
   ],
-  providers: [SubmissionService, CourseService],
+  providers: [CourseService, PackageService, SubmissionService, AssignmentService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

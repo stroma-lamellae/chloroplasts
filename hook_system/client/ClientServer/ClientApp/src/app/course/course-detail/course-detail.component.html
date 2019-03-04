@@ -24,7 +24,7 @@
   </div>
   <div style="position: relative; left: 50px; border-left: 2px solid black;" *ngIf="showAssignments && course.assignments">
     <div *ngFor="let assignment of course.assignments">
-      <app-assignment-detail [assignment]="assignment" (assignmentChange)="updateAssignment(assignment, $event)"></app-assignment-detail>
+      <app-assignment [assignment]="assignment" (assignmentChange)="updateAssignment(assignment, $event)"></app-assignment>
       <hr />
     </div>
     <button (click)="addAssignment()">Add Assignment</button>

@@ -9,9 +9,8 @@ import { Observable } from 'rxjs';
 export class CourseService {
 
   private _apiEndpoint = "/api/course";
-  private _apiAssignmentEndpoint = "/api/assignment";
 
-  constructor(private _httpClient: HttpClient, @Inject("BASE_URL") private baseUrl: string) { }
+  constructor(private _httpClient: HttpClient) { }
 
   getCourses(): Observable<Course[]> {
     return this._httpClient.get<Course[]>(this._apiEndpoint);
@@ -31,18 +30,5 @@ export class CourseService {
 
   getCourseAssignments(course: Course): Observable<Course> {
     return this._httpClient.get<Course>(this._apiEndpoint + "/" + course.courseId + "/assignments");
-  }
-
-  addAssignment(course: Course, assignment: Assignment): Observable<Assignment> {
-    assignment.courseId = course.courseId;
-    return this._httpClient.post<Assignment>(this._apiAssignmentEndpoint, assignment);
-  }
-
-  updateAssignment(assignment: Assignment): Observable<void> {
-    return this._httpClient.put<void>(this._apiAssignmentEndpoint + "/" + assignment.assignmentId, assignment);
-  }
-
-  deleteAssignment(assignment: Assignment): Observable<void> {
-    return this._httpClient.delete<void>(this._apiAssignmentEndpoint + "/" + assignment.assignmentId);
   }
 }

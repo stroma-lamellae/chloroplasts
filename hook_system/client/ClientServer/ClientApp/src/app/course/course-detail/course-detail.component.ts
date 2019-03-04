@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Course, Assignment } from '../course';
 import { CourseService } from '../course.service';
 import { Observable } from 'rxjs';
+import { AssignmentComponent } from '../assignment/assignment.component';
 
 @Component({
   selector: 'app-course-detail',
@@ -47,25 +48,23 @@ export class CourseDetailComponent implements OnInit {
   }
 
   addAssignment() {
-    this.course.assignments.push(new Assignment());
+    let assignment = new Assignment();
+    assignment.courseId = this.course.courseId;
+    this.course.assignments.push(assignment);
   }
 
   updateAssignment(origAssignment: Assignment, assignment: Assignment) {
+    // Updates the assignment with the output of the AssignmentComponent
+    // Needs to update differently based on what was returned
     if (assignment == null) {
-      this._courseService.deleteAssignment(origAssignment).subscribe(res => {
-        this.course.assignments.splice(this.course.assignments.indexOf(origAssignment), 1);
-        this.courseChange.emit(this.course);
-      });
-    } else if (!assignment.assignmentId) {
-      this._courseService.addAssignment(this.course, assignment).subscribe(res => {
-        this.course.assignments[this.course.assignments.indexOf(origAssignment)] = res;
-        this.courseChange.emit(this.course);
-      });
-    } else if (assignment.assignmentId) {
-      this._courseService.updateAssignment(assignment).subscribe(res => {
-        this.course.assignments[this.course.assignments.indexOf(origAssignment)] = assignment;
-        this.courseChange.emit(this.course);
-      });
+      this.course.assignments.splice(this.course.assignments.indexOf(origAssignment), 1);
+      this.courseChange.emit(this.course);
+    } else if (!origAssignment.assignmentId) {
+      this.course.assignments[this.course.assignments.indexOf(origAssignment)] = assignment;
+      this.courseChange.emit(this.course);
+    } else if (origAssignment.assignmentId) {
+      this.course.assignments[this.course.assignments.indexOf(origAssignment)] = assignment;
+      this.courseChange.emit(this.course);
     }
   }
 }
