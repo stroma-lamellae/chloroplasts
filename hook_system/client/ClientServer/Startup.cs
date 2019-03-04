@@ -111,6 +111,8 @@ namespace ClientServer
             // Add our custom services so they are injectable
             services.AddScoped<IProcessingService, ProcessingService>();
             services.AddScoped<IFileService, FileService>();
+
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

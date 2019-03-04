@@ -12,6 +12,6 @@ namespace ClientServer.Models
        
         public virtual Assignment Assignment { get; set; }
         public virtual Result Result { get; set; }
-        public virtual ICollection<Assignment> PreviousAssignments { get; set; }
+        public virtual ICollection<PreviousAssignment> PreviousAssignments { get; set; }
     }
 }
