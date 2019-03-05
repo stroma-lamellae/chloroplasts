@@ -1,0 +1,5 @@
+<h1>All Packages</h1>
+<div *ngFor="let package of packages">
+  <p>{{package.result ? "Has Results" : "No Results Yet"}}</p>
+  <button (click)="getResults(package)">Get Results</button>
+</div>

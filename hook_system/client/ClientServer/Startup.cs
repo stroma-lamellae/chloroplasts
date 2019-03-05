@@ -109,6 +109,7 @@ namespace ClientServer
             });
 
             // Add our custom services so they are injectable
+            services.AddScoped<IXMLService, XMLService>();
             services.AddScoped<IProcessingService, ProcessingService>();
             services.AddScoped<IFileService, FileService>();
 
