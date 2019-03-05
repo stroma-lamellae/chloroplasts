@@ -1,5 +1,13 @@
 import { Assignment } from '../course/course';
 
+export class Result {
+    resultId: number;
+    completedDate: Date;
+    packageId: number;
+    pack: Package;
+    // matches: Match[];
+}
+
 export class PreviousAssignment {
     assignmentId: number;
     packageId: number;
@@ -8,10 +16,10 @@ export class PreviousAssignment {
 }
 
 export class Package {
+    packageId: number;
     assignmentId: number;
-    resultId: number;
     estimatedCompletion: Date;
     assignment: Assignment;
-    // result: Result;
+    result: Result;
     previousAssignments: PreviousAssignment[];
 }

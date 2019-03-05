@@ -26,10 +26,12 @@ namespace ClientServer.Services
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly string ServerAddress = "http://localhost:3000";
+        private readonly IXMLService _xmlService;
 
-        public ProcessingService(IHttpClientFactory clientFactory)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService)
         {
             _clientFactory = clientFactory;
+            _xmlService = xmlService;
         }
 
         public async Task<ResultsResponse> InitiateUpload(Package package)
@@ -81,12 +83,12 @@ namespace ClientServer.Services
             };
         }
 
-        public async Task<ResultsResponse> RequestResults(long JobId)
+        public async Task<ResultsResponse> RequestResults(long jobId)
         {
             // TODO: Get the resultsRequest to be real
             var resultsRequest = new ResultsRequest {
                 UserId = 123456, // TODO: Should come from authservice
-                JobId = JobId,
+                JobId = jobId,
                 AuthToken = "Hahhahahahahahah This isn't the same authtoken. Oh well."
             }; 
 
@@ -94,13 +96,15 @@ namespace ClientServer.Services
 
             // Send to processing server
             var content = new StringContent(JsonConvert.SerializeObject(resultsRequest), Encoding.UTF8, "application/json");
-            var requestAddress = ServerAddress + "/request";
+            var requestAddress = ServerAddress + "/api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
             var responseText = await response.Content.ReadAsStringAsync();
             var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
 
+            var result = _xmlService.ParseXMLFile(resultsResponse.Results);
+            resultsResponse.Result = result;
             return resultsResponse;
         }
     }
@@ -127,5 +131,7 @@ namespace ClientServer.Services
         public long JobId { get; set; }
         public DateTime? EstimatedWaitTime { get; set; }
         public string Results { get; set; } // TODO: Make this be a file
+
+        public Result Result { get; set; }
     }
 }

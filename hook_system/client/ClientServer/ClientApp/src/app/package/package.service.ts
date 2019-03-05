@@ -15,4 +15,12 @@ export class PackageService {
   uploadPackage(pack: Package): Observable<any> {
     return this._httpClient.post(this._apiEndpoint, pack);
   }
+
+  getPackages(): Observable<Package[]> {
+    return this._httpClient.get<Package[]>(this._apiEndpoint);
+  }
+
+  requestResults(pack: Package): Observable<Package> {
+    return this._httpClient.get<Package>(this._apiEndpoint + "/" + pack.packageId + "/results");
+  }
 }
