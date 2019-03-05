@@ -19,6 +19,7 @@ import { PackageComponent } from './package/package.component';
 import { PackageService } from './package/package.service';
 import { SubmissionService } from './course/submission/submission.service';
 import { AssignmentService } from './course/assignment/assignment.service';
+import { ResultComponent } from './result/result.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AssignmentService } from './course/assignment/assignment.service';
     CourseComponent,
     CourseDetailComponent,
     AssignmentComponent,
-    PackageComponent
+    PackageComponent,
+    ResultComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -41,8 +43,9 @@ import { AssignmentService } from './course/assignment/assignment.service';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'course', component: CourseComponent},
-      { path: 'package', component: PackageComponent}
+      { path: 'course', component: CourseComponent },
+      { path: 'package', component: PackageComponent },
+      { path: 'result', component: ResultComponent }
     ])
   ],
   providers: [CourseService, PackageService, SubmissionService, AssignmentService],
