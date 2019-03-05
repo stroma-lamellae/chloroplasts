@@ -1,0 +1,27 @@
+<h2>Submit Assignment</h2>
+
+  <div>
+    <div>
+      <label>Select Files
+        <input id="files" name="files" type="file" (change)="fileChange($event)" webkitdirectory mozdirectory multiple />
+      </label>
+    </div>
+    <div>
+      <label>Student Number
+        <input [(ngModel)]="submission.studentNumber" />
+      </label>
+    </div>
+    <div>
+      <label>First Name
+        <input [(ngModel)]="submission.studentFirstname" />
+      </label>
+    </div>
+    <div>
+      <label>Last name
+        <input [(ngModel)]="submission.studentLastname" />
+      </label>
+    </div>
+    <div>
+      <button type="submit" (click)="uploadSubmission()">Submit</button>
+    </div>
+  </div>

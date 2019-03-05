@@ -1,0 +1,51 @@
+<h1>Create a Package for the Processing Server</h1>
+<label>Select a course for the primary assignment for the package
+  <select [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
+    <option disabled *ngIf="!courses; else courseItems">Loading...</option>
+    <option disabled>Select a Course</option>
+    <option #courseItems [value]="course.courseId" *ngFor="let course of courses">{{course.courseCode}}</option>
+  </select>
+</label>
+
+<div *ngIf="selectedCourse">
+  <label>Select the primary assignment for the package
+    <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
+      <option disabled *ngIf="!selectedCourse.assignments; else assignmentItems">Loading...</option>
+      <option #assignmentItems [value]="assignment.assignmentId" *ngFor="let assignment of selectedCourse.assignments">
+        {{assignment.name}}
+      </option>
+    </select>
+  </label>
+</div>
+
+<div *ngIf="selectedAssignment">
+  <h3>Supporting Assignments</h3>
+  <div *ngFor="let assignment of supportingAssignments">
+    {{assignment.course.courseCode}} : {{assignment.name}}
+  </div>
+  <div *ngIf="!addAssignment">
+    <button (click)="addSupporting()">Add Supporting Assignment</button>
+  </div>
+  <div *ngIf="addAssignment">
+    <div>
+      <label>Select course
+        <select [(ngModel)]="supportingCourseId" (change)="supportSelectCourse()">
+          <option [value]="course.courseId" *ngFor="let course of courses">{{course.courseCode}}</option>
+        </select>
+      </label>
+    </div>
+    <div *ngIf="supportingCourse">
+      <label>Select assignment
+        <select [(ngModel)]="supportingAssignmentId" (change)="supportSelectAssignment()">
+          <option [value]="assignment.assignmentId" *ngFor="let assignment of supportingCourse.assignments">{{assignment.name}}</option>
+        </select>
+      </label>
+    </div>
+    <div *ngIf="supportingAssignment">
+      <button (click)="addSupportingAssignment()">Submit Supporting Assignment</button>
+    </div>
+  </div>
+  <div>
+    <button (click)="submit()">Submit package</button>
+  </div>
+</div>

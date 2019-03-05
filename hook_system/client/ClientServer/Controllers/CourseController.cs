@@ -19,19 +19,20 @@ namespace ClientServer.Controllers
             _context = context;
         }
         // GET api/course
-        [HttpGet]
+        // Gets all of the courses
+        [HttpGet()]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            return await _context.Courses.ToListAsync();
+            return await _context.Course.ToListAsync();
         }
 
         // GET: api/course/#
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(long id)
         {
-            var course = await (_context.Courses.FindAsync(id));
+            var course = await (_context.Course.FindAsync(id));
 
-            // Enable below to do load sublist
+            // Enable below to do load sublist of assignments
             // _context.Entry(course).Collection(x => x.Assignments).Load(); 
 
             if (course == null)
@@ -46,30 +47,58 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCourse(Course course)
         {
-            _context.Courses.Add(course);
+            _context.Course.Add(course);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetCourse), new { id = course.CourseId }, course);
         }
 
-        // GET: api/course/#/assignments
-        // Gets all of the id for a course
-        [HttpGet("{id}/assignments")]
-        public async Task<ActionResult<IEnumerable<long>>> GetAssignmentIds(long id)
+        // PUT: api/course/{id}
+        // Updates the course with the given id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCourse(long id, Course course)
         {
-            var course = _context.Courses.Find(id);
+            if (id != course.CourseId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(course).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/course/{id}
+        // Removes a course and all of the children items
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCourse(long id)
+        {
+            var course = await _context.Course.FindAsync(id);
 
             if (course == null)
             {
                 return NotFound();
             }
 
-            var assignments =   await (from a in _context.Assignments
-                                select a).ToListAsync();
-            
-            var ids = assignments.Where(x => x.Course == course).Select(x => x.AssignmentId).ToList();
+            _context.Course.Remove(course);
+            await _context.SaveChangesAsync();
 
-            return ids;
+            return NoContent();
+        }
+
+        // GET: api/course/#/assignments
+        // Gets all of the assignments for a course
+        [HttpGet("{id}/assignments")]
+        public async Task<ActionResult<Course>> GetAssignments(long id)
+        {
+            // Get the assignment ids for this course
+            var assignments = await _context.Course
+                .Where(c => c.CourseId == id)
+                .Include(c => c.Assignments)
+                .FirstAsync();
+
+            return assignments;
         }
     }
 }
