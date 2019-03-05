@@ -1,0 +1,32 @@
+<div>
+  <div>
+    <label>Course Code:
+      <input [(ngModel)]="course.courseCode" />
+    </label>
+  </div>
+  <div>
+    <label>Year:
+      <input [(ngModel)]="course.year" type="number" />
+    </label>
+  </div>
+  <div>
+    <label>Semester:
+      <input [(ngModel)]="course.semester" type="number" />
+    </label>
+  </div>
+  <div>
+    <div *ngIf="course.courseId">
+      <button (click)="submit()">Update</button>
+      <button (click)="delete()">Delete</button>
+      <button (click)="toggleAssignments()">{{showAssignments ? "Hide" : "Show"}} Assignments</button>
+    </div>
+    <button *ngIf="!course.courseId" (click)="submit()" >Create</button>
+  </div>
+  <div style="position: relative; left: 50px; border-left: 2px solid black;" *ngIf="showAssignments && course.assignments">
+    <div *ngFor="let assignment of course.assignments">
+      <app-assignment [assignment]="assignment" (assignmentChange)="updateAssignment(assignment, $event)"></app-assignment>
+      <hr />
+    </div>
+    <button (click)="addAssignment()">Add Assignment</button>
+  </div>
+</div>

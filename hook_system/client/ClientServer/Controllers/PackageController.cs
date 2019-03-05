@@ -33,14 +33,14 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Package>>> GetPackages()
         {
-            return await _context.Packages.ToListAsync();
+            return await _context.Package.Include(p => p.Result).ToListAsync();
         }
 
         // GET: api/package/#
         [HttpGet("{id}")]
         public async Task<ActionResult<Package>> GetPackage(long id)
         {
-            var package = await _context.Packages.FindAsync(id);
+            var package = await _context.Package.FindAsync(id);
 
             if (package == null)
             {
@@ -54,7 +54,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostPackage(Package package)
         {
-            _context.Packages.Add(package);
+            _context.Package.Add(package);
             await _context.SaveChangesAsync();
 
             // Below initiates the upload. Maybe we don't want this to await?
@@ -62,6 +62,45 @@ namespace ClientServer.Controllers
             await _processingService.InitiateUpload(package); 
 
             return CreatedAtAction(nameof(GetPackage), new { id = package.PackageId }, package);
+        }
+
+        // GET: api/package/{id}/results
+        // Requests the results for a package
+        [HttpGet("{id}/results")]
+        public async Task<ActionResult<Package>> RequestResults(long id)
+        {
+            var package = await _context.Package.FindAsync(id);
+
+            if (package == null)
+            {
+                return NotFound();
+            }
+
+            var response = await _processingService.RequestResults(package.JobId);
+            if (response.Result != null) {
+                package.Result = response.Result;
+                _context.Entry(package).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            return package;
+        }
+
+        // DELETE: api/package/{id}
+        // Deletes a package and all of it's associated information
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePackage(long id)
+        {
+            var package = await _context.Package.FindAsync(id);
+
+            if (package == null)
+            {
+                return NotFound();
+            }
+
+            _context.Package.Remove(package);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
