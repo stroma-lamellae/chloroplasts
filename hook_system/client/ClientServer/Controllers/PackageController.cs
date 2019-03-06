@@ -18,8 +18,6 @@ namespace ClientServer.Controllers
     {
         private readonly ClientServerContext _context;
         private readonly IHttpClientFactory _clientFactory;
-<<<<<<< HEAD
-<<<<<<< HEAD
         private readonly IProcessingService _processingService;
 
         public PackageController(ClientServerContext context, 
@@ -29,22 +27,6 @@ namespace ClientServer.Controllers
             _context = context;
             _clientFactory = clientFactory;
             _processingService = processingService;
-=======
-=======
-        private readonly IProcessingService _processingService;
->>>>>>> 75fd07c... Added processing service to communicate with Processing Server. Rewrote PackageController to make use of this.
-
-        public PackageController(ClientServerContext context, 
-                                 IHttpClientFactory clientFactory,
-                                 IProcessingService processingService)
-        {
-            _context = context;
-            _clientFactory = clientFactory;
-<<<<<<< HEAD
->>>>>>> 958925a... Added sample of sending data to another server. Not sending the proper data or anything yet, but it's something!
-=======
-            _processingService = processingService;
->>>>>>> 75fd07c... Added processing service to communicate with Processing Server. Rewrote PackageController to make use of this.
         }
 
         // GET: api/package

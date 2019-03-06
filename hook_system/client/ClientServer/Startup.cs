@@ -10,22 +10,12 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-<<<<<<< HEAD
 using ClientServer.Models;
 using Newtonsoft.Json;
-using ClientServer.Services;
-
-using ClientServer.Models;
 using ClientServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-=======
-using Newtonsoft.Json;
-
-using ClientServer.Models;
-using ClientServer.Services;
->>>>>>> 4b28f5a... Created File Service.
 
 namespace ClientServer
 {
@@ -66,10 +56,7 @@ namespace ClientServer
                     .AddJsonOptions(options => {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
-            // Database Connection
-            var connection = "Data Source=clientserver.db";
-            services.AddDbContext<ClientServerContext>
-                (options => options.UseSqlite(connection));
+           
 
             // Make our ProcessingService Injectable
             services.AddScoped<IProcessingService, ProcessingService>();
