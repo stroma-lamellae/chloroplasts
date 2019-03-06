@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3690deed-4c8f-483d-8861-a8c3a2645a24" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ClientServer/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ClientServer/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ClientServer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ClientServer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/ClientApp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientServer.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ClientServer.csproj" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,125 +12,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Startup.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="35" column="66" selection-start-line="35" selection-start-column="66" selection-end-line="35" selection-end-column="66" />
+            <state relative-caret-position="720">
+              <caret line="98" column="60" lean-forward="true" selection-start-line="98" selection-start-column="60" selection-end-line="98" selection-end-column="60" />
               <folding>
-                <marker date="1551182955638" expanded="false" signature="6:567" ph="..." />
-                <marker date="1551182955638" expanded="true" signature="591:5495" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="618:5493" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="736:1008" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="1231:3480" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="1906:1965" ph="/* jwt wire up ... */" />
-                <marker date="1551182955638" expanded="true" signature="2159:2480" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="2539:2736" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="2788:2995" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="3059:3376" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="3668:5487" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="3715:3792" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="3809:4063" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="4208:4374" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="4407:4796" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="4438:4584" ph="/* To learn more about options for serving an Angular SPA from ASP.NET Core, ... */" />
-                <marker date="1551182955638" expanded="true" signature="4681:4782" ph="{...}" />
-                <marker date="1551182955638" expanded="true" signature="4976:5476" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ClientApp/src/app/app.routing.ts">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ClientApp/src/app/auth.guard.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-              <folding>
-                <element signature="e#17#60#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ClientApp/src/app/shared/services/user.service.spec.ts">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ClientApp/src/app/shared/services/user.service.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1005">
-              <caret line="82" column="1" selection-start-line="82" selection-start-column="1" selection-end-line="82" selection-end-column="1" />
-              <folding>
-                <element signature="e#0#43#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ClientApp/src/app/shared/services/base.service.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controllers/SampleDataController.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-              <folding>
-                <marker date="1551183462571" expanded="false" signature="6:200" ph="..." />
-                <marker date="1551183462571" expanded="true" signature="236:1344" ph="{...}" />
-                <marker date="1551183462571" expanded="true" signature="321:1342" ph="{...}" />
-                <marker date="1551183462571" expanded="true" signature="386:506" ph="{...}" />
-                <marker date="1551183462571" expanded="true" signature="641:994" ph="{...}" />
-                <marker date="1551183462571" expanded="true" signature="778:982" ph="{...}" />
-                <marker date="1551183462571" expanded="true" signature="1032:1336" ph="{...}" />
-                <marker date="1551183462571" expanded="true" signature="1231:1326" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/appsettings.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="41" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/AB5401EC-F7DB-4F1D-8224-2A6252453B4B/2B/SecurityTokenHandler.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="44" column="8" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Program.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-              <folding>
-                <marker date="1551119338671" expanded="true" signature="6:255" ph="..." />
-                <marker date="1551119338671" expanded="true" signature="279:606" ph="{...}" />
-                <marker date="1551119338671" expanded="true" signature="306:604" ph="{...}" />
-                <marker date="1551119338671" expanded="true" signature="359:433" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="4353:4366" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="4353:6379" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="4554:6373" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="4601:4678" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="4695:4949" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="5094:5260" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="5293:5682" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="5324:5470" ph="/* To learn more about options for serving an Angular SPA from ASP.NET Core, ... */" />
+                <marker date="1551825350025" expanded="true" signature="5567:5668" ph="{...}" />
+                <marker date="1551825350025" expanded="true" signature="5862:6362" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -219,8 +113,8 @@
       <pane id="SolutionExplorer">
         <option name="show-all-files" value="true" />
       </pane>
-      <pane id="AssemblyExplorer" />
       <pane id="FileSystemExplorer" />
+      <pane id="AssemblyExplorer" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -273,11 +167,12 @@
       <workItem from="1550859178699" duration="5168000" />
       <workItem from="1551288567806" duration="634000" />
       <workItem from="1551729382098" duration="1210000" />
+      <workItem from="1551825950348" duration="121000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8462000" />
+    <option name="totallyTimeSpent" value="8583000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -289,9 +184,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="-2" width="1926" height="1060" extended-state="6" />
+    <frame x="-3" y="233" width="1926" height="1060" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13791268" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13897763" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -584,42 +479,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Startup.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="35" column="66" selection-start-line="35" selection-start-column="66" selection-end-line="35" selection-end-column="66" />
-          <folding>
-            <marker date="1551182955638" expanded="false" signature="6:567" ph="..." />
-            <marker date="1551182955638" expanded="true" signature="591:5495" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="618:5493" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="736:1008" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="1231:3480" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="1906:1965" ph="/* jwt wire up ... */" />
-            <marker date="1551182955638" expanded="true" signature="2159:2480" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="2539:2736" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="2788:2995" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="3059:3376" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="3668:5487" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="3715:3792" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="3809:4063" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="4208:4374" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="4407:4796" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="4438:4584" ph="/* To learn more about options for serving an Angular SPA from ASP.NET Core, ... */" />
-            <marker date="1551182955638" expanded="true" signature="4681:4782" ph="{...}" />
-            <marker date="1551182955638" expanded="true" signature="4976:5476" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ClientApp/src/app/app.routing.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/ClientApp/src/app/shared/services/user.service.spec.ts">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/ClientApp/src/app/shared/services/user.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
+        <state relative-caret-position="1020">
           <caret line="82" column="1" selection-start-line="82" selection-start-column="1" selection-end-line="82" selection-end-column="1" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
@@ -634,13 +499,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/AB5401EC-F7DB-4F1D-8224-2A6252453B4B/2B/SecurityTokenHandler.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="44" column="8" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Program.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
+          <folding>
+            <marker date="1551119338671" expanded="true" signature="6:255" ph="..." />
+            <marker date="1551119338671" expanded="true" signature="306:604" ph="{...}" />
+            <marker date="1551119338671" expanded="true" signature="359:433" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ClientApp/src/app/auth.guard.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="e#17#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ClientApp/src/app/app.routing.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/Controllers/SampleDataController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
+        <state relative-caret-position="180">
           <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
           <folding>
-            <marker date="1551183462571" expanded="false" signature="6:200" ph="..." />
-            <marker date="1551183462571" expanded="true" signature="236:1344" ph="{...}" />
             <marker date="1551183462571" expanded="true" signature="321:1342" ph="{...}" />
             <marker date="1551183462571" expanded="true" signature="386:506" ph="{...}" />
             <marker date="1551183462571" expanded="true" signature="641:994" ph="{...}" />
@@ -658,32 +553,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/AB5401EC-F7DB-4F1D-8224-2A6252453B4B/2B/SecurityTokenHandler.cs">
+    <entry file="file://$PROJECT_DIR$/Startup.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="44" column="8" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Program.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
+        <state relative-caret-position="720">
+          <caret line="98" column="60" lean-forward="true" selection-start-line="98" selection-start-column="60" selection-end-line="98" selection-end-column="60" />
           <folding>
-            <marker date="1551119338671" expanded="true" signature="6:255" ph="..." />
-            <marker date="1551119338671" expanded="true" signature="279:606" ph="{...}" />
-            <marker date="1551119338671" expanded="true" signature="306:604" ph="{...}" />
-            <marker date="1551119338671" expanded="true" signature="359:433" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ClientApp/src/app/auth.guard.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-          <folding>
-            <element signature="e#17#60#0" expanded="true" />
+            <marker date="1551825350025" expanded="true" signature="4353:4366" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="4353:6379" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="4554:6373" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="4601:4678" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="4695:4949" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="5094:5260" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="5293:5682" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="5324:5470" ph="/* To learn more about options for serving an Angular SPA from ASP.NET Core, ... */" />
+            <marker date="1551825350025" expanded="true" signature="5567:5668" ph="{...}" />
+            <marker date="1551825350025" expanded="true" signature="5862:6362" ph="{...}" />
           </folding>
         </state>
       </provider>

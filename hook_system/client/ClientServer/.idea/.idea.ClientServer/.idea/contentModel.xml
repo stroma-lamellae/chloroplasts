@@ -105,20 +105,44 @@
             <e p="app.routing.ts" t="Include" />
             <e p="app.server.module.ts" t="Include" />
             <e p="auth.guard.ts" t="Include" />
-            <e p="counter" t="Include">
-              <e p="counter.component.html" t="Include" />
-              <e p="counter.component.spec.ts" t="Include" />
-              <e p="counter.component.ts" t="Include" />
-              <e p="rxjs-operators.js" t="Include" />
+            <e p="course" t="Include">
+              <e p="assignment" t="Include">
+                <e p="assignment.component.css" t="Include" />
+                <e p="assignment.component.html" t="Include" />
+                <e p="assignment.component.spec.ts" t="Include" />
+                <e p="assignment.component.ts" t="Include" />
+                <e p="assignment.service.spec.ts" t="Include" />
+                <e p="assignment.service.ts" t="Include" />
+              </e>
+              <e p="course-detail" t="Include">
+                <e p="course-detail.component.css" t="Include" />
+                <e p="course-detail.component.html" t="Include" />
+                <e p="course-detail.component.spec.ts" t="Include" />
+                <e p="course-detail.component.ts" t="Include" />
+              </e>
+              <e p="course.component.css" t="Include" />
+              <e p="course.component.html" t="Include" />
+              <e p="course.component.spec.ts" t="Include" />
+              <e p="course.component.ts" t="Include" />
+              <e p="course.service.spec.ts" t="Include" />
+              <e p="course.service.ts" t="Include" />
+              <e p="course.ts" t="Include" />
+              <e p="submission" t="Include">
+                <e p="submission.component.css" t="Include" />
+                <e p="submission.component.html" t="Include" />
+                <e p="submission.component.spec.ts" t="Include" />
+                <e p="submission.component.ts" t="Include" />
+                <e p="submission.service.spec.ts" t="Include" />
+                <e p="submission.service.ts" t="Include" />
+                <e p="submission.ts" t="Include" />
+              </e>
             </e>
-            <e p="fetch-data" t="Include">
-              <e p="fetch-data.component.html" t="Include" />
-              <e p="fetch-data.component.ts" t="Include" />
+            <e p="guards" t="Include">
+              <e p="auth.guard.ts" t="Include" />
             </e>
             <e p="home" t="Include">
               <e p="home.component.html" t="Include" />
               <e p="home.component.ts" t="Include" />
-              <e p="home.module.spec.ts" t="Include" />
               <e p="home.module.ts" t="Include" />
             </e>
             <e p="login" t="Include">
@@ -129,21 +153,35 @@
               <e p="login.module.spec.ts" t="Include" />
               <e p="login.module.ts" t="Include" />
             </e>
-            <e p="nav-menu" t="Include">
-              <e p="nav-menu.component.css" t="Include" />
-              <e p="nav-menu.component.html" t="Include" />
-              <e p="nav-menu.component.ts" t="Include" />
+            <e p="package" t="Include">
+              <e p="package.component.css" t="Include" />
+              <e p="package.component.html" t="Include" />
+              <e p="package.component.spec.ts" t="Include" />
+              <e p="package.component.ts" t="Include" />
+              <e p="package.service.spec.ts" t="Include" />
+              <e p="package.service.ts" t="Include" />
+              <e p="package.ts" t="Include" />
+            </e>
+            <e p="result" t="Include">
+              <e p="result.component.css" t="Include" />
+              <e p="result.component.html" t="Include" />
+              <e p="result.component.spec.ts" t="Include" />
+              <e p="result.component.ts" t="Include" />
             </e>
             <e p="shared" t="Include">
+              <e p="helpers" t="Include">
+                <e p="error.interceptor.ts" t="Include" />
+                <e p="jwt.interceptor.ts" t="Include" />
+              </e>
+              <e p="models" t="Include">
+                <e p="user.ts" t="Include" />
+              </e>
               <e p="services" t="Include">
+                <e p="authentication.service.ts" t="Include" />
                 <e p="base.service.spec.ts" t="Include" />
                 <e p="base.service.ts" t="Include" />
                 <e p="user.service.spec.ts" t="Include" />
                 <e p="user.service.ts" t="Include" />
-              </e>
-              <e p="utils" t="Include">
-                <e p="config.service.spec.ts" t="Include" />
-                <e p="config.service.ts" t="Include" />
               </e>
             </e>
           </e>
@@ -176,9 +214,14 @@
         <e p="AssignmentController.cs" t="Include" />
         <e p="AuthController.cs" t="Include" />
         <e p="CourseController.cs" t="Include" />
+        <e p="ExclusionController.cs" t="Include" />
+        <e p="MatchController.cs" t="Include" />
         <e p="PackageController.cs" t="Include" />
+        <e p="ResultController.cs" t="Include" />
+        <e p="RoleController.cs" t="Include" />
         <e p="SampleDataController.cs" t="Include" />
         <e p="SubmissionController.cs" t="Include" />
+        <e p="UserController.cs" t="Include" />
       </e>
       <e p="Helpers" t="Include">
         <e p="Constants.cs" t="Include" />
@@ -217,10 +260,12 @@
       <e p="Services" t="Include">
         <e p="AppUser.cs" t="Include" />
         <e p="Authenticator.cs" t="Include" />
+        <e p="FileService.cs" t="Include" />
         <e p="IJwtFactory.cs" t="Include" />
         <e p="JwtFactory.cs" t="Include" />
         <e p="JwtIssuerOptions.cs" t="Include" />
         <e p="ProcessingService.cs" t="Include" />
+        <e p="XMLService.cs" t="Include" />
       </e>
       <e p="Startup.cs" t="Include" />
       <e p="TODO" t="Include" />
