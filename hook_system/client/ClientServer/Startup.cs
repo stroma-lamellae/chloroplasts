@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ClientServer.Models;
 using Newtonsoft.Json;
 using ClientServer.Services;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -57,10 +56,7 @@ namespace ClientServer
                     .AddJsonOptions(options => {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
-            // Database Connection
-            var connection = "Data Source=clientserver.db";
-            services.AddDbContext<ClientServerContext>
-                (options => options.UseSqlite(connection));
+           
 
             // Make our ProcessingService Injectable
             services.AddScoped<IProcessingService, ProcessingService>();

@@ -38,7 +38,7 @@ namespace ClientServer.Controllers
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
-            await _dbContext.Users.AddAsync(new User()
+            await _dbContext.User.AddAsync(new User()
             {
                 Email = model.Email,
                 Firstname = model.FirstName,
