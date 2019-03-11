@@ -149,5 +149,10 @@
       }
     }
   },
-  "defaultProject": "ClientServer"
+  "defaultProject": "ClientServer",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
