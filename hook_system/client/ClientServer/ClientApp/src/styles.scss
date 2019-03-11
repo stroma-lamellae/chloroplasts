@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'styling/constants';
+
+@import 'styling/app';
+@import 'styling/dashboard';
+@import 'styling/course';
+
+$blue: #0ff;
+
+h1{
+    color: $blue;
+}
