@@ -24,11 +24,11 @@ for section in listdir(folder):
     if section == "Current Year" or section == "Previous Years":
         for studentSubmission in listdir(folder+"\\"+section):
             try:
-                firstName, lastName, stdNum = studentSubmission.split("-")
+                firstName, lastName, stdNum = studentSubmission.split("_")
                 hashFirstName = str(hash(firstName))
                 hashLastName = str(hash(lastName))
                 hashStdNum = str(hash(stdNum))
-                scrubbedStudentFolder = destinationFolder+"\\"+section+"\\"+hashFirstName+"-"+hashLastName+"-"+hashStdNum)
+                scrubbedStudentFolder = destinationFolder+"\\"+section+"\\"+hashFirstName+"_"+hashLastName+"_"+hashStdNum)
                 os.mkdir(scrubbedStudentFolder)
                 # save hash in the database HERE
                 cur.execute("INSERT INTO StudentHashMapping SET Hash_Firstname = "+hashFirstName+" Hash_Lastname = "+hashLastName+" HashStudentNumber = " + hashStdNum + "Firstname = "+FirstName+" Lastname = "+LastName+" StudentNumber = " + StdNum)
