@@ -17,5 +17,12 @@ Notable names and numbers:
 
 Notable files:
 
-- xmastree and christmasTree should be identified as completely plagiarized, with
+- Java 
+  - 1P02 (A1) xmastree and christmasTree should be identified as completely plagiarized, with
 changed variables and class names (2018-2019 Richard and Ada, 2015-2016 Noam)
+  
+  - 1P02 (A2) should be different between this year's students but should be matched with students from 2015-2016
+
+  - 1P02 (A3) should have a matching section between Richard and al, should be plagiarized between Alan and Noam 2015-2016, one of the files from Ada is plagiarized from Grace 2015-2016
+
+
