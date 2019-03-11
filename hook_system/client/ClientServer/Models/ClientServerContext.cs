@@ -30,6 +30,7 @@ namespace ClientServer.Models
         public DbSet<Result> Result { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Submission> Submission { get; set; }
+        public DbSet<StudentHashMapping> StudentHashMapping {get;set;}
         public DbSet<User> User { get; set; }
     }
 }
