@@ -7,7 +7,7 @@ import { Package, PreviousAssignment } from './package';
 @Component({
   selector: 'app-package',
   templateUrl: './package.component.html',
-  styleUrls: ['./package.component.css']
+  styleUrls: ['./package.component.scss']
 })
 export class PackageComponent implements OnInit {
   courses: Course[];

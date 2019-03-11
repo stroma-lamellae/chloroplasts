@@ -7,7 +7,7 @@ import { AssignmentComponent } from '../assignment/assignment.component';
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
-  styleUrls: ['./course-detail.component.css']
+  styleUrls: ['./course-detail.component.scss']
 })
 export class CourseDetailComponent implements OnInit {
 
