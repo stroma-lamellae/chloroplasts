@@ -31,7 +31,7 @@ for section in listdir(folder):
                 scrubbedStudentFolder = destinationFolder+"\\"+section+"\\"+hashFirstName+"-"+hashLastName+"-"+hashStdNum)
                 os.mkdir(scrubbedStudentFolder)
                 # save hash in the database HERE
-                cur.execute("INSERT INTO table_name_here SET firstName = "+hashFirstName+" lastName = "+hashLastName+" stdNum = " + hashStdNum +" WHERE stdName = " + stdNum)
+                cur.execute("INSERT INTO StudentHashMapping SET Hash_Firstname = "+hashFirstName+" Hash_Lastname = "+hashLastName+" HashStudentNumber = " + hashStdNum + "Firstname = "+FirstName+" Lastname = "+LastName+" StudentNumber = " + StdNum)
 
                 for filename in listdir(folder+"\\"+section+"\\"+studentSubmission):
                     if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") or filename.endswith(".hpp") or filename.endswith(".h"):
