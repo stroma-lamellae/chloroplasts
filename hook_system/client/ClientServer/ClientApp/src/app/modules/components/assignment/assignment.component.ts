@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Assignment } from '../../../../shared/models/course';
-import { CourseService } from '../../../../core/services/course.service';
-import { AssignmentService } from '../../../../core/services/assignment.service';
+import { Assignment } from '../../../shared/models/course';
+import { CourseService } from '../../../core/services/course.service';
+import { AssignmentService } from '../../../core/services/assignment.service';
 
 @Component({
   selector: 'app-assignment',

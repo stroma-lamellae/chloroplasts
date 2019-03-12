@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Submission } from '../../../../shared/models/submission';
-import { SubmissionService } from '../../../../core/services/submission.service';
+import { Submission } from '../../../shared/models/submission';
+import { SubmissionService } from '../../../core/services/submission.service';
 
 @Component({
   selector: 'app-submission',

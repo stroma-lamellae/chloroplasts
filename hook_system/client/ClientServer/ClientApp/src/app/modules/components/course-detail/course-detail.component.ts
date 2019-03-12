@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Course, Assignment } from '../../../../shared/models/course';
-import { CourseService } from '../../../../core/services/course.service';
+import { Course, Assignment } from '../../../shared/models/course';
+import { CourseService } from '../../../core/services/course.service';
 import { Observable } from 'rxjs';
 import { AssignmentComponent } from '../assignment/assignment.component';
 
