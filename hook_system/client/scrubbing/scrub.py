@@ -14,6 +14,7 @@ try:
     conn = psycopg2.connect(host="localhost", database="clientserver", user="clientserver", password="password")
     cur = conn.cursor()
 except:
+    #will stop execution and send back the error message
     sys.exit("error connecting to the database")
 
 destinationFolder = 'C:\\Users\\Emilia\\Documents\\ScrubbedData' #can be read from the datababase, initialized to the professors home directory
@@ -47,21 +48,24 @@ for section in listdir(folder):
                 # save hash in the database HERE
                 try:
                     cur.execute("INSERT INTO StudentHashMapping " +
-                                "SET Hash_Firstname = "+str(hashFirstName) +
-                                " Hash_Lastname = "+str(hashLastName) +
-                                " HashStudentNumber = " + str(hashStdNum) +
-                                " Firstname = "+FirstName +
-                                " Lastname = "+LastName +
-                                " StudentNumber = " + str(StdNum))
+                                "SET Hash_Firstname = %s"+
+                                " Hash_Lastname = %s"+
+                                " HashStudentNumber = %s"+
+                                " Firstname = %s"+
+                                " Lastname = %s"+
+                                " StudentNumber = %s" % (hashFirstName, hashLastName, hashStdNum, firstName, lastName, str(stdNum)))
                 except:
+                    #does not exit the program, we want to process all the student submissions that we can
                     print("Unable to insert into database")
 
                 #Loop through each file in the student submission folder and replace identifying info
                 for filename in listdir(studentSubmissionFolder):
-                    if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") or filename.endswith(".hpp") or filename.endswith(".h"):
+                    if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") \
+                            or filename.endswith(".hpp") or filename.endswith(".h"):
                         #scrub data
                         f = open(join(studentSubmissionFolder, filename)).read()
-                        replace = f.replace(firstName, hashFirstName).replace(lastName, hashLastName).replace(stdNum, hashStdNum)
+                        replace = f.replace(firstName, hashFirstName).replace(lastName, hashLastName)\
+                            .replace(stdNum, hashStdNum)
                         #write to scrubbed file
                         newFolder = join(scrubbedStudentFolder, "Scrubbed-"+filename)
                         newF = open(newFolder, 'w')
@@ -86,7 +90,9 @@ elif numOfUnscrubbedFolders > 1:
     root.withdraw()
     messagebox.showwarning('ALERT', alertMessage)
 
+#close the database connection
 if conn is not None:
     conn.close()
 
+#completed successfully
 sys.exit(None)
