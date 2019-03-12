@@ -1,18 +1,18 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './guards/auth.guard';
-import { CourseComponent } from './course/course.component';
-import { PackageComponent } from './package/package.component';
-import { ResultComponent } from './result/result.component';
+import { CourseComponent } from './modules/pages/course/course.component';
+import { PackageComponent } from './modules/components/package/package.component';
+import { ResultComponent } from './modules/pages/result/result.component';
+import { AuthGuard } from './core/guards/auth.guard';
+import { DashboardComponent } from './modules/pages/dashboard/dashboard.component';
 
 const appRoutes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard]},
+  { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'course', component: CourseComponent, canActivate: [AuthGuard]},
-  { path: 'package', component: PackageComponent, canActivate: [AuthGuard]},
-  { path: 'result', component: ResultComponent, canActivate: [AuthGuard]},
+  { path: 'course', component: CourseComponent, canActivate: [AuthGuard] },
+  { path: 'package', component: PackageComponent, canActivate: [AuthGuard] },
+  { path: 'result', component: ResultComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/' }
 ];
 
