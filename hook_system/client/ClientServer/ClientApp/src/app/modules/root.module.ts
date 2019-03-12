@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PackageComponent } from './components/package/package.component';
+import { PackageComponent } from './pages/package/package.component';
 import { CourseComponent } from './pages/course/course.component';
 import { ResultComponent } from './pages/result/result.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';

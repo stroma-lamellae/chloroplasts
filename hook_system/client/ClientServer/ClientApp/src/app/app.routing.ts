@@ -2,7 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { CourseComponent } from './modules/pages/course/course.component';
-import { PackageComponent } from './modules/components/package/package.component';
+import { PackageComponent } from './modules/pages/package/package.component';
 import { ResultComponent } from './modules/pages/result/result.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardComponent } from './modules/pages/dashboard/dashboard.component';
