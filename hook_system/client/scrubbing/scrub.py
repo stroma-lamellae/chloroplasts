@@ -11,7 +11,7 @@ from os.path import join
 folder = sys.argv[1]
 
 try:
-    conn = psycopg2.connect(host="localhost", database="clientserver2", user="clientserver", password="password")
+    conn = psycopg2.connect(host="localhost", database="clientserver", user="clientserver", password="password")
     cur = conn.cursor()
 except:
     #print("error connecting to the database")
