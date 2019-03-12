@@ -13,9 +13,7 @@ namespace ClientServer.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public long RoleId { get; set; }
-        [NotMapped]
         public string IdentityId { get; set; }
-        [NotMapped]
         public AppUser Identity { get; set; }
     }
 }
