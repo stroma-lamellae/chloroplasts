@@ -55,7 +55,7 @@ for section in listdir(folder):
                                 " Lastname = "+LastName +
                                 " StudentNumber = " + str(StdNum))
                 except:
-                    #print("Unable to insert into database")
+                    print("Unable to insert into database")
 
                 #Loop through each file in the student submission folder and replace identifying info
                 for filename in listdir(studentSubmissionFolder):
