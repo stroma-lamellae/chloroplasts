@@ -14,8 +14,7 @@ try:
     conn = psycopg2.connect(host="localhost", database="clientserver", user="clientserver", password="password")
     cur = conn.cursor()
 except:
-    #print("error connecting to the database")
-    sys.exit(100)
+    sys.exit("error connecting to the database")
 
 destinationFolder = 'C:\\Users\\Emilia\\Documents\\ScrubbedData' #can be read from the datababase, initialized to the professors home directory
 os.mkdir(destinationFolder)
@@ -90,4 +89,4 @@ elif numOfUnscrubbedFolders > 1:
 if conn is not None:
     conn.close()
 
-sys.exit(0)
+sys.exit(None)
