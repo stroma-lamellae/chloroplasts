@@ -9,15 +9,18 @@ from os import listdir
 from os.path import join
 
 folder = sys.argv[1]
+destinationFolder = sys.argv[2]
+dbUsername = sys.argv[3]
+dbPassword = sys.argv[4]
 
 try:
-    conn = psycopg2.connect(host="localhost", database="clientserver", user="clientserver", password="password")
+    conn = psycopg2.connect(host="localhost", database="clientserver", user=dbUsername, password=dbPassword)
     cur = conn.cursor()
 except:
     #will stop execution and send back the error message
     sys.exit("error connecting to the database")
 
-destinationFolder = 'C:\\Users\\Emilia\\Documents\\ScrubbedData' #can be read from the datababase, initialized to the professors home directory
+#destinationFolder is being passed as a parameter for now
 os.mkdir(destinationFolder)
 
 unScrubbedFolders = ""
@@ -56,7 +59,7 @@ for section in listdir(folder):
                                 " StudentNumber = %s" % (hashFirstName, hashLastName, hashStdNum, firstName, lastName, str(stdNum)))
                 except:
                     #does not exit the program, we want to process all the student submissions that we can
-                    print("Unable to insert into database")
+                    sys.exit("Unable to insert into database")
 
                 #Loop through each file in the student submission folder and replace identifying info
                 for filename in listdir(studentSubmissionFolder):
