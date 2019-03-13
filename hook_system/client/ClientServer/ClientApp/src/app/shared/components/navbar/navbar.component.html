@@ -1,0 +1,48 @@
+<div class="app-navbar">
+  <div class="app-navbar__icon-band">
+    <span class="fas fa-bars app-navbar__icon" (click)="toggleNavigation()"></span>
+  </div>
+  <div class="app-navbar__navigation navigation">
+    <div class="navigation__image-container">
+      <img class="navigation__image" src="../../../../assets/Logo.png" />
+    </div>
+    <div class="navigation__routes routes">
+      <div class="routes__section">
+        <div class="routes__header">
+          COURSES & ASSIGNMENTS
+        </div>
+        <div class="routes__option">
+          <a routerLink="/course" routerLinkActive="active">Current Academic Semester</a>
+        </div>
+        <div class="routes__option">
+            <a routerLink="/package" routerLinkActive="active">Archived Courses</a>
+        </div>
+      </div>
+      <div class="routes__section">
+        <div class="routes__header">
+          COURSE MANAGEMENT
+        </div>
+        <div class="routes__option">
+            <a routerLink="/result" routerLinkActive="active">Edit Course</a>
+        </div>
+        <div class="routes__option">
+            <a routerLink="/package" routerLinkActive="active">Add New Course</a>
+        </div>
+      </div>
+      <div class="routes__section">
+        <div class="routes__header">
+          HOOK JOB MANAGEMENT
+        </div>
+        <div class="routes__option">
+            <a routerLink="/package" routerLinkActive="active">New Hook Job</a>
+        </div>
+        <div class="routes__option">
+            <a routerLink="/package" routerLinkActive="active">View Processing Jobs</a>
+        </div>
+        <div class="routes__option">
+            <a routerLink="/package" routerLinkActive="active">View Results</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

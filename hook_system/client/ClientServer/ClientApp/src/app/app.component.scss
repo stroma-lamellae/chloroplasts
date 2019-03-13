@@ -1,0 +1,29 @@
+@import '../variables';
+$navbar-width: 20%;
+
+.navigation{
+    width: $navbar-width;
+    position: fixed;
+    height: 100vh;
+    background: $color-main-gradient;
+    transition: left 0.8s ease;
+    left: 0 ;
+    position: fix;
+
+    &--hidden{
+        left: -16%;
+    }
+}
+
+.content{
+    display: block;
+    float:right;
+    width: 80%;
+    transition: width 0.8s ease;
+    &--expand{
+        width: 96%;
+    }
+    &--noAuth{
+        width: 100%;
+    }
+}

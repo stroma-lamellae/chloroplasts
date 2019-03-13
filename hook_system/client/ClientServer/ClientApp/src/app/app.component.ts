@@ -11,6 +11,7 @@ import { AuthenticationService } from './core/services/authentication.service';
 })
 export class AppComponent {
   currentUser: User;
+  hideNavigation: Boolean;
 
   constructor(
     private router: Router,
@@ -19,10 +20,15 @@ export class AppComponent {
     this.authenticationService.currentUser.subscribe(
       x => (this.currentUser = x)
     );
+    this.hideNavigation = false;
   }
 
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleNavigation(): void {
+    this.hideNavigation = !this.hideNavigation;
   }
 }
