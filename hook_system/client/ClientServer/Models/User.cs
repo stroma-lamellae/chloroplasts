@@ -1,6 +1,7 @@
 using System;
 using ClientServer.Services;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServer.Models
 {
@@ -13,7 +14,6 @@ namespace ClientServer.Models
         public string Password { get; set; }
         public long RoleId { get; set; }
         public string IdentityId { get; set; }
-        
         public AppUser Identity { get; set; }
     }
 }
