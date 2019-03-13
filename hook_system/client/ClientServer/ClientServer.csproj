@@ -22,8 +22,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Watch Include="ClientApp\src\styling\*.scss"/>
-        <Watch Include="ClientApp\src\styles.scss"/>
+        <Watch Include="**\*.scss"/>
+        <Watch Include="**\*component.ts"/>
+        <Watch Include="**\*.component.html"/>
+
     </ItemGroup>
 
     <ItemGroup>
