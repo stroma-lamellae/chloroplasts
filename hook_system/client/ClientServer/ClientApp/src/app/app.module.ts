@@ -4,40 +4,24 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { routing } from './app.routing';
 
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { ErrorInterceptor } from './shared/helpers/error.interceptor';
-import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
-import { SubmissionComponent } from './course/submission/submission.component';
-import { CourseComponent } from './course/course.component';
-import { CourseService } from './course/course.service';
-import { CourseDetailComponent } from './course/course-detail/course-detail.component';
-import { AssignmentComponent } from './course/assignment/assignment.component';
-import { PackageComponent } from './package/package.component';
-import { PackageService } from './package/package.service';
-import { SubmissionService } from './course/submission/submission.service';
-import { AssignmentService } from './course/assignment/assignment.service';
-import { ResultComponent } from './result/result.component';
+import { LoginComponent } from './login/login.component';
+import { AppComponent } from './app.component';
+import { RootModule } from './modules/root.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    LoginComponent,
-    SubmissionComponent,
-    CourseComponent,
-    CourseDetailComponent,
-    AssignmentComponent,
-    PackageComponent,
-    ResultComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    RootModule,
     routing
   ],
   providers: [
