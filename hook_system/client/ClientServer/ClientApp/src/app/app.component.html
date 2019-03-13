@@ -1,18 +1,15 @@
-<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-  <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/">Home</a>
-      <a class="nav-item nav-link" (click)="logout()">Logout</a>
+<div class="site">
+  <!-- nav -->
+  <div
+    *ngIf="currentUser"
+    class="navigation"
+    [class.navigation--hidden]="hideNavigation"
+  >
+    <app-navbar (toggleNavigationEvent)="toggleNavigation($event)"></app-navbar>
   </div>
-</nav>
 
-<!-- main app container -->
-<div class="jumbotron">
-  <div class="container">
-      <div class="row">
-          <div class="col-md-6 offset-md-3">
-              <router-outlet></router-outlet>
-          </div>
-      </div>
+  <!-- main app container -->
+  <div class="content" [class.content--expand]="hideNavigation" [class.content--noAuth]="!currentUser">
+    <router-outlet></router-outlet>
   </div>
 </div>
