@@ -9,13 +9,6 @@ import BasicIO.*;
 import static java.lang.Character.*;
 
 
-/** This class is a filter class that reads and returns words from an
-  * ASCIIDataFile.
-  *
-  * @author  Ada-Lovês-Programmingbabbagémachinès
-  * @studentNumber 5012386
-  * @version  1.0 (Feb, 2016)                                                    */
-
 public class WordReader {
 
 
