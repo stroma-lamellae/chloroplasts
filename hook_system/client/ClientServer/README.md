@@ -40,7 +40,7 @@
     - `virtualenv env`
 - Activate the virtualenv
     - On Windows: `env\Scripts\activate`
-    - On Linux: `source env/scripts/activate`
+    - On Linux: `source env/bin/activate`
 - Install dependencies
     - `pip install -r requirements.txt`
 - Deactivate the virtualenv
