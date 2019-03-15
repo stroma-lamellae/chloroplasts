@@ -4,6 +4,9 @@
 - postgresql 10
     - You'll also need the npgsql driver, available through the dependency installer
 - npm
+- Python 3.3
+    - virtualenv
+
 # Setup
 ## Database
 - Make note of the port you set for the database (default is 5432)
@@ -31,12 +34,23 @@
 - Navigate to the `ClientServer/ClientApp` directory in a terminal. Install the dependencies:
     - `npm install`
 
+## Scrubbing Script
+- Navigate to the `ClientServer/scrubbing` directory in a terminal. 
+- Create a virtualenv
+    - `virtualenv env`
+- Activate the virtualenv
+    - On Windows: `env\Scripts\activate`
+    - On Linux: `source env/scripts/activate`
+- Install dependencies
+    - `pip install -r requirements.txt`
+- Deactivate the virtualenv
+    - On Windows: `env\Scripts\deactivate`
+    - On Linux: `deactivate`
+
 # Running the Client Server + Client Portal
 - In the `ClientServer` directory, open a terminal to run the project.
     - `dotnet run`
     - This serves the api on [http://localhost:5000](http://localhost:5000) and [https://localhost:5001](https://localhost:5001)
-    - The port for the client portal changes every time, so watch for that when the app starts
-        - Look for a line that says `> ng serve "--port" "#####"`
     - If you are actively developing the api, you can use the file watcher to automatically reload the app when you save a file
         - Instead of `dotnet run` use `dotnet watch run`
         - This means your app will always be up to date with the filesystem, however the build process does take a while

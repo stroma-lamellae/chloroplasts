@@ -55,6 +55,9 @@ namespace ClientServer.Controllers
                 
 
             _fileService.PersistSubmissionFiles(submission);
+            // Save the submission again, because it has been updated with a file path
+            _context.Entry(submission).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSubmission), new { id = submission.SubmissionId }, submission);
         }
