@@ -101,7 +101,8 @@ namespace ClientServer.Services
             string courseNumber = submission.Assignment.Course.CourseCode.Substring(half, length - half);
 
             return Path.Combine(submission.Assignment.Course.Year + "", courseCode, 
-                courseNumber, submission.Assignment.Name, GetSubmissionFolderName(submission));
+                courseNumber, submission.Assignment.Name, submission.SubmissionId + "",
+                GetSubmissionFolderName(submission));
         }
 
         private string GetSubmissionFolderName(Submission submission)
