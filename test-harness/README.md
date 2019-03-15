@@ -72,5 +72,8 @@ changed variables and class names ([2018-2019](Year/2018-2019/Fall/COSC/1P02/A1/
 
 - C++
 
-  - 2P03 ([A1](Year/2018-2019/Fall/COSC/2P03/A1)) MatrixBuilder and GridBuilder should be identified as completely plagiarized with changed variables and class names [2018-2019](Year/2018-2019/Fall/COSC/2P03/A1/) Richard and Ada, [2016-2017](Year/2017-2016/Spring/COSC/2P03/A1) by Steeve.
+  - 2P03 ([A1](Year/2018-2019/Fall/COSC/2P03/A1)) MatrixBuilder and GridBuilder should be identified as completely plagiarized with changed variables and class names [2018-2019](Year/2018-2019/Fall/COSC/2P03/A1/) Richard and Ada, [2016-2017](Year/2017-2016/Spring/COSC/2P03/A1) by Steeve. al-Khwarizmi has submitted PPMImg.h which:w
+ should be identified as having no student name/number.
+
+  - 2P03 ([A2](Year/2018-2019/Fall/COSC/2P03/A2)) should be different between this year's students but should be matched with students from [2015-2016](Year/2015-2016/Fall/COSC/2P03/A2/)
 
