@@ -27,15 +27,19 @@ namespace ClientServer.Services
         private readonly IHttpClientFactory _clientFactory;
         private readonly string ServerAddress = "http://localhost:3000";
         private readonly IXMLService _xmlService;
+        private readonly IScrubbingService _scrubbingService;
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
+            _scrubbingService = scrubbingService;
         }
 
         public async Task<ResultsResponse> InitiateUpload(Package package)
         {
+            _scrubbingService.ScrubPackage(package);
+
             var uploadRequest = CreateUploadRequest(package);
 
             var client = _clientFactory.CreateClient();

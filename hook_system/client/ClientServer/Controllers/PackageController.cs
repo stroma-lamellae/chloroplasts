@@ -56,6 +56,14 @@ namespace ClientServer.Controllers
         {
             _context.Package.Add(package);
             await _context.SaveChangesAsync();
+            package = await _context.Package
+                .Include(p => p.Assignment)
+                    .ThenInclude(a => a.Submissions)
+                .Include(p => p.PreviousAssignments)
+                    .ThenInclude(pa => pa.Assignment)
+                        .ThenInclude(a => a.Submissions)
+                .Where(p => p.PackageId == package.PackageId)
+                .FirstAsync();
 
             // Below initiates the upload. Maybe we don't want this to await?
             // Probably, this will be initiated in some other place (possibly a timed service?)

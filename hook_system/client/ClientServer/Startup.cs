@@ -56,10 +56,6 @@ namespace ClientServer
                     .AddJsonOptions(options => {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
-           
-
-            // Make our ProcessingService Injectable
-            services.AddScoped<IProcessingService, ProcessingService>();
 
             // For communicating with the Processing Server
             services.AddHttpClient();
@@ -108,6 +104,7 @@ namespace ClientServer
             services.AddScoped<IXMLService, XMLService>();
             services.AddScoped<IProcessingService, ProcessingService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IScrubbingService, ScrubbingService>();
 
             services.AddHttpClient();
         }

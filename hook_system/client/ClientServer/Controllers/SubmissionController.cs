@@ -46,8 +46,18 @@ namespace ClientServer.Controllers
         {
             _context.Submission.Add(submission);
             await _context.SaveChangesAsync();
+            // Load required info the persist files
+            submission = await _context.Submission
+                .Include(s => s.Assignment)
+                    .ThenInclude(a => a.Course)
+                .Where(s => s.SubmissionId == submission.SubmissionId)
+                .FirstAsync();
+                
 
             _fileService.PersistSubmissionFiles(submission);
+            // Save the submission again, because it has been updated with a file path
+            _context.Entry(submission).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSubmission), new { id = submission.SubmissionId }, submission);
         }

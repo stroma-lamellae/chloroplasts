@@ -21,7 +21,8 @@ except:
     sys.exit("error connecting to the database")
 
 #destinationFolder is being passed as a parameter for now
-os.mkdir(destinationFolder)
+if not os.path.exists(destinationFolder):
+    os.mkdir(destinationFolder)
 
 unScrubbedFolders = ""
 numOfUnscrubbedFolders = 0
@@ -50,13 +51,9 @@ for section in listdir(folder):
 
                 # save hash in the database HERE
                 try:
-                    cur.execute("INSERT INTO StudentHashMapping " +
-                                "SET Hash_Firstname = %s"+
-                                " Hash_Lastname = %s"+
-                                " HashStudentNumber = %s"+
-                                " Firstname = %s"+
-                                " Lastname = %s"+
-                                " StudentNumber = %s" % (hashFirstName, hashLastName, hashStdNum, firstName, lastName, str(stdNum)))
+                    cur.execute("INSERT INTO \"StudentHashMapping\" (\"Hash_Firstname\", \"Hash_Lastname\", " +
+                                "\"Hash_StudentNumber\", \"Firstname\", \"Lastname\", \"StudentNumber\") VALUES " +
+                                "(%s, %s, %s, %s, %s, %s);", (hashFirstName, hashLastName, hashStdNum, firstName, lastName, str(stdNum)))
                 except:
                     #does not exit the program, we want to process all the student submissions that we can
                     sys.exit("Unable to insert into database")
@@ -92,6 +89,8 @@ elif numOfUnscrubbedFolders > 1:
     root = tk.Tk()
     root.withdraw()
     messagebox.showwarning('ALERT', alertMessage)
+
+conn.commit()
 
 #close the database connection
 if conn is not None:
