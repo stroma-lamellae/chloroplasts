@@ -21,8 +21,15 @@ export class SubmissionComponent implements OnInit {
 
   uploadSubmission() {
     this.submission.assignmentId = this.assignmentId;
+    const submissionFiles = this.submission.files;
+    // Set to null to prevent a bulk upload in one request
+    this.submission.files = null; 
+    // Upload the submission, then upload all the files
     this._submissionService.uploadSubmission(this.submission).subscribe(res => {
       this.submissionMade.emit(res);
+      for (const key in submissionFiles) {
+        this._submissionService.addToQueue(submissionFiles[key], res);
+      }
     });
   }
 
