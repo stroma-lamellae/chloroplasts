@@ -4,6 +4,7 @@ from submission import Submission
 from hookFile import HookFile
 from hookFileType import HookFileType
 from processSubmissions import ProcessSubmissions
+from datetime import datetime, timedelta
 
 def submit(userId: str, email: str, data) -> str:
 
@@ -16,7 +17,7 @@ def submit(userId: str, email: str, data) -> str:
     with tar.open(fileobj=data.stream, mode='r') as tarFile:
         for fileName in tarFile.getnames():
             if tarFile.getmember(fileName).isfile() :
-            
+
                 category, student, _ = fileName.split('/')
 
                 
@@ -35,11 +36,11 @@ def submit(userId: str, email: str, data) -> str:
                 hFile = HookFile(fileName, student, fType, tarFile.extractfile(fileName).read().decode('utf-8'))
 
                 # TODO Need to verify with client team that these are the folder names being used in the tarball, for now just go with this
-                if category == "Prev":
+                if category == "Previous Years":
                     submission.previousYear.append(hFile)
-                elif category == "Current":
+                elif category == "Current Year":
                     submission.currentYear.append(hFile)
-                elif category == "Exclusion":
+                elif category == "Exclusions":
                     submission.excludedWork.append(hFile)
                 else:
                     return "Unrecognized Data Category", 400
@@ -47,7 +48,7 @@ def submit(userId: str, email: str, data) -> str:
     added, jobId, waitTime = ProcessSubmissions.addToQueue(submission)
 
     if added:
-        return "JobId: " + jobId + ", Estimated Wait Time: " + waitTime
+        return {"JobId" : jobId, "EstimatedCompletion" : datetime.now() + timedelta(minutes=5)}
     else:
         return "Unable to Add Submission to Queue", 400
 
@@ -61,7 +62,7 @@ def fetch(userId: str, jobId: str) -> str:
     resultPath = os.path.join("./Results", jobId + ".xml")
 
     if not os.path.exists(resultPath):
-        return "<results></results>"
+        return {'results': '<?xml version="1.0" encoding="UTF-8" ?><Results></Results>'}
 
     xmlResults = ""
 
