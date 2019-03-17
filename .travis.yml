@@ -25,28 +25,29 @@ env:
 
 jobs:
     include:
-        - stage: create tables with dotnet
+        - stage: create tables with dotnet and run python script
           before_script:
               - psql -c "CREATE DATABASE clientserver;" -U postgres
               - psql -c "CREATE USER clientserver WITH ENCRYPTED PASSWORD 'password';" -U postgres
               - psql -c 'GRANT ALL PRIVILEGES ON DATABASE clientserver TO clientserver;' -U postgres
-              - cd hook_system/client/ClientServer
+              - sudo apt-get update
+              - sudo apt-get install python3 python3-tk
+              - sudo apt-get install python3-pip
+              - cd hook_system/client/ClientServer/scrubbing
+              - pip3 install --user -r requirements.txt
+              - pip3 install --user tk-tools
+              - mkdir tmp
+              - cd ../
           script:
               - dotnet ef migrations add InitialCreate
               - dotnet ef database update
               - dotnet restore
               - dotnet build
+              - cd scrubbing
+              - python3 scrub.py ../../../../test-harness/Year/2018-2019/Fall/COSC/1P02/A1 tmp clientserver password
         - stage: initialize angular
           before_script:
               - cd hook_system/client/ClientServer/ClientApp
               - npm install
           script:
               - npm run test
-        - stage: run scub
-          before_script:
-              - cd hook_system/client/ClientServer/scrubbing
-              - virtualenv env
-              - source env/scripts/activate
-              - pip install -r requirements.txt
-          script:
-              -  python3 scrub.py ~/test-harness/Year/2018-2019/Fall/COSC/1P02/A1\
