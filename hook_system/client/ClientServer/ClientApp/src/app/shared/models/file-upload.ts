@@ -4,10 +4,12 @@ import { Submission } from "./submission";
 export class FileUpload {
     public status: UploadStatus;
     public progress: number;
+    public attempts: number;
 
     constructor(public file: File, public submission: Submission) {
         this.status = UploadStatus.NotStarted;
         this.progress = 0;
+        this.attempts = 1;
     }
 
     public updateProgress(progress: number) {

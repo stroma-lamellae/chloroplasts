@@ -4,6 +4,7 @@ import { Submission } from '../../shared/models/submission';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { FileUpload } from '../../shared/models/file-upload';
 import { finalize } from 'rxjs/operators';
+import { UploadStatus } from 'src/app/shared/models/upload-status.enum';
 
 
 // File upload stuff from:
@@ -78,6 +79,12 @@ export class SubmissionService {
         } else {
           // The backend returned an unsuccessful response code.
           queuedUploadFile.failed();
+        }
+
+        // Try 3 times to upload this file, before keeping it as failed
+        queuedUploadFile.attempts+=1;
+        if (queuedUploadFile.attempts < 3) {
+          queuedUploadFile.status = UploadStatus.NotStarted;
         }
 
         this._uploadQueue.next(this._files);
