@@ -11,13 +11,10 @@ addons:
   postgresql: "10"
   chrome: stable
   apt:
-    sources:
-      - google-chrome
     packages:
       - postgresql-10
       - postgresql-client-10
       - ng-common
-      - google-chrome-stable
 env:
   global:
     - PGPORT=5432
@@ -35,7 +32,6 @@ jobs:
               - sudo apt-get install python3-pip
               - cd hook_system/client/ClientServer/scrubbing
               - pip3 install --user -r requirements.txt
-              - pip3 install --user tk-tools
               - mkdir tmp
               - cd ../
           script:
