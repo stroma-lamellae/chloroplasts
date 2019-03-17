@@ -66,7 +66,7 @@ namespace ClientServer.Controllers
         // Adds files to a submission. Assumes that the submission already exists
         [HttpPut("{id}/files")]
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> PostSubmissionFiles(long id, List<IFormFile> files)
+        public async Task<IActionResult> PutSubmissionFiles(long id, List<IFormFile> files)
         {
             var submission = await _context.Submission
                 .Include(s => s.Assignment)
