@@ -44,7 +44,7 @@ jobs:
               - npm run test
         - stage: run scub
           before_script:
-              - cd hook_system/client/scrubbing
+              - cd hook_system/client/ClientServer/scrubbing
               - virtualenv env
               - source env/scripts/activate
               - pip install -r requirements.txt
