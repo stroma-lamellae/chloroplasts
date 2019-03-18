@@ -38,27 +38,23 @@ namespace ClientServer.Services
 
         public async Task<ResultsResponse> InitiateUpload(Package package)
         {
-            _scrubbingService.ScrubPackage(package);
+            var filename = _scrubbingService.ScrubPackage(package);
 
-            var uploadRequest = CreateUploadRequest(package);
+            var uploadRequest = CreateUploadRequest(package, filename);
 
             var client = _clientFactory.CreateClient();
 
             var requestAddress = ServerAddress + "/api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
 
-            // Get the path of the file
-            var path = Path.Combine(
-                Directory.GetCurrentDirectory(), "UploadFiles", uploadRequest.FileName);
-
             // Create the multipart form portion of the request
             var formDataContent = new MultipartFormDataContent();
 
             // Create a form part for the file
-            var fileContent = new StreamContent(File.OpenRead(path))
+            var fileContent = new StreamContent(File.OpenRead(filename))
             {
                 Headers = 
                 {
-                    ContentLength = new FileInfo(path).Length,
+                    ContentLength = new FileInfo(filename).Length,
                     ContentType = new MediaTypeHeaderValue("application/zip")
                 }
             };
@@ -75,7 +71,7 @@ namespace ClientServer.Services
             return resultsResponse;
         }
 
-        public UploadRequest CreateUploadRequest(Package package) 
+        public UploadRequest CreateUploadRequest(Package package, string filename) 
         {
             // TODO: Scrub package to create tarball
             // TODO: Get real data
@@ -83,7 +79,7 @@ namespace ClientServer.Services
                 UserId = 123456, // TODO: Should come from authservice
                 Email = "jb15iq@brocku.ca", // TODO: Should come from user id
                 AuthToken = "Hahhahahahahaha We don't have this yet :)",
-                FileName = "FakeData.tar.gz"
+                FileName = filename
             };
         }
 
@@ -132,7 +128,7 @@ namespace ClientServer.Services
     {
         public string Status { get; set; }
         public long JobId { get; set; }
-        public string EstimatedWaitTime { get; set; }
+        public DateTime EstimatedCompletion { get; set; }
         public string Results { get; set; } // TODO: Make this be a file
 
         public Result Result { get; set; }

@@ -67,7 +67,11 @@ namespace ClientServer.Controllers
 
             // Below initiates the upload. Maybe we don't want this to await?
             // Probably, this will be initiated in some other place (possibly a timed service?)
-            await _processingService.InitiateUpload(package); 
+            var result = await _processingService.InitiateUpload(package); 
+            package.JobId = result.JobId;
+            package.EstimatedCompletion = result.EstimatedCompletion;
+            _context.Entry(package).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPackage), new { id = package.PackageId }, package);
         }

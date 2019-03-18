@@ -1,5 +1,7 @@
 using ClientServer.Models;
 using System.IO;
+using SharpCompress.Writers;
+using SharpCompress.Common;
 
 /*
 This deals with anything to do with writing and saving files
@@ -20,6 +22,10 @@ namespace ClientServer.Services
 
         // Returns the root storage directory
         string GetStorageDirectory();
+
+        // Creates a tarball at the "dest" location from the files in 
+        // the "source" directory. 
+        void CompressFolder(string source, string dest);
     }
 
     public class FileService : IFileService
@@ -146,6 +152,22 @@ namespace ClientServer.Services
                     string temppath = Path.Combine(destDirName, subdir.Name);
                     DirectoryCopy(subdir.FullName, temppath, copySubDirs);
                 }
+            }
+        }
+
+        public void CompressFolder(string source, string dest)
+        {
+            var sourcePath = Path.Combine(_rootStorageDirectory, source);
+            var destPath = Path.Combine(_rootStorageDirectory, dest);
+
+            var options = new WriterOptions(CompressionType.GZip);
+            options.LeaveStreamOpen = true;
+
+            using (Stream stream = File.OpenWrite(destPath))
+            using (var writer = WriterFactory.Open(stream, ArchiveType.Tar, options))
+                                                
+            {
+                writer.WriteAll(sourcePath, "*", SearchOption.AllDirectories);   
             }
         }
 

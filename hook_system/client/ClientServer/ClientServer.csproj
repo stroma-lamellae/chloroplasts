@@ -18,6 +18,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
+        <PackageReference Include="SharpCompress" Version="0.23.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
     </ItemGroup>
 

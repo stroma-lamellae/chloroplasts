@@ -12,7 +12,7 @@ namespace ClientServer.Services
 {
     public interface IScrubbingService
     {
-        void ScrubPackage(Package package);
+        string ScrubPackage(Package package);
     }
 
     public class ScrubbingService: IScrubbingService
@@ -30,7 +30,7 @@ namespace ClientServer.Services
             _configuration = configuration;
         }
 
-        public void ScrubPackage(Package package)
+        public string ScrubPackage(Package package)
         {
             // Clear the scrub folders
             _fileService.EmptyDirectory(_preScrubDirectory);
@@ -49,6 +49,13 @@ namespace ClientServer.Services
             }
 
             RunScript();
+
+            string destPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".tar.gz");
+
+            // Tar the file
+            _fileService.CompressFolder(_postScrubDirectory, destPath);
+
+            return destPath;
         }
 
         // Actually runs the scrubbing script
@@ -93,6 +100,7 @@ namespace ClientServer.Services
                     sw.WriteLine("python " + scriptLocation + " " + preScrubLoc + " " + postScrubLoc + " " + username + " " + password);
                 }
             }
+            p.WaitForExit();
             p.Close();
         }
     }
