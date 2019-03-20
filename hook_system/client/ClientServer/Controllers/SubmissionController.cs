@@ -62,6 +62,30 @@ namespace ClientServer.Controllers
             return CreatedAtAction(nameof(GetSubmission), new { id = submission.SubmissionId }, submission);
         }
 
+        // PUT: api/submission/{id}/files
+        // Adds files to a submission. Assumes that the submission already exists
+        [HttpPut("{id}/files")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> PutSubmissionFiles(long id, List<IFormFile> files)
+        {
+            var submission = await _context.Submission
+                .Include(s => s.Assignment)
+                    .ThenInclude(a => a.Course)
+                .Where(s => s.SubmissionId == id)
+                .FirstAsync();
+
+            if (submission == null)
+            {
+                return NotFound();
+            }
+
+            submission.Files = files;
+
+            _fileService.PersistSubmissionFiles(submission);
+
+            return Ok();
+        }
+
         // PUT: api/submission/{id}
         // Update the submission with the given id
         [HttpPut("{id}")]
