@@ -1,5 +1,5 @@
 import connexion
-from processSubmissions import ProcessSubmissions
+import submissionQueue
 from threading import Thread
 import os
 

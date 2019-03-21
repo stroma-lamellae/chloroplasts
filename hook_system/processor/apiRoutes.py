@@ -3,9 +3,11 @@ import os
 from submission import Submission
 from hookFile import HookFile
 from hookFileType import HookFileType
-import processSubmissions
+import submissionQueue
 from datetime import datetime, timedelta
 import uuid
+
+from tempfile import SpooledTemporaryFile
 
 def submit(userId: str, email: str, data) -> str:
 
@@ -16,8 +18,9 @@ def submit(userId: str, email: str, data) -> str:
     jobID: str = str(uuid.uuid4())
     filename: str = "./Queue/"+jobID+".tar.gz"
 
-    with open(filename, 'w') as f:
-        f.write(data.stream)
+    with open(filename, 'wb') as f:
+        for line in data.stream:
+            f.write(line)
 
 
     #MOVE THIS STUFF TO PROCESS FUNCTION
@@ -53,7 +56,7 @@ def submit(userId: str, email: str, data) -> str:
     #             else:
     #                 return "Unrecognized Data Category", 400
 
-    added, waitTime = processSubmissions.addToQueue(filename, email)
+    added, waitTime = submissionQueue.addToQueue(filename, email)
 
     if added:
         return {"JobId" : jobID, "EstimatedCompletion" : datetime.now() + timedelta(minutes=5)}
