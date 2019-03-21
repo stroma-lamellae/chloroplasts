@@ -1,5 +1,5 @@
 from enum import Enum
 
 class HookFileType(Enum):
-    C = 1
-    JAVA = 2
+    CURRENT_YEAR = 1
+    PREVIOUS_YEAR = 2

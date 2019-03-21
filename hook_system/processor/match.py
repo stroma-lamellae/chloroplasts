@@ -1,10 +1,8 @@
-from hookFile import HookFile
+from plagiarismOccurence import PlagiarismOccurence
+from typing import List
 
 class Match():
 
-    def __init__(self, sOneFile: HookFile, sOneLines: tuple, sTwoFile: HookFile, sTwoLines: tuple):
-        self.sOneFile = sOneFile
-        self.sOneLines = sOneLines
-
-        self.sTwoFile = sTwoFile
-        self.sTwoLines = sTwoLines
+    def __init__(self, matchID:int, plagiarismList: List[PlagiarismOccurence]):
+        self.matchID = matchID
+        self.plagiarismList = plagiarismList

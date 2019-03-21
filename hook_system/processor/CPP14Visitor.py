@@ -1,6 +1,6 @@
 # Generated from CPP14.g4 by ANTLR 4.5.3
 from antlr4 import *
-import variable
+import CPP14Syntax
 if __name__ is not None and "." in __name__:
     from .CPP14Parser import CPP14Parser
 else:
@@ -12,7 +12,7 @@ class CPP14Visitor(ParseTreeVisitor):
 
     def visit(self, ctx):
 
-        variable.addVariable(ctx)
+        CPP14Syntax.addVariable(ctx)
 
         tree = ctx.accept(self)
 

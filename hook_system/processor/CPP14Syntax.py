@@ -1,5 +1,5 @@
-from CPP14Parser import CPP14Parser
 from antlr4 import *
+from CPP14Parser import CPP14Parser
 
 variableList = []
 
