@@ -1,25 +1,37 @@
 from submission import Submission
 from match import Match
-from typing import List
+from typing import List, Tuple
 import threading
 
+mutex = threading.Lock()
+submissionQueue: List[Tuple[str, str]] = []
 
-class ProcessSubmissions():
-    mutex = threading.Lock()
-    submissionQueue = []
 
-    @staticmethod
-    def addToQueue(sub: Submission):
-        return True, "1456", "10 Minutes"
-
-    @staticmethod
-    def processQueue():
-        return
-
-    @staticmethod
-    def __sendEmail(emailAddr: str, msg: str) -> bool:
-        return True
+def addToQueue(filePath: str, emailAddr: str) -> Tuple[bool, str]:
     
-    @staticmethod
-    def __generateResult(matches: List[Match]) -> str:
-        return "<results></results>"
+    
+    mutex.acquire()
+
+    nPrior: int = len(submissionQueue)
+
+    submissionQueue.append((filePath, emailAddr))
+
+    nCur:int = len(submissionQueue)
+
+    mutex.release()
+
+    if nCur == nPrior+1:
+        return True, "10 Minutes"
+    else:
+        return False, ""
+
+
+
+def processQueue():
+    return
+
+def __sendEmail(emailAddr: str, msg: str) -> bool:
+    return True
+
+def __generateResult(matches: List[Match]) -> str:
+    return "<results></results>"
