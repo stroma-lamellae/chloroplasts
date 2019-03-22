@@ -1,0 +1,39 @@
+<div class="app-archive archive">
+  <div class="archive__graphic">
+    <img class="archive__graphic-image" src="../../../../assets/courseViewGuy.svg" />
+  </div>
+  <div class="archive__courses">
+    <p class="archive__courses-title">Previous Academic Years</p>
+    <hr/>
+    <form [formGroup]="courseForm" class="archive__courses-form">
+      <div class="archive__courses-input">
+        <div class="form-group">
+          <label>Year</label>
+          <select class="form-control" formControlName="year">
+            <option *ngFor="let course of allCourses" value={{course.year}}>{{course.year}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="archive__courses-input">
+        <div class="form-group">
+          <label>Semester</label>
+          <select class="form-control" formControlName="semester">
+              <option value="0" >Fall</option>
+              <option value="1" >Winter</option>
+              <option value="2" >Summer</option>
+          </select>
+        </div>
+      </div>
+      <div class="archive__courses-input">
+        <button (click)="submit()">Submit</button>
+      </div>
+      <div class="archive__courses-view">
+        <div *ngFor="let course of allCourses">
+          <div *ngIf="course.year == selectedYear && course.semester == selectedSemester">
+            <app-course-box [course]="course"></app-course-box>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

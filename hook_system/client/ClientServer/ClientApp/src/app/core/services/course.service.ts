@@ -11,9 +11,13 @@ export class CourseService {
   private _apiEndpoint = "/api/course";
 
   constructor(private _httpClient: HttpClient) { }
-
+  
   getCourses(): Observable<Course[]> {
     return this._httpClient.get<Course[]>(this._apiEndpoint);
+  }
+
+  getSemesterCourses(year, semester): Observable<Course[]> {
+    return this._httpClient.get<Course[]>(this._apiEndpoint + "/" + year + "/" + semester);
   }
 
   addCourse(course: Course): Observable<Course> {
@@ -31,4 +35,5 @@ export class CourseService {
   getCourseAssignments(course: Course): Observable<Course> {
     return this._httpClient.get<Course>(this._apiEndpoint + "/" + course.courseId + "/assignments");
   }
+
 }

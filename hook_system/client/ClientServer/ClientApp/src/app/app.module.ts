@@ -10,12 +10,14 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { AppComponent } from './app.component';
 import { RootModule } from './modules/root.module';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { UniquePipe } from './shared/pipes/unique.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
+	UniquePipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,6 +30,9 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
+  export: [
+	UniquePipe
   ],
   bootstrap: [AppComponent]
 })
