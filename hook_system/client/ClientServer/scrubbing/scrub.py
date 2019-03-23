@@ -59,18 +59,20 @@ for section in listdir(folder):
                     sys.exit("Unable to insert into database")
 
                 #Loop through each file in the student submission folder and replace identifying info
-                for filename in listdir(studentSubmissionFolder):
-                    if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") \
-                            or filename.endswith(".hpp") or filename.endswith(".h"):
-                        #scrub data
-                        f = open(join(studentSubmissionFolder, filename)).read()
-                        replace = f.replace(firstName, hashFirstName).replace(lastName, hashLastName)\
-                            .replace(stdNum, hashStdNum)
-                        #write to scrubbed file
-                        newFolder = join(scrubbedStudentFolder, "Scrubbed-"+filename)
-                        newF = open(newFolder, 'w')
-                        newF.write(replace)
-                        newF.close()
+                for root, directory, files in os.walk(studentSubmissionFolder):
+                    for filename in files:
+                        if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") \
+                                or filename.endswith(".hpp") or filename.endswith(".h"):
+                            print(filename)
+                            #scrub data
+                            f = open(join(root, filename)).read()
+                            replace = f.replace(firstName, hashFirstName).replace(lastName, hashLastName)\
+                                .replace(stdNum, hashStdNum)
+                            #write to scrubbed file
+                            newFolder = join(scrubbedStudentFolder, "Scrubbed-"+filename)
+                            newF = open(newFolder, 'w')
+                            newF.write(replace)
+                            newF.close()
             except:
                 #this code will be executed if the folder is not named properly
                 unScrubbedFolders = "\t" + studentSubmission + "\n"
