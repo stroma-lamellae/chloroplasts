@@ -63,7 +63,6 @@ for section in listdir(folder):
                     for filename in files:
                         if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") \
                                 or filename.endswith(".hpp") or filename.endswith(".h"):
-                            print(filename)
                             #scrub data
                             f = open(join(root, filename)).read()
                             replace = f.replace(firstName, hashFirstName).replace(lastName, hashLastName)\
