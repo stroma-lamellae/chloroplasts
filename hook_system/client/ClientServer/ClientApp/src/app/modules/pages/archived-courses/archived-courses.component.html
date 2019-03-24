@@ -11,7 +11,7 @@
           <label>Year</label>
           <select class="form-control" formControlName="year">
             <option value="">Select Year</option>
-            <option *ngFor="let course of allCourses | unique" value={{course.year}}>{{course.year}}</option>
+            <option *ngFor="let course of allCourses | unique:'year'" value={{course.year}}>{{course.year}}</option>
           </select>
         </div>
       </div>
@@ -31,7 +31,7 @@
           <label>Course</label>
           <select class="form-control" formControlName="course">
             <option value="">Select Course</option>
-            <option *ngFor="let course of allCourses | unique" value={{course.courseCode}}>{{course.courseCode}}</option>
+            <option *ngFor="let course of allCourses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
           </select>
         </div>
       </div>

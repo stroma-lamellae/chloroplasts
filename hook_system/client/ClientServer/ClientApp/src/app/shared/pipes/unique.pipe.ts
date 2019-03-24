@@ -8,9 +8,9 @@ import * as _ from 'lodash';
 
  export class UniquePipe implements PipeTransform {
 
-   transform(value: any): any {
+   transform(value: any, property: string): any {
        if (value !== undefined && value !== null) {
-           return _.uniqBy(value, 'name');
+            return _.uniqBy(value, property);
        }
        return value;
    }
