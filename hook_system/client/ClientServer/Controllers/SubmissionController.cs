@@ -172,6 +172,31 @@ namespace ClientServer.Controllers
             return NoContent();
         }
 
+        // PUT: api/submission/{id}/tar
+        // Adds the files within the tar to the specified submission
+        [HttpPut("{id}/tar")]
+        public async Task<IActionResult> PutSubmissionTar([FromForm] IFormFile file, long id) 
+        {
+            var submission = await _context.Submission
+                .Include(s => s.Assignment)
+                    .ThenInclude(a => a.Course)
+                .Where(s => s.SubmissionId == id)
+                .FirstAsync();
+
+            if (submission == null)
+            {
+                return BadRequest($"No submission with id {id}");
+            }
+
+            string extractedFilePath = _fileService.ExtractFile(file);
+            _fileService.PersistSubmissionFiles(submission, extractedFilePath, "temp");
+            _context.Entry(submission).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
         // DELETE: api/submission/{id}
         // Deletes a submission
         [HttpDelete("{id}")]
