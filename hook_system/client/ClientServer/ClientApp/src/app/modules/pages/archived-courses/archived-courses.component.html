@@ -10,7 +10,8 @@
         <div class="form-group">
           <label>Year</label>
           <select class="form-control" formControlName="year">
-            <option *ngFor="let course of allCourses" value={{course.year}}>{{course.year}}</option>
+            <option value="">Select Year</option>
+            <option *ngFor="let course of allCourses | unique" value={{course.year}}>{{course.year}}</option>
           </select>
         </div>
       </div>
@@ -18,6 +19,7 @@
         <div class="form-group">
           <label>Semester</label>
           <select class="form-control" formControlName="semester">
+              <option value="" >Select Semester</option>
               <option value="0" >Fall</option>
               <option value="1" >Winter</option>
               <option value="2" >Summer</option>
@@ -25,11 +27,21 @@
         </div>
       </div>
       <div class="archive__courses-input">
+        <div class="form-group">
+          <label>Course</label>
+          <select class="form-control" formControlName="course">
+            <option value="">Select Course</option>
+            <option *ngFor="let course of allCourses | unique" value={{course.courseCode}}>{{course.courseCode}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="archive__courses-input">
+        <!-- <label> </label> -->
         <button (click)="submit()">Submit</button>
       </div>
       <div class="archive__courses-view">
         <div *ngFor="let course of allCourses">
-          <div *ngIf="course.year == selectedYear && course.semester == selectedSemester">
+          <div *ngIf="(course.year == selectedYear && course.semester == selectedSemester) || course.courseCode == selectedCourse">
             <app-course-box [course]="course"></app-course-box>
           </div>
         </div>

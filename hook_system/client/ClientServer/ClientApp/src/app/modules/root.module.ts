@@ -12,6 +12,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { BulkSubmissionComponent } from './components/bulk-submission/bulk-submission.component';
 import { CourseBoxComponent } from './components/course-box/course-box.component';
 import { ArchivedCoursesComponent } from './pages/archived-courses/archived-courses.component';
+import { UniquePipe } from './../shared/pipes/unique.pipe';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
@@ -26,7 +27,8 @@ import { ArchivedCoursesComponent } from './pages/archived-courses/archived-cour
     LoginComponent,
     BulkSubmissionComponent,
     CourseBoxComponent,
-    ArchivedCoursesComponent
+    ArchivedCoursesComponent,
+    UniquePipe
   ]
 })
 export class RootModule {}

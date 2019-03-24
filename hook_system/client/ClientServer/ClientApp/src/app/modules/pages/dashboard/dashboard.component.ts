@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from 'src/app/core/services/course.service';
 import { Course} from '../../../shared/models/course';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,7 @@ export class DashboardComponent implements OnInit {
   semesters: any[];
 
   courses: Course[];
+  courseCodes: String[];
 
   currYear = (new Date().getFullYear().toString());
   currMonth = (new Date().getMonth());

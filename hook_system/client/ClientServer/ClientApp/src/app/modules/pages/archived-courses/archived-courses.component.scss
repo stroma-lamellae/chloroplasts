@@ -47,7 +47,7 @@
         &-input {
             float: left;
             margin: 20px;
-            width: 25%;
+            width: 20%;
 
             label {
                 display: block;
@@ -68,7 +68,13 @@
                 height: auto;
                 min-width: 50%;
                 padding: 14px;
-                width: 90%;
+                width: 95%;
+            }
+
+            button {
+                @extend select;
+                background: $color-primary-light-grey;
+                color: $color-text-black;
             }
 
         }

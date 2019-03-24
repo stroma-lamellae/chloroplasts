@@ -22,6 +22,7 @@ export class ArchivedCoursesComponent implements OnInit {
 
   selectedYear: any;
   selectedSemester: any;
+  selectedCourse: any;
 
   currYear = (new Date().getFullYear());
   currMonth = (new Date().getMonth());
@@ -45,20 +46,11 @@ export class ArchivedCoursesComponent implements OnInit {
 
     this.courseForm = new FormGroup({
       year: new FormControl(),
-      semester: new FormControl()
+      semester: new FormControl(),
+      course: new FormControl()
     });
 
-    // this.getPrevCourse();
-
   }
-
-  // getPrevCourse(): void {
-  //   // this.submitted = true;
-  //   this.selectedYear = 2019;//this.f.selectedYear.value;
-  //   this.selectedSemester = 1;//this.f.selectedSemester.value;
-  //   this.courseService.getSemesterCourses(this.selectedYear, this.selectedSemester)
-  //     .subscribe(prevCourses => this.prevCourses = prevCourses);
-  // }
 
   getAllCourses(): void {
     this.courseService.getCourses().subscribe(allCourses => this.allCourses = allCourses);
@@ -72,6 +64,7 @@ export class ArchivedCoursesComponent implements OnInit {
   submit(): void {
     this.selectedSemester = this.f.semester.value;
     this.selectedYear = this.f.year.value;
+    this.selectedCourse = this.f.course.value;
   }
 
 }
