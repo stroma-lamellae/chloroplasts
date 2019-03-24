@@ -7,8 +7,12 @@ Readme for the Processing Server
 1. Python 3 installed on system
 2. Python3-pip installed on system
 3. python3-virtualenv installed on the system
+4. Psycopg2 installed on the system
+```
+pip install psycopg2
+```
 
-To first create your virtual enviroment for python run the command `virtualenv -p /usr/bin/python3 env`, for windows instead of `/usr/bin/python3` put the path to your python3 interpreter. 
+To first create your virtual enviroment for python run the command `virtualenv -p /usr/bin/python3 env`, for windows instead of `/usr/bin/python3` put the path to your python3 interpreter.
 
 The next step is to install the dependencies in your virtual enviroment, run the command `source env/bin/activate` to activate the virtual python enviroment. **NOTE**: You will need to run this command everytime you open up a new terminal to run the python code or else it will not be able to find the dependencies.
 
