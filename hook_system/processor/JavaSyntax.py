@@ -1,5 +1,5 @@
-from JavaParser import JavaParser
 from antlr4 import *
+from JavaParser import JavaParser
 
 variableList = []
 classList = []

@@ -1,10 +1,14 @@
-import tarfile as tar
 import os
-from submission import Submission
+# from submission import Submission
 from hookFile import HookFile
 from hookFileType import HookFileType
-from processSubmissions import ProcessSubmissions
+import submissionQueue
 from datetime import datetime, timedelta
+import uuid
+import tarfile as tar
+from tempfile import SpooledTemporaryFile
+
+validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
 def submit(userId: str, email: str, data) -> str:
 
@@ -12,43 +16,38 @@ def submit(userId: str, email: str, data) -> str:
     # if not auth:
     #     return "Forbidden", 403
 
-    submission = Submission(email)
+    jobID: str = str(uuid.uuid4())
+    filename: str = "./Queue/"+jobID+".tar.gz"
+
+    with open(filename, 'wb') as f:
+        for line in data.stream:
+            f.write(line)
 
     with tar.open(fileobj=data.stream, mode='r') as tarFile:
         for fileName in tarFile.getnames():
             if tarFile.getmember(fileName).isfile() :
 
-                category, student, _ = fileName.split('/')
+                #Break up the file path into it's respective folders
+                filePathElements: List[str] = os.path.normpath(fileName).split(os.sep)
 
-                
+                if len(filePathElements) != 2 and len(filePathElements) != 3:
+                    return "Unrecognized Folder Structure", 400
+
                 ext = fileName[fileName.rfind('.'):]
 
-                fType = None
-                if ext == ".java":
-                    fType = HookFileType.JAVA
-                elif ext == ".cpp" or ext == ".c" or ext == ".hpp" or ext == ".h":
-                    fType = HookFileType.C
-                else:
-                    return "Unrecognized File Type", 400
+                if ext not in validFileExt:
+                    return "Invalid File Type: " + ext, 400
 
-                # TODO Need to consult with the client team on how they'll have it stored on their end and how the want to receive the filename
-                # but for now we're just going to keep it to the entire path from the tarball
-                hFile = HookFile(fileName, student, fType, tarFile.extractfile(fileName).read().decode('utf-8'))
-
-                # TODO Need to verify with client team that these are the folder names being used in the tarball, for now just go with this
-                if category == "Previous Years":
-                    submission.previousYear.append(hFile)
-                elif category == "Current Year":
-                    submission.currentYear.append(hFile)
-                elif category == "Exclusions":
-                    submission.excludedWork.append(hFile)
-                else:
+                if filePathElements[0] == "PreviousYears" or filePathElements[0] == "CurrentYear":
+                    if len(filePathElements[1].split('_')) != 3:
+                        return "Invalid Student Folder", 400
+                elif filePathElements[0] != "Exclusions":
                     return "Unrecognized Data Category", 400
 
-    added, jobId, waitTime = ProcessSubmissions.addToQueue(submission)
+    added, waitTime = submissionQueue.addToQueue(filename, email)
 
     if added:
-        return {"JobId" : jobId, "EstimatedCompletion" : datetime.now() + timedelta(minutes=5)}
+        return {"JobId" : jobID, "EstimatedCompletion" : datetime.now() + timedelta(minutes=5)}
     else:
         return "Unable to Add Submission to Queue", 400
 
@@ -67,8 +66,8 @@ def fetch(userId: str, jobId: str) -> str:
     xmlResults = ""
 
     with open(resultPath, 'r') as f:
-        xmlResults = f.readlines().join('')
+        xmlResults = ''.join(f.readlines())
 
     os.remove(resultPath)
 
-    return xmlResults
+    return {'results': xmlResults}
