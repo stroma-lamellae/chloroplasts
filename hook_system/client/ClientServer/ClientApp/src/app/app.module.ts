@@ -11,6 +11,9 @@ import { AppComponent } from './app.component';
 import { RootModule } from './modules/root.module';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
+import { MatFileUploadModule } from 'angular-material-fileupload';
+import { FileDropModule } from 'ngx-file-drop';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +26,9 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
     FormsModule,
     ReactiveFormsModule,
     RootModule,
-    routing
+    routing,
+	MatFileUploadModule,
+	FileDropModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

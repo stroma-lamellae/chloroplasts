@@ -1,4 +1,53 @@
-<h1>Create a Package for the Processing Server</h1>
+<div class="app-package package">
+  <div class="package__graphic">
+    <img class="package__graphic-image" src="../../../../assets/uploadGuy.svg" />
+  </div>
+  <div class="package__jobs">
+    <p class="package__jobs-title">New Hook Job</p>
+  </div>
+  <form class="package__jobs-form">
+    <!-- <div class="package__jobs-input">
+      <div class="form-group">
+        <label>Program Code</label>
+        <select class="form-control" formControlName="programCode">
+          <option value="">Select Code</option>
+          <option *ngFor="let course of courses" value={{course.courseCode}}>{{course.courseCode}}</option>
+        </select>
+      </div>
+    </div> -->
+    <div class="package__jobs-input">
+      <div class="form-group">
+        <label>Course Code</label>
+        <select [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
+          <option disabled *ngIf="!courses; else courseItems">Loading...</option>
+          <option disabled>Select a Course</option>
+          <option #courseItems [value]="course.courseId" *ngFor="let course of courses">{{course.courseCode}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="package__jobs-input">
+      <div class="form-group">
+        <label>Assignment</label>
+        <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
+          <option disabled *ngIf="!selectedCourse.assignments; else assignmentItems">Loading...</option>
+          <option #assignmentItems [value]="assignment.assignmentId" *ngFor="let assignment of selectedCourse.assignments">
+            {{assignment.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="package__jobs-input">
+      <input type="file">
+    </div>
+    <div class="package__jobs-input">
+      <button>LAUNCH</button>
+    </div>
+  </form>
+</div>
+
+
+
+<!-- <h1>Create a Package for the Processing Server</h1>
 <label>Select a course for the primary assignment for the package
   <select [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
     <option disabled *ngIf="!courses; else courseItems">Loading...</option>
@@ -48,4 +97,4 @@
   <div>
     <button (click)="submit()">Submit package</button>
   </div>
-</div>
+</div> -->
