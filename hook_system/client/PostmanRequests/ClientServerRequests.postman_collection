@@ -105,7 +105,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"OwnerId\": 1234,\n\t\"Year\": 2019,\n\t\"Semester\": 1,\n\t\"Name\": \"COSC2P05\"\n}"
+					"raw": "{\n\t\"OwnerId\": 1234,\n\t\"Year\": 2019,\n\t\"Semester\": 1,\n\t\"ProgramCode\": \"COSC\"\n\t\"CourseCode\": \"2P05\"\n}"
 				},
 				"url": {
 					"raw": "https://localhost:5001/api/course",

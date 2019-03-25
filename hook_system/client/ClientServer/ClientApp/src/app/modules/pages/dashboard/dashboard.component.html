@@ -6,11 +6,11 @@
     <p class="dashboard__courses-title">Current Academic Semester | {{semester}} {{currYear}}</p>
     <div class="dashboard__courses-department">
         <div class="course__view">
-            <div class="course__view-department" *ngFor="let c of courses | unique:'courseCode'">
-              <p>{{c.courseCode.substring(0, 4)}}</p>
+            <div class="course__view-department" *ngFor="let c of courses | unique:'programCode'">
+              <p>{{c.programCode}}</p>
               <hr/>
               <div *ngFor="let course of courses">
-                <div *ngIf="course.courseCode.substring(0,4) == c.courseCode.substring(0, 4)">
+                <div *ngIf="course.programCode == c.programCode">
                   <app-course-box [course]="course"></app-course-box>
                 </div>
               </div>
