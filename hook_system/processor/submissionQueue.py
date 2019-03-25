@@ -60,6 +60,7 @@ def processQueue():
             javaFiles: List[HookFile] = []
             javaWhitelist: List[HookFile] = []
 
+            start = time.time()
             with tar.open(filePath, mode='r') as tarFile:
                 for fileName in tarFile.getnames():
                     if tarFile.getmember(fileName).isfile():
@@ -101,6 +102,9 @@ def processQueue():
             """
 
             #Standardize the files to be processed, this includes removing variable names.
+                filetime = time.time()
+            all_file_time = time.time()
+
             cStandardized: List[StandardizedFile] = standardize.standardizeC(cFiles)
             cStandardizedWhitelist : List[StandardizedFile] = standardize.standardizeC(cWhitelist)
 
@@ -119,11 +123,19 @@ def processQueue():
             allMatches += javaMatches
             with open("./Results/"+jobID+".xml", 'wb') as f:
                 f.write(xmlGenerator.generateResult(allMatches))
-            timeQueue.pop()
+            processed_file = timeQueue.pop()
             os.remove(filePath)
 
             notified = __sendEmail(emailAddr,jobID)
             #not sure what the best thing to do here is. . .
+            endtime = time.time()
+            print("Overall processing time for "+processed_file[1]+" files is:"+ endtime-start)
+            print("Bulk file plagiarism processing time for "+processed_file[1]+
+                    "files is:"+ all_file_time-start)
+            processing_per_file = filetime-start
+            print("File processing time for "+processed_file[1]+
+                    "files is:"+ filetime-start)
+
 
 
 def __sendEmail(emailAddr: str, msg: str) -> bool:
