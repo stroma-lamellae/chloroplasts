@@ -67,6 +67,12 @@ paths:
         403:
           description: Unauthorized to view results
       parameters:
+        - name: licence
+          in: query
+          description: The licence key assigned to the institution
+          required: true
+          type: string
+
         - name: userId
           in: query
           description: The User's ID

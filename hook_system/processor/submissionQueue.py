@@ -4,21 +4,24 @@ from hookFile import HookFile
 from hookFileType import HookFileType
 from standardizedFile import StandardizedFile
 from typing import List, Tuple
-from datetime import datetime, timedelta
+import smtplib
+from email.message import EmailMessage
 import tarfile as tar
 import threading
 import time
+import arrow
 import os
 import standardize
 import winnow
 import xmlGenerator
 
+timeQueue = list()
+processing_per_file = 0.001 #TODO: actually time processing of a file
 mutex = threading.Lock()
 submissionQueue: List[Tuple[str, str]] = []
 
+def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
-def addToQueue(filePath: str, emailAddr: str) -> Tuple[bool, str]:
-    
     mutex.acquire()
 
     nPrior: int = len(submissionQueue)
@@ -30,14 +33,16 @@ def addToQueue(filePath: str, emailAddr: str) -> Tuple[bool, str]:
     mutex.release()
 
     if nCur == nPrior+1:
-        return True, datetime.now() + timedelta(minutes=5) #TODO find a formula for wait time
+        estimate = estimateProcessing(numFile)
+        timer = (filepath, arrow.utcnow(), estimate)
+        timeQueue.append(timer)
+        local_utc = arrow.utcnow().shift(seconds=estimate)
+        return True, local_utc.to('local').format('YYY-MM-DD HH:mm:ss')
     else:
         return False, ""
 
-
-
 def processQueue():
-    
+
     while True:
         mutex.acquire()
 
@@ -61,12 +66,11 @@ def processQueue():
 
                         #Break up the file path into it's respective folders
                         filePathElements: List[str] = os.path.normpath(fileName).split(os.sep)
-                        
-                        ext = fileName[fileName.rfind('.'):] #Find the file extension
+                        ext = fileName[fileName.rfind('.'):]
 
                         #This is a previous years submission so we need to use it to check for plagiarism but not actually
                         #check for plagiarism in this file
-                        if filePathElements[0] == 'PreviousYears': 
+                        if filePathElements[0] == 'PreviousYears':
                             owner = filePathElements[1].split('_')[-1] #Get the student hash in the folder name
 
                             if ext == ".java": #If it's a java file then add it to the java list
@@ -115,13 +119,37 @@ def processQueue():
             allMatches += javaMatches
             with open("./Results/"+jobID+".xml", 'wb') as f:
                 f.write(xmlGenerator.generateResult(allMatches))
-
+            timeQueue.pop()
             os.remove(filePath)
-                        
-            #TODO SEND EMAIL 
 
-
+            notified = __sendEmail(emailAddr,jobID)
+            #not sure what the best thing to do here is. . .
 
 
 def __sendEmail(emailAddr: str, msg: str) -> bool:
-    return True
+
+    msg = EmailMessage("Your results have been processed and are ready to be"+
+    " downloaded from the hook. Please log in to your account and request"+
+    " them with job id: "+msg)
+    msg.set_content()
+    msg["Subject"]= "Your Results are Ready!"
+    msg["To"] = emailAddr
+    msg["From"] = config["EMAIL"]["FromAddr"]
+
+    s = smtplib.SMTP(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
+    s.ehlo()
+    s.starttls()
+    s.ehlo()
+    s.login(config["EMAIL"]["FromAddr"], config["EMAIL"]["FromPassword"])
+    s.sendmail(config["EMAIL"]["FromAddr"], recipients, msg.as_string())
+    s.quit()
+
+
+def estimateProcessing(numFile):
+
+    wait_time = 0
+    if timeQueue:
+        for timer in timeQueue:
+            wait_time+=timer[2]
+
+    return wait_time+(multiply(processing_per_file, numFile))

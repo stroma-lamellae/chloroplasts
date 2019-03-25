@@ -11,6 +11,10 @@ Readme for the Processing Server
 ```
 pip install psycopg2
 ```
+5. Arrow installed on system
+```
+pip install arrow
+```
 
 To first create your virtual enviroment for python run the command `virtualenv -p /usr/bin/python3 env`, for windows instead of `/usr/bin/python3` put the path to your python3 interpreter.
 

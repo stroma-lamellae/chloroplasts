@@ -43,7 +43,7 @@ def add():
         email = input("Enter their email address:\n")
         userid = hashlib.sha1()
         userid.update(email)
-        userid.hexdigest
+        userid.hexdigest()
         cur.execute("INSERT INTO \"Institutions\"(\"License_Number\",\"School_Name\", " +
                 "\"User_ID\",\"User_Name\", \"User_Email\") VALUES " +
                 "(%s, %s, %s, %s, %s);", (args.add, inst,userid, username,email))
