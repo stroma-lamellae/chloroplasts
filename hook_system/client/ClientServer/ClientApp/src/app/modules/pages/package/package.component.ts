@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PackageService } from '../../../core/services/package.service';
 import { Package, PreviousAssignment } from '../../../shared/models/package';
 import { Course, Assignment } from '../../../shared/models/course';
-import { CourseService } from '../../../core/services/course.service';
+import { CourseService } from 'src/app/core/services/course.service';
 
 @Component({
   selector: 'app-package',
@@ -18,14 +18,14 @@ export class PackageComponent implements OnInit {
   selectedAssignmentId: string;
   selectedAssignment: Assignment;
 
-  addAssignment: boolean = false;
+  // addAssignment: boolean = false;
 
-  supportingAssignments: Assignment[] = [];
-  supportingCourse: Course;
-  supportingCourseId: string;
+  // supportingAssignments: Assignment[] = [];
+  // supportingCourse: Course;
+  // supportingCourseId: string;
 
-  supportingAssignmentId: string;
-  supportingAssignment: Assignment;
+  // supportingAssignmentId: string;
+  // supportingAssignment: Assignment;
 
   constructor(
     private _courseService: CourseService,
@@ -33,16 +33,14 @@ export class PackageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._courseService.getCourses().subscribe(res => {
-      this.courses = res;
-    });
+    this._courseService.getCourses().subscribe(courses => this.courses = courses);
   }
 
   updateAssignments() {
     this.selectedCourse = this.courses.find(
-      c => c.courseId.toString() == this.selectedCourseId
+      c => c.courseId.toString() === this.selectedCourseId
     );
-    if (!this.selectedCourse.assignments) {
+    if (this.selectedCourse.assignments) {
       this._courseService
         .getCourseAssignments(this.selectedCourse)
         .subscribe(res => {
@@ -53,52 +51,52 @@ export class PackageComponent implements OnInit {
 
   selectAssignment() {
     this.selectedAssignment = this.selectedCourse.assignments.find(
-      a => a.assignmentId.toString() == this.selectedAssignmentId
+      a => a.assignmentId.toString() === this.selectedAssignmentId
     );
   }
 
-  addSupporting() {
-    this.supportingCourse = null;
-    this.supportingAssignment = null;
-    this.addAssignment = true;
-  }
+  // addSupporting() {
+  //   this.supportingCourse = null;
+  //   this.supportingAssignment = null;
+  //   this.addAssignment = true;
+  // }
 
-  supportSelectCourse() {
-    this.supportingCourse = this.courses.find(
-      c => c.courseId.toString() == this.supportingCourseId
-    );
-    console.log(this.supportingCourse);
-    if (!this.supportingCourse.assignments) {
-      this._courseService
-        .getCourseAssignments(this.supportingCourse)
-        .subscribe(res => {
-          this.supportingCourse = res;
-        });
-    }
-  }
+  // supportSelectCourse() {
+  //   this.supportingCourse = this.courses.find(
+  //     c => c.courseId.toString() === this.supportingCourseId
+  //   );
+  //   console.log(this.supportingCourse);
+  //   if (!this.supportingCourse.assignments) {
+  //     this._courseService
+  //       .getCourseAssignments(this.supportingCourse)
+  //       .subscribe(res => {
+  //         this.supportingCourse = res;
+  //       });
+  //   }
+  // }
 
-  supportSelectAssignment() {
-    this.supportingAssignment = this.supportingCourse.assignments.find(
-      a => a.assignmentId.toString() == this.supportingAssignmentId
-    );
-  }
+  // supportSelectAssignment() {
+  //   this.supportingAssignment = this.supportingCourse.assignments.find(
+  //     a => a.assignmentId.toString() === this.supportingAssignmentId
+  //   );
+  // }
 
-  addSupportingAssignment() {
-    this.addAssignment = false;
-    this.supportingAssignment.course = this.supportingCourse;
-    this.supportingAssignments.push(this.supportingAssignment);
-  }
+  // addSupportingAssignment() {
+  //   this.addAssignment = false;
+  //   this.supportingAssignment.course = this.supportingCourse;
+  //   this.supportingAssignments.push(this.supportingAssignment);
+  // }
 
   submit() {
-    console.log(this.supportingAssignments);
+    // console.log(this.supportingAssignments);
     let pack = new Package();
     pack.assignmentId = parseInt(this.selectedAssignmentId);
-    pack.previousAssignments = [];
-    for (let i = 0; i < this.supportingAssignments.length; i++) {
-      let prevAssignment = new PreviousAssignment();
-      prevAssignment.assignmentId = this.supportingAssignments[i].assignmentId;
-      pack.previousAssignments.push(prevAssignment);
-    }
+    // pack.previousAssignments = [];
+    // for (let i = 0; i < this.supportingAssignments.length; i++) {
+    //   let prevAssignment = new PreviousAssignment();
+    //   prevAssignment.assignmentId = this.supportingAssignments[i].assignmentId;
+    //   pack.previousAssignments.push(prevAssignment);
+    // }
 
     this._packageService.uploadPackage(pack).subscribe(res => {
       console.log(res);
