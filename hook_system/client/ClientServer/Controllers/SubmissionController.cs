@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 using ClientServer.Models;
 using ClientServer.Services;
-
 namespace ClientServer.Controllers
 {
     [Route("api/[controller]")]
@@ -60,6 +61,73 @@ namespace ClientServer.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSubmission), new { id = submission.SubmissionId }, submission);
+        }
+
+        // POST: api/submission/bulk/
+        // Adds a bunch of submissions to the database
+        [HttpPost("bulk/{assignId}")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> PostBulkSubmission([FromForm] IFormFile file, long assignId)
+        {
+            // Check to make sure that the assignment exists
+            var assignment = await _context.Assignment.FindAsync(assignId);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            // Unzip zip file to location
+            string extractedFilePath = _fileService.ExtractFile(file);
+            List<Submission> submissions = new List<Submission>();
+            List<string> validSubmissionPaths = new List<string>();
+            List<string> invalidSubmissions = new List<string>();
+            // Browse through folders in the extracted location
+            var directories = Directory.GetDirectories(extractedFilePath);
+            foreach (var directory in directories)
+            {
+                string relativePath = directory.Split(extractedFilePath)[1];
+                // If the directory has the proper naming format, make a submission
+                if (relativePath.Split("_").Length == 3)
+                {
+                    var submission = new Submission { 
+                        AssignmentId = assignId, 
+                        StudentFirstname = relativePath.Split("_")[0].Replace("\\", ""),
+                        StudentLastname = relativePath.Split("_")[1], 
+                        StudentNumber = relativePath.Split("_")[2]
+                    };
+                    submissions.Add(submission);
+                    validSubmissionPaths.Add(relativePath);
+                } else // Otherwise it is invalid 
+                {
+                    invalidSubmissions.Add(relativePath);
+                }
+            }
+            // Save all the valid submissions to the database
+            _context.Submission.AddRange(submissions);
+            await _context.SaveChangesAsync();
+
+            // Get a list of the submission Ids
+            var submissionIds = submissions.Select(s => s.SubmissionId).ToList();
+
+            // Load required info to persist files
+            submissions = await _context.Submission
+                .Include(s => s.Assignment)
+                    .ThenInclude(a => a.Course)
+                .Where(s => submissionIds.Contains(s.SubmissionId))
+                .ToListAsync();
+            
+            // Persist all submission files
+            foreach (var submission in submissions)
+            {
+                _fileService.PersistSubmissionFiles(submission, extractedFilePath);
+                _context.Entry(submission).State = EntityState.Modified;
+            }
+            // Save the filepaths for the submissions
+            await _context.SaveChangesAsync();
+
+            return Ok(new BulkSubmissionResults { Submissions = submissions, InvalidSubmissionPaths = invalidSubmissions });
+
         }
 
         // PUT: api/submission/{id}/files
@@ -119,5 +187,10 @@ namespace ClientServer.Controllers
 
             return NoContent();
         }
+    }
+
+    class BulkSubmissionResults {
+        public List<Submission> Submissions;
+        public List<string> InvalidSubmissionPaths;
     }
 }

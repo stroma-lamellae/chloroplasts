@@ -24,10 +24,13 @@
       <button (click)="update()">Update</button>
       <button (click)="delete()">Delete</button>
       <button (click)="toggleSubmission()">Make Submission</button>
-      <button (click)="makeBulkSubmission()">Make Bulk Submission</button>
+      <button (click)="toggleBulkSubmission()">Make Bulk Submission</button>
     </div>
     <div *ngIf="showSubmission">
       <app-submission [assignmentId]="assignment.assignmentId" (submissionMade)="submissionMade($event)"></app-submission>
+    </div>
+    <div *ngIf="showBulkSubmission">
+      <app-bulk-submission [assignmentId]="assignment.assignmentId" (submissionMade)="bulkSubmissionMade($event)"></app-bulk-submission>
     </div>
     <div *ngIf="!assignment.assignmentId">
       <button (click)="update()">Create</button>

@@ -123,4 +123,11 @@ export class SubmissionService {
 
     return this._httpClient.post(this._apiEndpoint, formData);
   }
+
+  uploadBulkSubmission(file: File, assignmentId: number): Observable<any> {
+    let formData = new FormData();
+    formData.append("file", file);
+    
+    return this._httpClient.post(this._apiEndpoint + "/bulk/" + assignmentId, formData);
+  }
 }

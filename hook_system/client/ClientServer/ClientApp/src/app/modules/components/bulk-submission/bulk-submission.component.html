@@ -1,0 +1,13 @@
+<h2>Bulk Submit Assignments</h2>
+
+<div>
+  <div>
+    The compressed file should have all the submissions in the top directory
+    <label>Select Compressed File
+      <input id="file" name="file" type="file" (change)="fileChange($event)" />
+    </label>
+  </div>
+  <div>
+    <button type="submit" (click)="uploadSubmission()">Submit</button>
+  </div>
+</div>
