@@ -1,6 +1,7 @@
 from hookFile import HookFile
 from hookFileType import HookFileType
 import submissionQueue
+import connexion
 import arrow
 import uuid
 import os
@@ -10,9 +11,9 @@ from tempfile import SpooledTemporaryFile
 
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
-def submit(licence: str, userId: str, email: str, data) -> str:
+def submit(userId: str, email: str, data) -> str:
 
-    auth_ok = authorize(licence, userId)
+    auth_ok = authorize(userId)
     if not auth_ok[0]:
         return auth[2],auth[1]
 
@@ -68,8 +69,8 @@ def submit(licence: str, userId: str, email: str, data) -> str:
     else:
         return "Unable to Add Submission to Queue", 400
 
-def fetch(licence: str, userId: str, jobId: str) -> str:
-    auth_ok = authorize(licence, userId)
+def fetch(userId: str, jobId: str) -> str:
+    auth_ok = authorize(userId)
     if not auth_ok[0]:
         return auth[2],auth[1]
 
@@ -88,7 +89,8 @@ def fetch(licence: str, userId: str, jobId: str) -> str:
 
     return {'results': xmlResults}
 
-def authorize(licence, userId) -> (bool,int,str):
+def authorize(userId) -> (bool,int,str):
+    licence = connexion.request.headers['{licence}']
     try:
         #need to look into secure way to store dbusername + password
         conn = psycopg2.connect(host="localhost", database="hookserver", user=dbUsername, password=dbPassword)
@@ -96,10 +98,11 @@ def authorize(licence, userId) -> (bool,int,str):
         select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
         cur.execute(select_user_id, (email, ))
         db_values = cur.fetchone()
-        if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[1], "utf-8")) == db_values[1]:
-            print("Authorized Licence")
-        if db_values[1] == userId:
-            return (True,"User Authorized, Proceeding to Process",200)
+        if db_values:
+            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[1], "utf-8")) == db_values[1]:
+                print("Authorized Licence")
+            if db_values[1] == userId:
+                return (True,"User Authorized, Proceeding to Process",200)
         else:
             return (False,"Forbidden",403)
     except:

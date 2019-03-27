@@ -29,7 +29,7 @@ paths:
         - multipart/form-data
       parameters: # List of parameters that the request has
         - name: licence
-          in: query
+          in: header
           description: The licence key assigned to the institution
           required: true
           type: string
@@ -68,7 +68,7 @@ paths:
           description: Unauthorized to view results
       parameters:
         - name: licence
-          in: query
+          in: header
           description: The licence key assigned to the institution
           required: true
           type: string

@@ -94,7 +94,8 @@ def processQueue():
                                 javaWhitelist.append(HookFile(fileName, "", None, tarFile.extractfile(fileName).read().decode('utf-8')))
                             elif ext == ".cpp" or ext == ".c" or ext == ".hpp" or ext == ".h":
                                 cWhitelist.append(HookFile(fileName, "", None, tarFile.extractfile(fileName).read().decode('utf-8')))
-
+                    filetime = time.time()
+                all_file_time = time.time()
             """
             The MOSS paper on Winnowing goes into detail on how the winnowing algorithm work's and why it is necessary to standardize the input.
             Section 3 of the paper explains the winnowing algorithm while Section 5.2 describes how to use the algorithm for plagiarism detection.
@@ -102,8 +103,6 @@ def processQueue():
             """
 
             #Standardize the files to be processed, this includes removing variable names.
-                filetime = time.time()
-            all_file_time = time.time()
 
             cStandardized: List[StandardizedFile] = standardize.standardizeC(cFiles)
             cStandardizedWhitelist : List[StandardizedFile] = standardize.standardizeC(cWhitelist)
