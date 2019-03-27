@@ -16,9 +16,17 @@ export class CourseService {
     return this._httpClient.get<Course[]>(this._apiEndpoint);
   }
 
+  getYearCourses(year): Observable<Course[]> {
+    return this._httpClient.get<Course[]>(this._apiEndpoint + '/' + year);
+  }
+
   getSemesterCourses(year, semester): Observable<Course[]> {
     return this._httpClient.get<Course[]>(this._apiEndpoint + '/' + year + '/' + semester);
   }
+
+  // getProgramCourses(year, semester, program): Observable<Course[]> {
+  //   return this._httpClient.get<Course[]>(this._apiEndpoint + '/' + year + '/' + semester + '/' + program);
+  // }
 
   addCourse(course: Course): Observable<Course> {
     return this._httpClient.post<Course>(this._apiEndpoint, course);

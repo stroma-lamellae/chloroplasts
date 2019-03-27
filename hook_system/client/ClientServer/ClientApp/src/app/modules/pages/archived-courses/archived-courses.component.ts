@@ -15,6 +15,7 @@ export class ArchivedCoursesComponent implements OnInit {
 
   courseForm: FormGroup;
   allCourses: Course[];
+  searchedCourses: Course[];
 
   academicYear: string;
   currYear1: any;
@@ -22,7 +23,13 @@ export class ArchivedCoursesComponent implements OnInit {
 
   selectedYear: any;
   selectedSemester: any;
+  selectedProgram: any;
   selectedCourse: any;
+
+  yearSelected = false;
+  semesterSelected = false;
+  programSelected = false;
+  courseSelected = false;
 
   currYear = (new Date().getFullYear());
   currMonth = (new Date().getMonth());
@@ -47,6 +54,7 @@ export class ArchivedCoursesComponent implements OnInit {
     this.courseForm = new FormGroup({
       year: new FormControl(),
       semester: new FormControl(),
+      program: new FormControl(),
       course: new FormControl()
     });
 
@@ -61,10 +69,64 @@ export class ArchivedCoursesComponent implements OnInit {
     return this.courseForm.controls;
   }
 
-  submit(): void {
-    this.selectedSemester = this.f.semester.value;
-    this.selectedYear = this.f.year.value;
-    this.selectedCourse = this.f.course.value;
+  yearChange(): void {
+    if (this.f.year.value === '') {
+      this.yearSelected = false;
+      this.semesterSelected = false;
+      this.programSelected = false;
+      this.courseSelected = false;
+
+      this.selectedYear = '';
+      this.selectedSemester = '';
+      this.selectedProgram = '';
+      this.selectedCourse = '';
+    } else {
+      this.yearSelected = true;
+      this.selectedYear = this.f.year.value;
+    }
+
+  }
+
+  semesterChange(): void {
+    if (this.f.semester.value === '') {
+      this.semesterSelected = false;
+      this.programSelected = false;
+      this.courseSelected = false;
+
+      this.selectedSemester = '';
+      this.selectedProgram = '';
+      this.selectedCourse = '';
+    } else {
+      this.semesterSelected = true;
+      this.selectedSemester = this.f.semester.value;
+    }
+
+    this.courseService.getSemesterCourses(this.selectedYear, this.selectedSemester)
+    .subscribe(allCourses => this.searchedCourses = allCourses);
+  }
+
+  programChange(): void {
+    if (this.f.program.value === '') {
+      this.programSelected = false;
+      this.courseSelected = false;
+
+      this.selectedProgram = '';
+      this.selectedCourse = '';
+    } else {
+      this.programSelected = true;
+      this.selectedProgram = this.f.program.value;
+    }
+
+  }
+
+  courseChange(): void {
+    if (this.f.course.value === '') {
+      this.courseSelected = false;
+      this.selectedCourse = '';
+    } else {
+      this.courseSelected = true;
+      this.selectedCourse = this.f.course.value;
+    }
   }
 
 }

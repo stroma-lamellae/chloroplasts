@@ -1,6 +1,7 @@
 @import '../../../../variables';
 
 .course__view {
+    position: relative;
 
     &-box {
         float:left;
@@ -54,10 +55,13 @@
 
     &-summary {
         clear: both;
-        text-align: right;
         font-family: SF Pro Text;
         font-size: 15px;
         color: $color-text-black;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        padding: 15px;
     }
     
 }
