@@ -197,7 +197,6 @@ namespace ClientServer.Services
         public string ExtractFile(IFormFile file)
         {
             string filePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Split(".")[0]);
-            File.Delete(filePath); // Because GetTempFilename seems to create the file
             using (Stream stream = file.OpenReadStream())
             using (var reader = ReaderFactory.Open(stream))
             {
