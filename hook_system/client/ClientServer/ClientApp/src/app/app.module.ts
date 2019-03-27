@@ -27,8 +27,8 @@ import { FileDropModule } from 'ngx-file-drop';
     ReactiveFormsModule,
     RootModule,
     routing,
-	MatFileUploadModule,
-	FileDropModule
+    MatFileUploadModule,
+    FileDropModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

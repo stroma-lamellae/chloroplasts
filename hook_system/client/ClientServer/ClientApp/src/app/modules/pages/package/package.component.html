@@ -11,7 +11,7 @@
         <label>Program Code</label>
         <select class="form-control" formControlName="programCode">
           <option value="">Select Code</option>
-          <option *ngFor="let course of courses" value={{course.courseCode}}>{{course.courseCode}}</option>
+          <option *ngFor="let course of courses" value={{course.programCode}}>{{course.programCode}}</option>
         </select>
       </div>
     </div> -->
@@ -38,6 +38,10 @@
     </div>
     <div class="package__jobs-input">
       <input type="file">
+      <!-- <file-drop>
+        <span>Drop Here</span>
+      </file-drop> -->
+      <mat-file-drop-queue></mat-file-drop-queue>
     </div>
     <div class="package__jobs-input">
       <button>LAUNCH</button>
