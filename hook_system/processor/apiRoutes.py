@@ -7,7 +7,6 @@ import uuid
 import os
 import tarfile as tar
 import psycopg2
-from tempfile import SpooledTemporaryFile
 
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
@@ -93,7 +92,7 @@ def authorize(userId) -> (bool,int,str):
     licence = connexion.request.headers['{licence}']
     try:
         #need to look into secure way to store dbusername + password
-        conn = psycopg2.connect(host="localhost", database="hookserver", user=dbUsername, password=dbPassword)
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
         select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
         cur.execute(select_user_id, (email, ))
