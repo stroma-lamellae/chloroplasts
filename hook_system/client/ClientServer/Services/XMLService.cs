@@ -57,12 +57,12 @@ namespace ClientServer.Services
             var hashMapping = await _context.StudentHashMapping
                 .Where(s => s.Hash_StudentNumber == hash)
                 .FirstAsync();
-            var something = await _context.Submission
+            var submission = await _context.Submission
                 .Where(s => s.StudentFirstname == hashMapping.Firstname)
                 .Where(s => s.StudentLastname == hashMapping.Lastname)
                 .Where(s => s.StudentNumber == hashMapping.StudentNumber)
                 .FirstAsync();
-            return something.SubmissionId;
+            return submission.SubmissionId;
         }
     }
 
