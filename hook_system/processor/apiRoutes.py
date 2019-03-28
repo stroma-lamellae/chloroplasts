@@ -12,9 +12,9 @@ validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
 def submit(userId: str, email: str, data) -> str:
 
-    auth_ok = authorize(userId)
+    auth_ok = authorize(userId,email)
     if not auth_ok[0]:
-        return auth[2],auth[1]
+        return auth[1],auth[2]
 
     #Create a 128 bit job number represented in a hex string
     jobID: str = str(uuid.uuid4())
@@ -69,9 +69,9 @@ def submit(userId: str, email: str, data) -> str:
         return "Unable to Add Submission to Queue", 400
 
 def fetch(userId: str, jobId: str) -> str:
-    auth_ok = authorize(userId)
+    auth_ok = authorize(userId, email)
     if not auth_ok[0]:
-        return auth[2],auth[1]
+        return auth[1],auth[2]
 
     resultPath = os.path.join("./Results", jobId + ".xml")
 
@@ -88,8 +88,8 @@ def fetch(userId: str, jobId: str) -> str:
 
     return {'results': xmlResults}
 
-def authorize(userId) -> (bool,int,str):
-    licence = connexion.request.headers['{licence}']
+def authorize(userId, email) -> (bool,int,str):
+    licence = connexion.request.headers['licence']
     try:
         #need to look into secure way to store dbusername + password
         conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])

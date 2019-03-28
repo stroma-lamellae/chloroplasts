@@ -89,7 +89,7 @@ dbUsername = args.user
 dbPassword = args.password
 
 try:
-    conn = psycopg2.connect(host="localhost", database="hookserver", user=dbUsername, password=dbPassword)
+    conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
     cur = conn.cursor()
 except:
     #will stop execution and send back the error message
