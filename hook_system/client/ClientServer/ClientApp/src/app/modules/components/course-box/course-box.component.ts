@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Course, Assignment } from '../../../shared/models/course';
 import { Observable } from 'rxjs';
 

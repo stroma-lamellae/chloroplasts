@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from 'src/app/core/services/course.service';
 import { Course} from '../../../shared/models/course';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,10 +10,9 @@ import { forEach } from '@angular/router/src/utils/collection';
 export class DashboardComponent implements OnInit {
 
   semester: string;
-  semesters: any[];
 
   courses: Course[];
-  courseCodes: String[];
+  courseCodes: string[];
 
   currYear = (new Date().getFullYear().toString());
   currMonth = (new Date().getMonth());
@@ -22,15 +20,20 @@ export class DashboardComponent implements OnInit {
   constructor(private courseService: CourseService) { }
 
   ngOnInit() {
-    this.semesters = ['Winter', 'Winter', 'Winter', 'Winter', 'Summer', 'Summer', 'Summer', 'Summer', 'Fall', 'Fall', 'Fall', 'Fall'];
-    this.semester = this.semesters[(new Date().getMonth())];
+    if (this.currMonth < 4) {
+      this.semester = 'Winter';
+    } else if (this.currMonth < 8) {
+      this.semester = 'Summer';
+    } else {
+      this.semester = 'Fall';
+    }
 
     this.getCourse();
   }
 
   getCourse(): void {
 
-    let sem: any;
+    let sem: number;
 
     if (this.currMonth < 4) {
       sem = 1;

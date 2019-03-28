@@ -10,7 +10,7 @@
               <p>{{c.programCode}}</p>
               <hr/>
               <div *ngFor="let course of courses">
-                <div *ngIf="course.programCode == c.programCode">
+                <div *ngIf="course.programCode === c.programCode">
                   <app-course-box [course]="course"></app-course-box>
                 </div>
               </div>

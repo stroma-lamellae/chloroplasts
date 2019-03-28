@@ -29,7 +29,6 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  exports: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

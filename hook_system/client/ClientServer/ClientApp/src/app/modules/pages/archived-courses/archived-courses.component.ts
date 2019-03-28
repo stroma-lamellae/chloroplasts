@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from 'src/app/core/services/course.service';
 import { Course } from '../../../shared/models/course';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { getEffectiveTypeRoots } from 'typescript';
 
 @Component({
   selector: 'app-archived-courses',
