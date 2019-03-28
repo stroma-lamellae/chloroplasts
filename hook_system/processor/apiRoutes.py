@@ -1,5 +1,6 @@
 from hookFile import HookFile
 from hookFileType import HookFileType
+import re
 import submissionQueue
 import connexion
 import arrow
@@ -26,9 +27,11 @@ def submit(userId: str, email: str, data) -> str:
             f.write(line)
 
     fileCount = 0
+    java_files = 0
+    cpp_files = 0
     with tar.open(filename, mode='r') as tarFile:
         for fileName in tarFile.getnames():
-            if tarFile.getmember(fileName).isfile() :
+            if tarFile.getmember(fileName).isfile():
 
                 #Break up the file path into it's respective folders
                 filePathElements: List[str] = os.path.normpath(fileName).split(os.sep)
@@ -45,6 +48,12 @@ def submit(userId: str, email: str, data) -> str:
                     os.remove(filename)
                     return "Invalid File Type: " + ext, 400
 
+                if filePathElements[0] == "CurrentYear" and ext is in validFileExt:
+                    if ext != ".java":
+                        cpp_files+=1
+                    else:
+                        java_files+=1
+
                 #Verifying the folder structure of each file
                 if filePathElements[0] == "PreviousYears" or filePathElements[0] == "CurrentYear":
                     if len(filePathElements[1].split('_')) != 3:
@@ -59,6 +68,8 @@ def submit(userId: str, email: str, data) -> str:
                     return "Unrecognized Data Category", 400
 
                 fileCount+=1
+    if java_files < 1 and cpp_files < 1:
+        return "Insufficient files to detect plagiarism", 400
 
     #Add the filename to a queue to process
     added, waitTime = submissionQueue.addToQueue(filename,fileCount, email)
@@ -72,6 +83,10 @@ def fetch(userId: str, jobId: str) -> str:
     auth_ok = authorize(userId, email)
     if not auth_ok[0]:
         return auth[1],auth[2]
+
+    pattern = re.compile("[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}")
+    if not pattern.match(jobId):
+        return ("Forbidden",403)
 
     resultPath = os.path.join("./Results", jobId + ".xml")
 
