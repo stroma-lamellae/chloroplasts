@@ -17,3 +17,6 @@ def addVariable(ctx):
 
 def getVarList():
     return list(dict.fromkeys(variableList))
+
+def clearList():
+    variableList.clear()

@@ -1,6 +1,7 @@
 from hookFile import HookFile
 from hookFileType import HookFileType
 import re
+from typing import List
 import submissionQueue
 import connexion
 import arrow
