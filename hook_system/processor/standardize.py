@@ -75,6 +75,8 @@ def standardizeJava(javaFiles: List[HookFile]) -> List[StandardizedFile]:
 
         standardizedFiles.append(StandardizedFile(javaFile, stripped))
 
+        JavaSyntax.clearLists()
+
     return standardizedFiles
     
 def standardizeC(cFiles: List[HookFile]) -> List[StandardizedFile]:
@@ -100,5 +102,7 @@ def standardizeC(cFiles: List[HookFile]) -> List[StandardizedFile]:
         stripped = ''.join(words).replace('\t','').lower()
 
         standardizedFiles.append(StandardizedFile(cFile, stripped))
+
+        CPP14Syntax.clearList()
 
     return standardizedFiles

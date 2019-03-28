@@ -50,3 +50,9 @@ def addVariable(ctx):
 
 def getLists():
     return list(dict.fromkeys(variableList)), list(dict.fromkeys(funcList)), list(dict.fromkeys(classList)), list(dict.fromkeys(typeList))
+
+def clearLists():
+    variableList.clear()
+    funcList.clear()
+    classList.clear()
+    typeList.clear()
