@@ -16,8 +16,8 @@ paths:
       operationId: apiRoutes.submit # Where the package should look for the function to call
                                     # for example this will look in a file called submit.py
                                     # for a function named "submission" and call it when a request is made
-      produces: # what the request returns 
-        - text/plain 
+      produces: # what the request returns
+        - text/plain
       responses:
         200:
           description: Submission Received
@@ -26,8 +26,14 @@ paths:
         400:
           description: Error Submitting Request
       consumes:
-        - multipart/form-data      
+        - multipart/form-data
       parameters: # List of parameters that the request has
+        - name: licence
+          in: header
+          description: The licence key assigned to the institution
+          required: true
+          type: string
+
         - name: userId
           in: query
           description: The User's ID
@@ -61,12 +67,18 @@ paths:
         403:
           description: Unauthorized to view results
       parameters:
+        - name: licence
+          in: header
+          description: The licence key assigned to the institution
+          required: true
+          type: string
+
         - name: userId
           in: query
           description: The User's ID
           required: true
           type: string
-        
+
         - name: jobId
           in: query
           description: The Job to return

@@ -1,19 +1,20 @@
 from hookFile import HookFile
 from hookFileType import HookFileType
-from datetime import datetime, timedelta
-from tempfile import SpooledTemporaryFile
+import submissionQueue
+import connexion
+import arrow
 import uuid
 import os
 import tarfile as tar
-import submissionQueue
+import psycopg2
 
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
 def submit(userId: str, email: str, data) -> str:
 
-    #TODO auth stuff before anything continues
-    # if not auth:
-    #     return "Forbidden", 403
+    auth_ok = authorize(userId,email)
+    if not auth_ok[0]:
+        return auth[1],auth[2]
 
     #Create a 128 bit job number represented in a hex string
     jobID: str = str(uuid.uuid4())
@@ -24,6 +25,7 @@ def submit(userId: str, email: str, data) -> str:
         for line in data.stream:
             f.write(line)
 
+    fileCount = 0
     with tar.open(filename, mode='r') as tarFile:
         for fileName in tarFile.getnames():
             if tarFile.getmember(fileName).isfile() :
@@ -56,8 +58,10 @@ def submit(userId: str, email: str, data) -> str:
                     os.remove(filename)
                     return "Unrecognized Data Category", 400
 
+                fileCount+=1
+
     #Add the filename to a queue to process
-    added, waitTime = submissionQueue.addToQueue(filename, email)
+    added, waitTime = submissionQueue.addToQueue(filename,fileCount, email)
 
     if added:
         return {"JobId" : jobID, "EstimatedCompletion" : waitTime}
@@ -65,12 +69,10 @@ def submit(userId: str, email: str, data) -> str:
         return "Unable to Add Submission to Queue", 400
 
 def fetch(userId: str, jobId: str) -> str:
+    auth_ok = authorize(userId, email)
+    if not auth_ok[0]:
+        return auth[1],auth[2]
 
-    #TODO auth stuff before anything continues
-    # if not auth:
-    #     return "Forbidden", 403
-
-    # TODO this will be read from config file
     resultPath = os.path.join("./Results", jobId + ".xml")
 
     #If the results don't exist return empty results
@@ -85,3 +87,25 @@ def fetch(userId: str, jobId: str) -> str:
     os.remove(resultPath)
 
     return {'results': xmlResults}
+
+def authorize(userId, email) -> (bool,int,str):
+    licence = connexion.request.headers['licence']
+    try:
+        #need to look into secure way to store dbusername + password
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
+        cur = conn.cursor()
+        select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
+        cur.execute(select_user_id, (email, ))
+        db_values = cur.fetchone()
+        if db_values:
+            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[1], "utf-8")) == db_values[1]:
+                print("Authorized Licence")
+            if db_values[1] == userId:
+                return (True,"User Authorized, Proceeding to Process",200)
+        else:
+            return (False,"Forbidden",403)
+    except:
+        #will stop execution and send back the error message
+        #sys.exit("error connecting to the database")
+        return (False,"Error connecting to database", 400)
+
