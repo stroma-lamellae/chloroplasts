@@ -2,6 +2,7 @@ from hookFile import HookFile
 from hookFileType import HookFileType
 from datetime import datetime, timedelta
 from tempfile import SpooledTemporaryFile
+from typing import List
 import uuid
 import os
 import tarfile as tar
