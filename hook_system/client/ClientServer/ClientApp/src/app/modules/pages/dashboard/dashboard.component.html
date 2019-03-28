@@ -1,3 +1,21 @@
-<p>
-  dashboard works!
-</p>
+<div class="app-dashboard dashboard">
+  <div class="dashboard__graphic">
+    <img class="dashboard__graphic-image" src="../../../../assets/courseViewGuy.svg" />
+  </div>
+  <div class="dashboard__courses">
+    <p class="dashboard__courses-title">Current Academic Semester | {{semester}} {{currYear}}</p>
+    <div class="dashboard__courses-department">
+        <div class="course__view">
+            <div class="course__view-department" *ngFor="let c of courses | unique:'programCode'">
+              <p>{{c.programCode}}</p>
+              <hr/>
+              <div *ngFor="let course of courses">
+                <div *ngIf="course.programCode === c.programCode">
+                  <app-course-box [course]="course"></app-course-box>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>

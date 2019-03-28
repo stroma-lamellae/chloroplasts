@@ -1,0 +1,67 @@
+@import '../../../../variables';
+
+.course__view {
+    position: relative;
+
+    &-box {
+        float:left;
+        position: relative;
+        padding: 11px;
+        padding-bottom:8px;
+        margin: 11px;
+        width: 30%;
+        min-height: 168px;
+        background: $color-primary-white;
+        border-radius: 6px;
+        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2), 0px 3px 4px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14);
+        
+        p {
+            padding-top: 0px;
+            font-weight: bold;
+            font-family: SF Pro Display;
+            font-size: 22px;
+            color: $color-text-black;
+            margin-bottom: 7px;
+
+            img {
+                float: right;
+                width: 15px;
+                height: 15px;
+            }
+        }
+    
+    }
+
+    &-assignments {
+        position: relative;
+        float: left;
+        background: rgba(26, 92, 128, 0.25);
+        border-radius: 4px;
+        margin: 4px;
+        width: fit-content;
+        min-width: 30%;
+        
+        p {
+            font-weight: 1;
+            font-family: SF Pro Text;
+            font-size: 14px;
+            text-align: center;
+            margin: 0;
+            padding: 2px;
+            color: #1A5C80;
+        }
+
+    }
+
+    &-summary {
+        clear: both;
+        font-family: SF Pro Text;
+        font-size: 15px;
+        color: $color-text-black;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        padding: 15px;
+    }
+    
+}

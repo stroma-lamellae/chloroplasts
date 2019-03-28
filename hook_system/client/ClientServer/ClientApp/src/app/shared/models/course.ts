@@ -13,6 +13,7 @@ export class Course {
     userId: number;
     year: number;
     semester: number;
+    programCode: string;
     courseCode: string;
 
     assignments: Assignment[];
