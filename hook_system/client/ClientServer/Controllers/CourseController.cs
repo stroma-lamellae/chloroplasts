@@ -23,7 +23,21 @@ namespace ClientServer.Controllers
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            return await _context.Course.ToListAsync();
+            return await _context.Course.Include(c => c.Assignments).ToListAsync();
+        }
+
+        // GET api/course/year/semester
+        // Gets all of the courses in a particular year and semester
+        [HttpGet("{year}/{semester}")]
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourses(int year, int semester)
+        {
+            var courses =  await _context.Course
+                .Where(c => c.Year == year)
+                .Where(c => c.Semester == semester)
+                .Include(c => c.Assignments)
+                .ToListAsync();
+
+            return courses;
         }
 
         // GET: api/course/#

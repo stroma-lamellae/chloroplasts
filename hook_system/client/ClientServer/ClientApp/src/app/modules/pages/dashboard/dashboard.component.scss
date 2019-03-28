@@ -1,0 +1,56 @@
+@import '../../../../variables';
+
+.dashboard {
+    background-color: $color-background;
+    width: 100%;
+    height: 100vh;
+    border-top: 30%;
+    padding-top: 5vh;
+    padding-left: 6vw;
+    padding-right: 3vw;
+
+    &__graphic {
+
+        &-image {
+            position: fixed;
+            right: 0px;
+            bottom: 0px;
+            padding: 30pt;
+        }
+
+    }
+
+    &__courses {
+        
+        &-title {
+            font-weight: bold;
+            color: $color-text-black;
+            font-size: 22px;
+            position: relative;
+            width: 100%;
+        }
+
+    }
+
+}
+
+.course__view {
+
+    &-department {
+        padding-top: 20px;
+
+        p {
+            clear: both;
+            font-family: "SF UI Text";
+            font-size: 34px;
+            margin-bottom:0px;
+            padding-top: 20px;
+        }
+
+        hr {
+            border: 1px solid $color-text-black;
+            margin-top:0px;
+        }
+
+    }
+}

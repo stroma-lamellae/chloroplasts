@@ -1,0 +1,77 @@
+<div class="app-archive archive">
+  <div class="archive__graphic">
+    <img class="archive__graphic-image" src="../../../../assets/courseViewGuy.svg" />
+  </div>
+  <div class="archive__courses">
+    <p class="archive__courses-title">Previous Academic Years</p>
+    <hr/>
+    <form [formGroup]="courseForm" class="archive__courses-form">
+      <div class="archive__courses-input">
+        <div class="form-group">
+          <label>Year</label>
+          <select class="form-control" formControlName="year" (change)="yearChange()">
+            <option value="">Select Year</option>
+            <option *ngFor="let course of allCourses | unique:'year'" value={{course.year}}>{{course.year}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="archive__courses-input" *ngIf="yearSelected">
+        <div class="form-group">
+          <label>Semester</label>
+          <select class="form-control" formControlName="semester" (change)="semesterChange()">
+              <option value="" >Select Semester</option>
+              <option value="0" >Fall</option>
+              <option value="1" >Winter</option>
+              <option value="2" >Summer</option>
+          </select>
+        </div>
+      </div>
+      <div class="archive__courses-input" *ngIf="semesterSelected">
+          <div class="form-group">
+            <label>Program Code</label>
+            <select class="form-control" formControlName="program" (change)="programChange()">
+              <option value="">Select Program Code</option>
+              <option *ngFor="let course of searchedCourses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
+            </select>
+          </div>
+        </div>
+      <div class="archive__courses-input" *ngIf="programSelected">
+        <div class="form-group">
+          <label>Course Code</label>
+          <select class="form-control" formControlName="course" (change)="courseChange()">
+            <option value="">Select Course Code</option>
+            <option *ngFor="let course of searchedCourses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <div class="archive__courses-view" *ngIf="yearSelected && !semesterSelected">
+      <div *ngFor="let course of allCourses">
+        <div *ngIf="course.year == selectedYear">
+          <app-course-box [course]="course"></app-course-box>
+        </div>
+      </div>
+    </div>
+    <div class="archive__courses-view" *ngIf="semesterSelected && !programSelected">
+      <div *ngFor="let course of searchedCourses">
+        <div>
+          <app-course-box [course]="course"></app-course-box>
+        </div>
+      </div>
+    </div>
+    <div class="archive__courses-view" *ngIf="programSelected && !courseSelected">
+      <div *ngFor="let course of searchedCourses">
+        <div *ngIf="course.programCode == selectedProgram">
+          <app-course-box [course]="course"></app-course-box>
+        </div>
+      </div>
+    </div>
+    <div class="archive__courses-view" *ngIf="courseSelected">
+      <div *ngFor="let course of searchedCourses">
+        <div *ngIf="course.programCode == selectedProgram && course.courseCode == selectedCourse">
+          <app-course-box [course]="course"></app-course-box>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
