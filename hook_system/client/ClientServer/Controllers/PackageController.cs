@@ -33,7 +33,11 @@ namespace ClientServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Package>>> GetPackages()
         {
-            return await _context.Package.Include(p => p.Result).ToListAsync();
+            return await _context.Package
+                .Include(p => p.Result)
+                    .ThenInclude(r => r.Matches)
+                .OrderBy(p => p.PackageId)
+                .ToListAsync();
         }
 
         // GET: api/package/#

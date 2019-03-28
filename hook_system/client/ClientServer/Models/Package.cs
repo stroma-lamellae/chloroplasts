@@ -7,7 +7,7 @@ namespace ClientServer.Models
     {
         public long PackageId { get; set; }
         public long AssignmentId { get; set; }
-        public long JobId { get; set; }
+        public string JobId { get; set; }
         public DateTime EstimatedCompletion { get; set; }
        
         public virtual Assignment Assignment { get; set; }

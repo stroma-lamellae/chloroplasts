@@ -1,8 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using System.Xml.Serialization;
 using System.Threading.Tasks;
 using System.IO;
 using System;
+using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 
 using ClientServer.Models;
 
@@ -10,29 +13,35 @@ namespace ClientServer.Services
 {
     public interface IXMLService
     {
-        Result ParseXMLFile(string data);
+        Task<Result> ParseXMLFile(string data);
     }
 
     public class XMLService: IXMLService
     {
-        public Result ParseXMLFile(string data)
+        private readonly ClientServerContext _context;
+
+        public XMLService(ClientServerContext context)
         {
-            Console.WriteLine(data);
-            Console.WriteLine("Hello There");
-            XmlSerializer ser = new XmlSerializer(typeof(Results));
-            Results results = ((Results)ser.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(data ?? ""))));
+            _context = context;
+        }
+        public async Task<Result> ParseXMLFile(string data)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(results));
+            results results = ((results)ser.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(data ?? ""))));
             Result result = new Result();
+            result.Matches = new List<Match>();
             result.CompletedDate = DateTime.UtcNow;
             if (results.matches != null) {
                 foreach (var match in results.matches) {
                     Match modelMatch = new Match();
+                    modelMatch.Lines = new List<Line>();
 
                     Line line1 = new Line();
                     Line line2 = new Line();
-                    XMLSubmission sub1 = match.submissions[0];
-                    XMLSubmission sub2 = match.submissions[1];
-                    line1.SubmissionId = DeHash(sub1.hash);
-                    line2.SubmissionId = DeHash(sub2.hash);
+                    submission sub1 = match.submissions[0];
+                    submission sub2 = match.submissions[1];
+                    line1.SubmissionId = await DeHash(sub1.hash);
+                    line2.SubmissionId = await DeHash(sub2.hash);
 
                     line1.LineStart = sub1.line_start;
                     line2.LineStart = sub2.line_start;
@@ -53,14 +62,22 @@ namespace ClientServer.Services
         }
 
         // Looks up the hash, and returns the submission id
-        private int DeHash(string hash)
+        private async Task<long> DeHash(string hash)
         {
-            return 1;
+            var hashMapping = await _context.StudentHashMapping
+                .Where(s => s.Hash_StudentNumber == hash)
+                .FirstAsync();
+            var something = await _context.Submission
+                .Where(s => s.StudentFirstname == hashMapping.Firstname)
+                .Where(s => s.StudentLastname == hashMapping.Lastname)
+                .Where(s => s.StudentNumber == hashMapping.StudentNumber)
+                .FirstAsync();
+            return something.SubmissionId;
         }
     }
 
 
-    public class XMLSubmission
+    public class submission
     {
         public string hash { get; set; }
         public string file { get; set; }
@@ -68,14 +85,14 @@ namespace ClientServer.Services
         public int line_finish { get; set; }
     }
 
-    public class XMLMatch
+    public class match
     {
         public int number { get; set; }
-        public XMLSubmission[] submissions { get; set; }
+        public submission[] submissions { get; set; }
     }
 
-    public class Results
+    public class results
     {
-        public XMLMatch[] matches { get; set; }
+        public match[] matches { get; set; }
     }
 }

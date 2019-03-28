@@ -19,8 +19,8 @@ namespace ClientServer.Services
     {
         private readonly string _preScrubDirectory = "PreScrub";
         private readonly string _postScrubDirectory = "Scrubbed";
-        private readonly string _currentAssignmentDirectory = "Current Year";
-        private readonly string _previousAssignmentsDirectory = "Previous Years";
+        private readonly string _currentAssignmentDirectory = "CurrentYear";
+        private readonly string _previousAssignmentsDirectory = "PreviousYears";
         private readonly IFileService _fileService;
         private readonly IConfiguration _configuration;
 

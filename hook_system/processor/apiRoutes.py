@@ -14,7 +14,7 @@ def submit(userId: str, email: str, data) -> str:
     #TODO auth stuff before anything continues
     # if not auth:
     #     return "Forbidden", 403
-
+    
     with tar.open(fileobj=data.stream, mode='r') as tarFile:
         for fileName in tarFile.getnames():
             if tarFile.getmember(fileName).isfile() :
@@ -45,6 +45,7 @@ def submit(userId: str, email: str, data) -> str:
     #Write the tarball to disk to be processed later
     filename: str = "./Queue/"+jobID+".tar.gz"
     with open(filename, 'wb') as f:
+        data.stream.seek(0) # Needed because we read already read the tarball once
         for line in data.stream:
             f.write(line)
 

@@ -1,5 +1,10 @@
 <h1>All Packages</h1>
 <div *ngFor="let package of packages">
-  <p>{{package.result ? "Has Results" : "No Results Yet"}}</p>
-  <button (click)="getResults(package)">Get Results</button>
+  <p>Package ID: {{package.packageId}} <br />
+  {{package.result ? "Has Results" : "No Results Yet"}}</p>
+  <div *ngIf="package.result && package.result.matches">
+    This package has {{package.result.matches.length}} matches
+  </div>
+  <button *ngIf="!package.result" (click)="getResults(package)">Get Results</button>
+  <hr/>
 </div>

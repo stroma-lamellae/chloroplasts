@@ -19,7 +19,7 @@ namespace ClientServer.Services
     public interface IProcessingService
     {
         Task<ResultsResponse> InitiateUpload(Package package);
-        Task<ResultsResponse> RequestResults(long JobId);
+        Task<ResultsResponse> RequestResults(string jobId);
     }
 
     public class ProcessingService : IProcessingService
@@ -83,7 +83,7 @@ namespace ClientServer.Services
             };
         }
 
-        public async Task<ResultsResponse> RequestResults(long jobId)
+        public async Task<ResultsResponse> RequestResults(string jobId)
         {
             // TODO: Get the resultsRequest to be real
             var resultsRequest = new ResultsRequest {
@@ -103,7 +103,7 @@ namespace ClientServer.Services
             var responseText = await response.Content.ReadAsStringAsync();
             var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
 
-            var result = _xmlService.ParseXMLFile(resultsResponse.Results);
+            var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
             resultsResponse.Result = result;
             return resultsResponse;
         }
@@ -120,14 +120,14 @@ namespace ClientServer.Services
     public class ResultsRequest
     {
         public long UserId { get; set; }
-        public long JobId { get; set; }
+        public string JobId { get; set; }
         public string AuthToken { get; set; }
     }
 
     public class ResultsResponse
     {
         public string Status { get; set; }
-        public long JobId { get; set; }
+        public string JobId { get; set; }
         public DateTime EstimatedCompletion { get; set; }
         public string Results { get; set; } // TODO: Make this be a file
 

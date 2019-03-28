@@ -29,7 +29,7 @@ numOfUnscrubbedFolders = 0
 
 for section in listdir(folder):
     os.mkdir(join(destinationFolder, section))
-    if section == "Current Year" or section == "Previous Years":
+    if section == "CurrentYear" or section == "PreviousYears":
         for studentSubmission in listdir(join(folder, section)):
             try:
                 #take not of each folder you are going into
