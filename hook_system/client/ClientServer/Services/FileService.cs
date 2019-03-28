@@ -1,7 +1,9 @@
 using ClientServer.Models;
+using Microsoft.AspNetCore.Http;
 using System.IO;
-using SharpCompress.Writers;
 using SharpCompress.Common;
+using SharpCompress.Readers;
+using SharpCompress.Writers;
 
 /*
 This deals with anything to do with writing and saving files
@@ -26,6 +28,14 @@ namespace ClientServer.Services
         // Creates a tarball at the "dest" location from the files in 
         // the "source" directory. 
         void CompressFolder(string source, string dest);
+
+        // Extracts the given file (assuming it is compressed) to a temporary
+        //  folder and returns the location of that temporary folder
+        string ExtractFile(IFormFile file);
+
+        // Saves the files in this submission object.
+        // The submission needs a valid SubmissionId, as well as the Assignment and Course loaded
+        void PersistSubmissionFiles(Submission submission, string sourceDirBase);
     }
 
     public class FileService : IFileService
@@ -76,6 +86,17 @@ namespace ClientServer.Services
                     }
                 }
             }
+        }
+        // Saves the files in this submission object.
+        // The submission needs a valid SubmissionId, as well as the Assignment and Course loaded
+        public void PersistSubmissionFiles(Submission submission, string sourceDirBase)
+        {
+            var submissionPath = GetSubmissionPath(submission);
+            var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submissionPath);
+            submission.FilePath = submissionPath;
+            // var sourcePath = sourceDirBase + Path.DirectorySeparatorChar + GetSubmissionFolderName(submission);
+            var sourcePath = Path.Combine(sourceDirBase, GetSubmissionFolderName(submission));
+            DirectoryCopy(sourcePath, destPath, true);
         }
 
         // https://stackoverflow.com/questions/1288718/how-to-delete-all-files-and-folders-in-a-directory
@@ -171,6 +192,27 @@ namespace ClientServer.Services
             {
                 writer.WriteAll(sourcePath, "*", SearchOption.AllDirectories);   
             }
+        }
+
+        public string ExtractFile(IFormFile file)
+        {
+            string filePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Split(".")[0]);
+            using (Stream stream = file.OpenReadStream())
+            using (var reader = ReaderFactory.Open(stream))
+            {
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        reader.WriteEntryToDirectory(filePath, new ExtractionOptions()
+                        {
+                            ExtractFullPath = true,
+                            Overwrite = true
+                        });
+                    }
+                }
+            }
+            return filePath;
         }
 
         public string GetStorageDirectory() 

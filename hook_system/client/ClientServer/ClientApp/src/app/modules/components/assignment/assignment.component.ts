@@ -13,6 +13,7 @@ export class AssignmentComponent implements OnInit {
   @Input() assignment: Assignment;
   @Output() assignmentChange: EventEmitter<Assignment> = new EventEmitter();
   showSubmission = false;
+  showBulkSubmission = false;
 
   constructor(private _assignmentService: AssignmentService) { }
 
@@ -43,7 +44,15 @@ export class AssignmentComponent implements OnInit {
     this.showSubmission = !this.showSubmission;
   }
 
+  toggleBulkSubmission() {
+    this.showBulkSubmission = !this.showBulkSubmission;
+  }
+
   submissionMade() {
     this.showSubmission = false;
+  }
+
+  bulkSubmissionMade() {
+    this.showBulkSubmission = false;
   }
 }
