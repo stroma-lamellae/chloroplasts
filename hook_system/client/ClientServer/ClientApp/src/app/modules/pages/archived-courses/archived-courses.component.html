@@ -68,7 +68,7 @@
     </div>
     <div class="archive__courses-view" *ngIf="courseSelected">
       <div *ngFor="let course of searchedCourses">
-        <div *ngIf="course.courseCode == selectedCourse">
+        <div *ngIf="course.programCode == selectedProgram && course.courseCode == selectedCourse">
           <app-course-box [course]="course"></app-course-box>
         </div>
       </div>
