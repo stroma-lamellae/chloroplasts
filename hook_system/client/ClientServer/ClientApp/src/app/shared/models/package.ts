@@ -1,11 +1,29 @@
 import { Assignment } from './course';
+import { Submission } from './submission';
+
+export class Line {
+  lineId: number;
+  matchId: number;
+  submissionId: number;
+  lineStart: number;
+  lineEnd: number;
+  filePath: string;
+  match: Match;
+  submission: Submission;
+}
+
+export class Match {
+  matchId: number;
+  resultId: number;
+  lines: Line[];
+}
 
 export class Result {
   resultId: number;
   completedDate: Date;
   packageId: number;
   pack: Package;
-  // matches: Match[];
+  matches: Match[];
 }
 
 export class PreviousAssignment {
