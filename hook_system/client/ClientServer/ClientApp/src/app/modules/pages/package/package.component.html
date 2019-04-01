@@ -10,7 +10,7 @@
     <div class="package__jobs-input">
       <div class="form-group">
         <label>Current Year</label>
-        <select class="form-control" formControlName="year" [value]='2019'>
+        <select class="form-control" formControlName="year" [value]='2019' [(ngModel)]="selectedYear">
           <option *ngFor="let course of courses | unique:'year'" value={{course.year}}>{{course.year}}</option>
         </select>
       </div>
@@ -18,7 +18,7 @@
     <div class="package__jobs-input">
       <div class="form-group">
         <label>Semester</label>
-        <select class="form-control" formControlName="semester">
+        <select class="form-control" formControlName="semester" [(ngModel)]="selectedSemester">
           <option [value]='0'>Fall</option>
           <option [value]='1'>Winter</option>
           <option [value]='2'>Summer</option>
@@ -28,7 +28,7 @@
     <div class="package__jobs-input">
       <div class="form-group">
         <label>Program Code</label>
-        <select class="form-control" formControlName="program">
+        <select class="form-control" formControlName="program" [(ngModel)]="selectedProgramCode">
             <option *ngFor="let course of courses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
         </select>
       </div>
@@ -36,8 +36,8 @@
     <div class="package__jobs-input">
       <div class="form-group">
         <label>Course Code</label>
-        <select class="form-control" formControlName="course" [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
-            <option *ngFor="let course of courses | unique:'courseCode'" value={{course.courseId}}>{{course.courseCode}}</option>
+        <select class="form-control" formControlName="course" [(ngModel)]="selectedCourseCode" (change)="updateAssignments()">
+            <option *ngFor="let course of courses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
         </select>
       </div>
     </div>
@@ -85,8 +85,8 @@
       </div>
       <div class="package__jobs-input">
         <label>Select course</label>
-        <select [(ngModel)]="supportingCourseId" (change)="supportSelectCourse()">
-          <option [value]="course.courseId" *ngFor="let course of courses | unique:'courseCode'">{{course.courseCode}}</option>
+        <select [(ngModel)]="supportingCourseCode" (change)="supportSelectCourse()">
+          <option [value]="course.courseCode" *ngFor="let course of courses | unique:'courseCode'">{{course.courseCode}}</option>
         </select>
       </div>
       <div class="package__jobs-input" *ngIf="supportingCourse">
