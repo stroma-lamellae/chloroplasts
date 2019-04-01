@@ -49,7 +49,7 @@ def submit(userId: str, email: str, data) -> str:
                     os.remove(filename)
                     return "Invalid File Type: " + ext, 400
 
-                if filePathElements[0] == "CurrentYear" and ext is in validFileExt:
+                if filePathElements[0] == "CurrentYear" and ext in validFileExt:
                     if ext != ".java":
                         cpp_files+=1
                     else:
