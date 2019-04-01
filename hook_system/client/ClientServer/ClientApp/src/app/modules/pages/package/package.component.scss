@@ -30,15 +30,24 @@
             font-size: 22px;
             position: relative;
             width: 100%;
-            // padding-bottom: 40px;
             margin-bottom:0px;
             padding-top: 20px;
+        }
+
+        &-subtitle {
+            clear: both;
+            font-weight: bold;
+            color: $color-text-black;
+            font-size: 17px;
+            position: relative;
+            width: 100%;
+            margin-bottom:0px;
         }
 
         &-input {
             float: left;
             margin: 20px;
-            width: 20%;
+            width: 15%;
 
             label {
                 display: block;
@@ -65,7 +74,7 @@
             button {
                 @extend select;
                 float: right;
-                background: #4F4F4F;
+                background: #1A5C80;
                 color: $color-primary-white;
             }
 
@@ -74,6 +83,43 @@
                 display: inline;
             }
 
+        }
+
+    }
+
+    hr {
+        // border: 1px solid $color-text-black;
+        margin-top:0px;
+    }
+
+}
+
+.supporting {
+
+    &__doc {
+        display: block;
+        font-family: "SF Pro Text";
+        font-size: 20px;
+        line-height: 40px;
+        color: $color-text-black;
+        font-weight: bold;
+        margin: 4px;
+
+        &-remove, 
+        &-add,
+        &-submit {
+            position: relative;
+            font-family: "Arial Rounded MT Bold";
+            font-size: 30px;
+            line-height: normal;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            border: 0px;
+            border-radius: 20px;
+            background: $color-primary-light-grey;
+            color: $color-primary-white;
+            margin-left: 30px;
         }
 
     }
