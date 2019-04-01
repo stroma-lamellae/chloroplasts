@@ -1,0 +1,33 @@
+<div class="package__jobs-input">
+  <div class="form-group">
+    <select class="form-control" formControlName="year">
+      <option *ngFor="let course of courses | unique:'year'" value={{course.year}}>{{course.year}}</option>
+    </select>
+  </div>
+</div>
+<div class="package__jobs-input">
+  <div class="form-group">
+    <select class="form-control" formControlName="program">
+        <option *ngFor="let course of courses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
+    </select>
+  </div>
+</div>
+<div class="package__jobs-input">
+  <div class="form-group">
+    <select class="form-control" formControlName="course" [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
+        <option *ngFor="let course of courses | unique:'courseCode'" value={{course.courseId}}>{{course.courseCode}}</option>
+    </select>
+  </div>
+</div>
+<div class="package__jobs-input" *ngIf="selectedCourse">
+  <div class="form-group">
+    <select class="form-control" formControlName="assignment" [(ngModel)]="selectedAssignmentId">
+        <option *ngFor="let assignment of selectedCourse.assignments" value={{assignment.assignmentId}}>{{assignment.name}}</option>
+    </select>
+  </div>
+</div>
+<div class="package__jobs-input">
+  <div class="form-group">
+    <button>-</button>
+  </div> 
+</div>

@@ -3,6 +3,7 @@ import { PackageService } from '../../../core/services/package.service';
 import { Package, PreviousAssignment } from '../../../shared/models/package';
 import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from 'src/app/core/services/course.service';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-package',
@@ -10,6 +11,8 @@ import { CourseService } from 'src/app/core/services/course.service';
   styleUrls: ['./package.component.scss']
 })
 export class PackageComponent implements OnInit {
+  packageForm: FormGroup;
+
   courses: Course[];
 
   selectedCourse: Course;
@@ -18,14 +21,16 @@ export class PackageComponent implements OnInit {
   selectedAssignmentId: string;
   selectedAssignment: Assignment;
 
-  // addAssignment: boolean = false;
+  addAssignment = false;
 
-  // supportingAssignments: Assignment[] = [];
-  // supportingCourse: Course;
-  // supportingCourseId: string;
+  supportingAssignments: Assignment[] = [];
+  supportingCourse: Course;
+  supportingCourseId: string;
 
-  // supportingAssignmentId: string;
-  // supportingAssignment: Assignment;
+  supportingAssignmentId: string;
+  supportingAssignment: Assignment;
+
+  currYear = (new Date().getFullYear());
 
   constructor(
     private _courseService: CourseService,
@@ -34,6 +39,19 @@ export class PackageComponent implements OnInit {
 
   ngOnInit() {
     this._courseService.getCourses().subscribe(courses => this.courses = courses);
+
+    this.packageForm = new FormGroup({
+      year: new FormControl(),
+      semester: new FormControl(),
+      program: new FormControl(),
+      course: new FormControl(),
+      assignment: new FormControl()
+    });
+  }
+
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.packageForm.controls;
   }
 
   updateAssignments() {
@@ -55,42 +73,42 @@ export class PackageComponent implements OnInit {
     );
   }
 
-  // addSupporting() {
-  //   this.supportingCourse = null;
-  //   this.supportingAssignment = null;
-  //   this.addAssignment = true;
-  // }
+  addSupporting() {
+    this.supportingCourse = null;
+    this.supportingAssignment = null;
+    this.addAssignment = true;
+  }
 
-  // supportSelectCourse() {
-  //   this.supportingCourse = this.courses.find(
-  //     c => c.courseId.toString() === this.supportingCourseId
-  //   );
-  //   console.log(this.supportingCourse);
-  //   if (!this.supportingCourse.assignments) {
-  //     this._courseService
-  //       .getCourseAssignments(this.supportingCourse)
-  //       .subscribe(res => {
-  //         this.supportingCourse = res;
-  //       });
-  //   }
-  // }
+  supportSelectCourse() {
+    this.supportingCourse = this.courses.find(
+      c => c.courseId.toString() === this.supportingCourseId
+    );
+    console.log(this.supportingCourse);
+    if (!this.supportingCourse.assignments) {
+      this._courseService
+        .getCourseAssignments(this.supportingCourse)
+        .subscribe(res => {
+          this.supportingCourse = res;
+        });
+    }
+  }
 
-  // supportSelectAssignment() {
-  //   this.supportingAssignment = this.supportingCourse.assignments.find(
-  //     a => a.assignmentId.toString() === this.supportingAssignmentId
-  //   );
-  // }
+  supportSelectAssignment() {
+    this.supportingAssignment = this.supportingCourse.assignments.find(
+      a => a.assignmentId.toString() === this.supportingAssignmentId
+    );
+  }
 
-  // addSupportingAssignment() {
-  //   this.addAssignment = false;
-  //   this.supportingAssignment.course = this.supportingCourse;
-  //   this.supportingAssignments.push(this.supportingAssignment);
-  // }
+  addSupportingAssignment() {
+    this.addAssignment = false;
+    this.supportingAssignment.course = this.supportingCourse;
+    this.supportingAssignments.push(this.supportingAssignment);
+  }
 
-  submit() {
+  // submit() {
     // console.log(this.supportingAssignments);
-    let pack = new Package();
-    pack.assignmentId = parseInt(this.selectedAssignmentId);
+    // let pack = new Package();
+    // pack.assignmentId = parseInt(this.selectedAssignmentId);
     // pack.previousAssignments = [];
     // for (let i = 0; i < this.supportingAssignments.length; i++) {
     //   let prevAssignment = new PreviousAssignment();
@@ -98,8 +116,8 @@ export class PackageComponent implements OnInit {
     //   pack.previousAssignments.push(prevAssignment);
     // }
 
-    this._packageService.uploadPackage(pack).subscribe(res => {
-      console.log(res);
-    });
-  }
+    // this._packageService.uploadPackage(pack).subscribe(res => {
+    //   console.log(res);
+    // });
+  // }
 }

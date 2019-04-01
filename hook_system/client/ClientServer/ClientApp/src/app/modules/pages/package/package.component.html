@@ -3,50 +3,105 @@
     <img class="package__graphic-image" src="../../../../assets/uploadGuy.svg" />
   </div>
   <div class="package__jobs">
-    <p class="package__jobs-title">New Hook Job</p>
+  <p class="package__jobs-title">New Hook Job</p>
+  <p class="package__jobs-subtitle">Assignments to be Processed:</p>
   </div>
-  <form class="package__jobs-form">
-    <!-- <div class="package__jobs-input">
+  <form [formGroup]="packageForm" class="package__jobs-form">
+    <div class="package__jobs-input">
       <div class="form-group">
-        <label>Program Code</label>
-        <select class="form-control" formControlName="programCode">
-          <option value="">Select Code</option>
-          <option *ngFor="let course of courses" value={{course.programCode}}>{{course.programCode}}</option>
+        <label>Current Year</label>
+        <select class="form-control" formControlName="year" [value]='2019'>
+          <option *ngFor="let course of courses | unique:'year'" value={{course.year}}>{{course.year}}</option>
         </select>
       </div>
-    </div> -->
+    </div>
+    <div class="package__jobs-input">
+      <div class="form-group">
+        <label>Semester</label>
+        <select class="form-control" formControlName="semester">
+          <option [value]='0'>Fall</option>
+          <option [value]='1'>Winter</option>
+          <option [value]='2'>Summer</option>
+        </select>
+      </div>
+    </div>
+    <div class="package__jobs-input">
+      <div class="form-group">
+        <label>Program Code</label>
+        <select class="form-control" formControlName="program">
+            <option *ngFor="let course of courses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
+        </select>
+      </div>
+    </div>
     <div class="package__jobs-input">
       <div class="form-group">
         <label>Course Code</label>
-        <select [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
-          <option disabled *ngIf="!courses; else courseItems">Loading...</option>
-          <option disabled>Select a Course</option>
-          <option #courseItems [value]="course.courseId" *ngFor="let course of courses">{{course.courseCode}}</option>
+        <select class="form-control" formControlName="course" [(ngModel)]="selectedCourseId" (change)="updateAssignments()">
+            <option *ngFor="let course of courses | unique:'courseCode'" value={{course.courseId}}>{{course.courseCode}}</option>
         </select>
       </div>
     </div>
-    <div class="package__jobs-input">
+    <div class="package__jobs-input" *ngIf="selectedCourse">
       <div class="form-group">
         <label>Assignment</label>
-        <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
-          <option disabled *ngIf="!selectedCourse.assignments; else assignmentItems">Loading...</option>
-          <option #assignmentItems [value]="assignment.assignmentId" *ngFor="let assignment of selectedCourse.assignments">
-            {{assignment.name}}
-          </option>
+        <select class="form-control" formControlName="assignment" [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
+            <option *ngFor="let assignment of selectedCourse.assignments" value={{assignment.assignmentId}}>{{assignment.name}}</option>
         </select>
       </div>
     </div>
-    <div class="package__jobs-input">
-      <input type="file">
-      <!-- <file-drop>
-        <span>Drop Here</span>
-      </file-drop> -->
-      <mat-file-drop-queue></mat-file-drop-queue>
-    </div>
-    <div class="package__jobs-input">
-      <button>LAUNCH</button>
-    </div>
   </form>
+  <p class="package__jobs-subtitle">Previous Years Submissions</p>
+  <hr/>
+  <div class="supporting">
+    <div *ngIf="selectedAssignment">
+      <div class="supporting__doc" *ngFor="let assignment of supportingAssignments">
+        {{assignment.course.year}} - {{assignment.course.programCode}} {{assignment.course.courseCode}} : {{assignment.name}}
+        <button class="supporting__doc-remove">-</button>
+      </div>
+    </div>
+    <div *ngIf="!addAssignment && selectedAssignment">
+      <button class="supporting__doc-add" (click)="addSupporting()">+</button>
+    </div>
+    <div class="supporting__adding" *ngIf="addAssignment">
+      <div class="package__jobs-input">
+        <label>Select year</label>
+        <select>
+          <option [value]="course.year" *ngFor="let course of courses | unique:'year'">{{course.year}}</option>
+        </select>
+      </div>
+      <div class="package__jobs-input">
+        <label>Select semester</label>
+        <select>
+          <option [value]='0'>Fall</option>
+          <option [value]='1'>Winter</option>
+          <option [value]='2'>Summer</option>
+        </select>
+      </div>
+      <div class="package__jobs-input">
+        <label>Select program</label>
+        <select>
+          <option [value]="course.programCode" *ngFor="let course of courses | unique:'programCode'">{{course.programCode}}</option>
+        </select>
+      </div>
+      <div class="package__jobs-input">
+        <label>Select course</label>
+        <select [(ngModel)]="supportingCourseId" (change)="supportSelectCourse()">
+          <option [value]="course.courseId" *ngFor="let course of courses | unique:'courseCode'">{{course.courseCode}}</option>
+        </select>
+      </div>
+      <div class="package__jobs-input" *ngIf="supportingCourse">
+        <label>Select assignment</label>
+        <select [(ngModel)]="supportingAssignmentId" (change)="supportSelectAssignment()">
+          <option [value]="assignment.assignmentId" *ngFor="let assignment of supportingCourse.assignments">{{assignment.name}}</option>
+        </select>
+      </div>
+      <div *ngIf="supportingAssignment">
+        <button class="supporting__doc-submit" (click)="addSupportingAssignment()">✓</button>
+      </div>
+    </div>
+  <div class="package__jobs-input">
+    <button>LAUNCH</button>
+  </div>
 </div>
 
 
