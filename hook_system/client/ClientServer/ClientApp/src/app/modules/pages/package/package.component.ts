@@ -16,7 +16,7 @@ export class PackageComponent implements OnInit {
   courses: Course[];
 
   selectedCourse: Course;
-  selectedCourseId: string;
+  selectedCourseCode: string;
 
   selectedAssignmentId: string;
   selectedAssignment: Assignment;
@@ -56,7 +56,7 @@ export class PackageComponent implements OnInit {
 
   updateAssignments() {
     this.selectedCourse = this.courses.find(
-      c => c.courseId.toString() === this.selectedCourseId
+      c => c.courseCode.toString() === this.selectedCourseCode
     );
     if (this.selectedCourse.assignments) {
       this._courseService
