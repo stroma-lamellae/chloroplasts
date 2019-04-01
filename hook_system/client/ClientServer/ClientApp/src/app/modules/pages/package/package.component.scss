@@ -21,6 +21,24 @@
 
     }
 
+    &__submit {
+        position: relative;
+
+        button {
+            box-shadow: 0px 7px 64px rgba(0, 0, 0, 0.07);
+            border: 0px;
+            border-radius: 6px;
+            height: auto;
+            padding: 14px;
+            width: 20%;
+            position: absolute;
+            right: 0px;
+            background: #1A5C80;
+            color: $color-primary-white;
+        }
+
+    }
+
     &__jobs {
         
         &-title {
@@ -71,13 +89,6 @@
                 width: 95%;
             }
 
-            button {
-                @extend select;
-                float: right;
-                background: #1A5C80;
-                color: $color-primary-white;
-            }
-
             input {
                 clear: both;
                 display: inline;
@@ -106,8 +117,24 @@
         margin: 4px;
 
         &-remove, 
-        &-add,
+        &-add {
+            position: relative;
+            font-family: "Arial Rounded MT Bold";
+            font-size: 30px;
+            line-height: normal;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            border: 0px;
+            border-radius: 20px;
+            background: $color-primary-light-grey;
+            color: $color-primary-white;
+            margin-left: 30px;
+        }
+
         &-submit {
+            float: left;
+            margin-top: 50px;
             position: relative;
             font-family: "Arial Rounded MT Bold";
             font-size: 30px;
