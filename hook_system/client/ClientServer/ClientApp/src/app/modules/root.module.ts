@@ -13,6 +13,7 @@ import { BulkSubmissionComponent } from './components/bulk-submission/bulk-submi
 import { CourseBoxComponent } from './components/course-box/course-box.component';
 import { ArchivedCoursesComponent } from './pages/archived-courses/archived-courses.component';
 import { UniquePipe } from './../shared/pipes/unique.pipe';
+import { TestSubmissionComponent } from './pages/test-submission/test-submission.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
@@ -28,7 +29,8 @@ import { UniquePipe } from './../shared/pipes/unique.pipe';
     BulkSubmissionComponent,
     CourseBoxComponent,
     ArchivedCoursesComponent,
-    UniquePipe
+    UniquePipe,
+    TestSubmissionComponent
   ]
 })
 export class RootModule {}

@@ -7,6 +7,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardComponent } from './modules/pages/dashboard/dashboard.component';
 import { LoginComponent } from './modules/pages/login/login.component';
 import { ArchivedCoursesComponent } from './modules/pages/archived-courses/archived-courses.component';
+import { TestSubmissionComponent } from './modules/pages/test-submission/test-submission.component';
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -15,6 +16,7 @@ const appRoutes: Routes = [
   { path: 'course', component: CourseComponent, canActivate: [AuthGuard] },
   { path: 'package', component: PackageComponent, canActivate: [AuthGuard] },
   { path: 'result', component: ResultComponent, canActivate: [AuthGuard] },
+  { path: 'test', component: TestSubmissionComponent },
   { path: '**', redirectTo: '/' }
 ];
 

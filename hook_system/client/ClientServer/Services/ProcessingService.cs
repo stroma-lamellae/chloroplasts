@@ -18,33 +18,46 @@ namespace ClientServer.Services
 {
     public interface IProcessingService
     {
-        Task<ResultsResponse> InitiateUpload(Package package);
+        Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true);
         Task<ResultsResponse> RequestResults(string jobId);
     }
 
     public class ProcessingService : IProcessingService
     {
         private readonly IHttpClientFactory _clientFactory;
-        private readonly string ServerAddress = "http://localhost:3000";
         private readonly IXMLService _xmlService;
         private readonly IScrubbingService _scrubbingService;
+        private readonly IFileService _fileService;
+        private readonly string _tempTestDirectory = "test";
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IFileService fileService)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
+            _fileService = fileService;
         }
 
-        public async Task<ResultsResponse> InitiateUpload(Package package)
+        public async Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true)
         {
-            var filename = _scrubbingService.ScrubPackage(package);
+            string filename = "";
+            if (scrub) {
+                filename = _scrubbingService.ScrubPackage(package);
+            } else {
+                // Don't scrub files, just compress and send
+                _fileService.EmptyDirectory(_tempTestDirectory);
+                var currAssignmentPath = Path.Combine(_tempTestDirectory, "CurrentYear");
+                _fileService.CopyAssignment(package.Assignment, currAssignmentPath);
+
+                filename = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".tar.gz");
+                _fileService.CompressFolder(_tempTestDirectory, filename);
+            }
 
             var uploadRequest = CreateUploadRequest(package, filename);
 
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("processing");
 
-            var requestAddress = ServerAddress + "/api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
+            var requestAddress = "api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
 
             // Create the multipart form portion of the request
             var formDataContent = new MultipartFormDataContent();
@@ -61,11 +74,10 @@ namespace ClientServer.Services
 
             // Add the file form part to our form data
             formDataContent.Add(fileContent, "data", uploadRequest.FileName);
-
+            
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
             var responseText = await response.Content.ReadAsStringAsync();
-
             var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
             
             return resultsResponse;
@@ -92,11 +104,11 @@ namespace ClientServer.Services
                 AuthToken = "Hahhahahahahahah This isn't the same authtoken. Oh well."
             }; 
 
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("processing");
 
             // Send to processing server
             var content = new StringContent(JsonConvert.SerializeObject(resultsRequest), Encoding.UTF8, "application/json");
-            var requestAddress = ServerAddress + "/api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
+            var requestAddress = "api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response

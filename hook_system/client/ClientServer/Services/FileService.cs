@@ -36,6 +36,10 @@ namespace ClientServer.Services
         // Saves the files in this submission object.
         // The submission needs a valid SubmissionId, as well as the Assignment and Course loaded
         void PersistSubmissionFiles(Submission submission, string sourceDirBase);
+
+        // Saves the files, except it is expecting a custom folder name
+        // Mainly used for the test submission
+        void PersistSubmissionFiles(Submission submission, string sourceDirBase, string foldername);
     }
 
     public class FileService : IFileService
@@ -96,6 +100,17 @@ namespace ClientServer.Services
             submission.FilePath = submissionPath;
             // var sourcePath = sourceDirBase + Path.DirectorySeparatorChar + GetSubmissionFolderName(submission);
             var sourcePath = Path.Combine(sourceDirBase, GetSubmissionFolderName(submission));
+            DirectoryCopy(sourcePath, destPath, true);
+        }
+
+        // Saves the files, except it is expecting a custom folder name
+        // Mainly used for the test submission
+        public void PersistSubmissionFiles(Submission submission, string sourceDirBase, string foldername)
+        {
+            var submissionPath = GetSubmissionPath(submission);
+            var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submissionPath);
+            submission.FilePath = submissionPath;
+            var sourcePath = Path.Combine(sourceDirBase, foldername);
             DirectoryCopy(sourcePath, destPath, true);
         }
 
