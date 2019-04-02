@@ -25,7 +25,6 @@ namespace ClientServer.Services
     public class ProcessingService : IProcessingService
     {
         private readonly IHttpClientFactory _clientFactory;
-        private readonly string ServerAddress = "http://localhost:3000";
         private readonly IXMLService _xmlService;
         private readonly IScrubbingService _scrubbingService;
 
@@ -42,9 +41,9 @@ namespace ClientServer.Services
 
             var uploadRequest = CreateUploadRequest(package, filename);
 
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("processing");
 
-            var requestAddress = ServerAddress + "/api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
+            var requestAddress = "api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
 
             // Create the multipart form portion of the request
             var formDataContent = new MultipartFormDataContent();
@@ -78,7 +77,6 @@ namespace ClientServer.Services
             return new UploadRequest { 
                 UserId = 123456, // TODO: Should come from authservice
                 Email = "jb15iq@brocku.ca", // TODO: Should come from user id
-                AuthToken = "Hahhahahahahaha We don't have this yet :)",
                 FileName = filename
             };
         }
@@ -88,15 +86,14 @@ namespace ClientServer.Services
             // TODO: Get the resultsRequest to be real
             var resultsRequest = new ResultsRequest {
                 UserId = 123456, // TODO: Should come from authservice
-                JobId = jobId,
-                AuthToken = "Hahhahahahahahah This isn't the same authtoken. Oh well."
+                JobId = jobId
             }; 
 
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("processing");
 
             // Send to processing server
             var content = new StringContent(JsonConvert.SerializeObject(resultsRequest), Encoding.UTF8, "application/json");
-            var requestAddress = ServerAddress + "/api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
+            var requestAddress = "api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
@@ -113,15 +110,13 @@ namespace ClientServer.Services
     {
         public long UserId { get; set; }
         public string Email { get; set; }
-        public string AuthToken { get; set; }
-        public string FileName { get; set; } // TODO: Make this be a file
+        public string FileName { get; set; } 
     }
 
     public class ResultsRequest
     {
         public long UserId { get; set; }
         public string JobId { get; set; }
-        public string AuthToken { get; set; }
     }
 
     public class ResultsResponse
@@ -129,7 +124,7 @@ namespace ClientServer.Services
         public string Status { get; set; }
         public string JobId { get; set; }
         public DateTime EstimatedCompletion { get; set; }
-        public string Results { get; set; } // TODO: Make this be a file
+        public string Results { get; set; } 
 
         public Result Result { get; set; }
     }

@@ -58,7 +58,12 @@ namespace ClientServer
                     });
 
             // For communicating with the Processing Server
-            services.AddHttpClient();
+            var processingConfig = Configuration.GetSection("ProcessingConfigurations");
+            services.AddHttpClient("processing", c => 
+            {
+               c.BaseAddress = new Uri(processingConfig["BaseAddress"]);
+               c.DefaultRequestHeaders.Add("licence", processingConfig["Licence"]); 
+            });
             
             // jwt wire up
             // Get options from app settings
