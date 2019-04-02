@@ -3,6 +3,8 @@ import bcrypt
 import argparse
 import hashlib
 import sys
+import configparser
+import os
 
 
 
@@ -76,6 +78,16 @@ def add_institution(licence):
     cur.execute(insert_new_institution, (licence,inst_name,inst_address,sys_admin,sys_admin_email))
     conn.commit()
 
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = dir_path + "/config.ini"
+
+if not os.path.isfile(configFilename):
+    print("No configuration file found. Please run Setup before running this.")
+    exit(0)
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-institution-name', type=str,required=True, help='name of institution affiliated wtih the licence')

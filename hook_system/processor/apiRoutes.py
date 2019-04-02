@@ -9,6 +9,13 @@ import uuid
 import os
 import tarfile as tar
 import psycopg2
+import configparser
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = dir_path+"/config.ini"
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
 
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
@@ -107,7 +114,6 @@ def fetch(userId: str, jobId: str) -> str:
 def authorize(userId, email) -> (bool,int,str):
     licence = connexion.request.headers['licence']
     try:
-        #need to look into secure way to store dbusername + password
         conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
         select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
