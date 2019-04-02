@@ -9,9 +9,11 @@ using Newtonsoft.Json;
 
 using ClientServer.Models;
 using ClientServer.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClientServer.Controllers
 {
+    [Authorize(Policy = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class PackageController: Controller

@@ -1,21 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
-using ClientServer.Helpers;
+using ClientServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using ClientServer.Models;
 using Newtonsoft.Json;
-using ClientServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 
 namespace ClientServer
 {
@@ -36,7 +38,48 @@ namespace ClientServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IJwtFactory, JwtFactory>();
+            services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<AccountService>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = _signingKey
+                    };
+                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrator", policy =>
+                {
+                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new RolesAuthorizationRequirement(new List<string>(){"Administrator"}));
+                });
+                options.AddPolicy("User", policy =>
+                {
+                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                });
+            });
+            
+            // Configure JwtIssuerOptions
+            var builder = services.AddIdentity<AppUser, IdentityRole>(o =>
+            {
+                o.Password.RequireDigit = true;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireUppercase = true;
+                o.Password.RequireNonAlphanumeric = true;
+                o.Password.RequiredLength = 8;
+            });
+            
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+            builder.AddEntityFrameworkStores<ClientServerContext>().AddDefaultTokenProviders();
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options => {
@@ -51,49 +94,10 @@ namespace ClientServer
                .AddDbContext<ClientServerContext>(options =>
                     options.UseNpgsql(Configuration.GetConnectionString("ClientServerDatabase")))
                .BuildServiceProvider();
-            services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                    .AddJsonOptions(options => {
-                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    });
 
             // For communicating with the Processing Server
             services.AddHttpClient();
             
-            // jwt wire up
-            // Get options from app settings
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-
-            // Configure JwtIssuerOptions
-            services.Configure<JwtIssuerOptions>(options =>
-            {
-                options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-                options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
-            });
-            
-            services.AddAuthentication(o =>
-            {
-                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
-                    Constants.Strings.JwtClaims.ApiAccess));
-            });
-
-            services.AddIdentity<AppUser, IdentityRole>(o =>
-                {
-                    o.Password.RequireDigit = true;
-                    o.Password.RequireLowercase = true;
-                    o.Password.RequireUppercase = true;
-                    o.Password.RequireNonAlphanumeric = true;
-                    o.Password.RequiredLength = 8;
-                }).AddEntityFrameworkStores<ClientServerContext>()
-                .AddDefaultTokenProviders();
-
             // Remove content length limit. This is for our submission uploading
             services.Configure<FormOptions>(x => {
                 x.ValueLengthLimit = int.MaxValue;
@@ -126,7 +130,7 @@ namespace ClientServer
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -146,22 +150,7 @@ namespace ClientServer
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
-
-                ValidateAudience = true,
-                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
-
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = _signingKey,
-
-                RequireExpirationTime = false,
-                ValidateLifetime = false,
-                ClockSkew = TimeSpan.Zero
-            };
+          
         }
     }
 }

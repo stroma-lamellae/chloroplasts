@@ -3,11 +3,13 @@ using ClientServer.Helpers;
 using ClientServer.Models;
 using ClientServer.Services;
 using ClientServer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientServer.Controllers
 {
+   // [Authorize(Policy = "ApiUser")]
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
@@ -33,20 +35,18 @@ namespace ClientServer.Controllers
                 UserName = model.Email,
                 Email = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Role = model.Role
             };
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
-            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
-            await _dbContext.User.AddAsync(new User()
+            
+
+
+            if (!result.Succeeded)
             {
-                Email = model.Email,
-                Firstname = model.FirstName,
-                Lastname = model.LastName,
-                Password = model.Password,
-                IdentityId = userIdentity.Id,
-            });
-            await _dbContext.SaveChangesAsync();
+                return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            }
 
             return new OkObjectResult("Account created");
         }

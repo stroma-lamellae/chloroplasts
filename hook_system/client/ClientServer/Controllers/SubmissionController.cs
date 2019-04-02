@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +8,11 @@ using System.Threading.Tasks;
 
 using ClientServer.Models;
 using ClientServer.Services;
+using Microsoft.AspNetCore.Authorization;
+
 namespace ClientServer.Controllers
 {
+    [Authorize(Policy = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class SubmissionController : ControllerBase

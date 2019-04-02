@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using ClientServer.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClientServer.Controllers
 {
+    [Authorize(Policy = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class ExclusionController : ControllerBase
