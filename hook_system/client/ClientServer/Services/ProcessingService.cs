@@ -39,7 +39,7 @@ namespace ClientServer.Services
         {
             var filename = _scrubbingService.ScrubPackage(package);
 
-            var uploadRequest = CreateUploadRequest(package, filename);
+            var uploadRequest = CreateUploadRequest(filename);
 
             var client = _clientFactory.CreateClient("processing");
 
@@ -70,9 +70,8 @@ namespace ClientServer.Services
             return resultsResponse;
         }
 
-        public UploadRequest CreateUploadRequest(Package package, string filename) 
+        public UploadRequest CreateUploadRequest(string filename) 
         {
-            // TODO: Scrub package to create tarball
             // TODO: Get real data
             return new UploadRequest { 
                 UserId = 123456, // TODO: Should come from authservice
@@ -83,7 +82,6 @@ namespace ClientServer.Services
 
         public async Task<ResultsResponse> RequestResults(string jobId)
         {
-            // TODO: Get the resultsRequest to be real
             var resultsRequest = new ResultsRequest {
                 UserId = 123456, // TODO: Should come from authservice
                 JobId = jobId
