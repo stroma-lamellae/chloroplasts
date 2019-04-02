@@ -7,19 +7,7 @@ Readme for the Processing Server
 1. Python 3 installed on system
 2. Python3-pip installed on system
 3. python3-virtualenv installed on the system
-4. Psycopg2 installed on the system
-```
-pip install psycopg2-binary
-```
-5. Arrow installed on system
-```
-pip install arrow
-```
-6. bcrypt installed on the system and [system specific dependencies](https://pypi.org/project/bcrypt/) installed
-```
-pip install brcypt
-```
-7. Postgresql set up on the system with [this](database-dump.dmp) schema
+4. Postgresql database set up on the system with [this](database-dump.dmp) schema
 
 To first create your virtual enviroment for python run the command `virtualenv -p /usr/bin/python3 env`, for windows instead of `/usr/bin/python3` put the path to your python3 interpreter.
 
