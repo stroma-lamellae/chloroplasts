@@ -3,17 +3,15 @@ import os.path, os
 import errno
 import sqlite3
 
-configFilename = "/config.ini"
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
-fullConfig = dir_path + configFilename
+fullConfig = os.path.join(dir_path, "config.ini")
 
 def createConfig():
 
     #Database info
-    db_name = input("Enter the URL for Impact Auto's search query: ")
-    db_user = input("Enter the car model searching for: ")
-    db_password = input("Enter the older possible year for the car or leave blank for no limit: ")
+    db_name = input("Enter the database name: ")
+    db_user = input("Enter the database user: ")
+    db_password = input("Enter the database password: ")
 
     #Email info
     fromEmail = input("Enter address of Email to send from: ")
@@ -33,7 +31,8 @@ def createConfig():
 
     print("Setup Complete!")
 
-
+def removeIfExists(filename):
+    try:
         os.remove(filename)
     except OSError as e:
         if e.errno != errno.ENOENT:

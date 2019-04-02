@@ -21,3 +21,25 @@ The package being used to run the REST server is called *Connexion*, the list of
 
 To access the UI page for the API go open up the following link **http://\<ip-address>:\<port>/api/ui** where the ip address and port are specified in the *server.py* file
 
+## The Database
+
+To directly access the hookserver database on the server:
+
+```
+sudo -i -u stromae psql -d hookserver`
+```
+
+To dump the contents of the database:
+
+Login in stromae:
+
+```
+su stromae
+```
+
+enter the password and then run:
+
+```
+pg_dump -U stromae -W -F t hookserver > PATH\TO\FILE\hook-dump.tar
+```
+

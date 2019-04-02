@@ -12,7 +12,7 @@ import psycopg2
 import configparser
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-configFilename = dir_path+"/config.ini"
+configFilename = os.path.join(dir_path,"config.ini")
 
 config = configparser.RawConfigParser()
 config.read(configFilename)

@@ -22,7 +22,7 @@ mutex = threading.Lock()
 submissionQueue: List[Tuple[str, str]] = []
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-configFilename = dir_path + "/config.ini"
+configFilename = os.path.join(dir_path,"config.ini")
 
 if not os.path.isfile(configFilename):
     print("No configuration file found. Please run Setup before running this.")
