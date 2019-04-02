@@ -15,8 +15,13 @@ export class PackageComponent implements OnInit {
 
   courses: Course[];
 
+  filteredCourses: Course[];
+
   selectedCourse: Course;
   selectedCourseCode: string;
+  selectedProgramCode: string;
+  selectedSemester: string;
+  selectedYear: string;
 
   selectedAssignmentId: string;
   selectedAssignment: Assignment;
@@ -54,8 +59,17 @@ export class PackageComponent implements OnInit {
     return this.packageForm.controls;
   }
 
+  semesterUpdate() {
+    this.filteredCourses = this.courses.filter(c => c.year.toString() === this.selectedYear)
+      .filter(c => c.semester.toString() === this.selectedSemester);
+  }
+
+  programUpdate() {
+    this.filteredCourses = this.filteredCourses.filter(c => c.programCode.toString() === this.selectedProgramCode);
+  }
+
   updateAssignments() {
-    this.selectedCourse = this.courses.find(
+    this.selectedCourse = this.filteredCourses.find(
       c => c.courseCode.toString() === this.selectedCourseCode
     );
     if (this.selectedCourse.assignments) {
