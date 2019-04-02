@@ -28,7 +28,7 @@ namespace ClientServer
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            var options = Configuration.GetSection("Configurations");
+            var options = Configuration.GetSection("JwtConfigurations");
             var secretKey = options["SigningKey"];
             _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
         }
@@ -65,6 +65,7 @@ namespace ClientServer
                     policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
                     policy.RequireAuthenticatedUser();
                 });
+                
             });
             
             // Configure JwtIssuerOptions

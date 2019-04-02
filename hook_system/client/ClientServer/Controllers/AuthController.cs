@@ -5,6 +5,7 @@ using ClientServer.Models;
 using ClientServer.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ClientServer.Controllers
 {
@@ -12,12 +13,16 @@ namespace ClientServer.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly JsonSerializerSettings _serializerSettings;
         private readonly AccountService _accountService;
         public AuthController(UserManager<AppUser> userManager, AccountService accountService )
         {
             _userManager = userManager;
             _accountService = accountService;
-
+            _serializerSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            };
         }
 
         [HttpPost("login")]
@@ -28,16 +33,21 @@ namespace ClientServer.Controllers
                 return BadRequest(ModelState);
             }
 
-            var token = await _accountService.Login(credentials);
+            var response = await _accountService.Login(credentials);
             
-            if (token == null)
+            if (response == null)
             {
                 return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
             }
             // Serialize and return the response
-            
-
-            return Ok(token);
+            var jsonObject = new
+            {
+                id = response.Item1,
+                auth_token = response.Item2,
+                expires_in = response.Item3
+            };
+            var json = JsonConvert.SerializeObject(jsonObject, _serializerSettings);
+            return new OkObjectResult(json);
         }
 
     }

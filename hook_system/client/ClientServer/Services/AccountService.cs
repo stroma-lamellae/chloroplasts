@@ -21,31 +21,32 @@ namespace ClientServer.Services
         private readonly int _expiryDuration;
         public AccountService(IConfiguration configuration, UserManager<AppUser> userManager)
         {
-            var options = configuration.GetSection("Configurations");
+            var options = configuration.GetSection("JwtConfigurations");
             var secretKey = options["SigningKey"];
             _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             _expiryDuration = int.Parse(options["ExpiryDuration"]);
             _userManager = userManager;
         }
 
-        public async Task<string> Login(CredentialsViewModel login)
+        public async Task<Tuple<string,string,int>> Login(CredentialsViewModel login)
         {
-            var token = await GetClaimsIdentity(login.Email, login.Password);
-            return token;
+            var response = await GetClaimsIdentity(login.Email, login.Password);
+           
+            return response;
         }
         
-        private async Task<string> GetClaimsIdentity(string email, string password)
+        private async Task<Tuple<string,string,int>>GetClaimsIdentity(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
             // get the user to verify
-            var userToVerify = await _userManager.FindByNameAsync(email);
+            var user = await _userManager.FindByNameAsync(email);
 
-            if (userToVerify == null) return null; 
+            if (user == null) return null; 
 
             // check the credentials
-            if (!await _userManager.CheckPasswordAsync(userToVerify, password)) return null;
+            if (!await _userManager.CheckPasswordAsync(user, password)) return null;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = null,              // Not required as no third-party is involved
@@ -54,16 +55,16 @@ namespace ClientServer.Services
                 NotBefore = DateTime.UtcNow,
                 Expires = DateTime.UtcNow.AddMinutes(_expiryDuration),
                 Subject = new ClaimsIdentity(new List<Claim> {
-                    new Claim("userid", userToVerify.Id.ToString()),
-                    new Claim("role", userToVerify.Role)
+                    new Claim("userid", user.Id.ToString()),
+                    new Claim("role", user.Role)
                 }),
                 SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256Signature)
             };
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
             var token = jwtTokenHandler.WriteToken(jwtToken);
-            return token;
 
+            return new Tuple<string, string, int>(user.Id,token,_expiryDuration);
         }
     }
 }
