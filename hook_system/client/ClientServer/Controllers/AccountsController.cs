@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClientServer.Controllers
 {
-   // [Authorize(Policy = "ApiUser")]
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
@@ -40,8 +39,6 @@ namespace ClientServer.Controllers
             };
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
-            
-
 
             if (!result.Succeeded)
             {

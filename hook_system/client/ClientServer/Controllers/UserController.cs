@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ClientServer.Controllers
 {
-    [Authorize(Policy = "User")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "User")]
     public class UserController : ControllerBase
     {
         private readonly ClientServerContext _context;

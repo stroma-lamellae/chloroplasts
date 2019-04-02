@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ClientServer.Controllers
 {
-    [Authorize(Policy = "User")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "User")]
     public class SubmissionController : ControllerBase
     {
         private readonly ClientServerContext _context;
