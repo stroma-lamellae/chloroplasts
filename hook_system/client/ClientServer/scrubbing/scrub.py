@@ -87,7 +87,7 @@ for section in listdir(folder):
                 unScrubbedFolders = "\t" + studentSubmission + "\n"
                 numOfUnscrubbedFolders = numOfUnscrubbedFolders + 1
 
-#if any folder causes an exception, then show an alert at the end with the summary
+#if any folder causes an exception, send a sys.exit error message
 if numOfUnscrubbedFolders == 1:
     alertMessage = "A submission was not able to be scrubbed. It is listed below:\n"
     alertMessage = alertMessage + unScrubbedFolders
