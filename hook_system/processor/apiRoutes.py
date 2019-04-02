@@ -16,7 +16,7 @@ def submit(userId: str, email: str, data) -> str:
 
     auth_ok = authorize(userId,email)
     if not auth_ok[0]:
-        return auth[1],auth[2]
+        return auth_ok[1],auth_ok[2]
 
     #Create a 128 bit job number represented in a hex string
     jobID: str = str(uuid.uuid4())
@@ -83,7 +83,7 @@ def submit(userId: str, email: str, data) -> str:
 def fetch(userId: str, jobId: str) -> str:
     auth_ok = authorize(userId, email)
     if not auth_ok[0]:
-        return auth[1],auth[2]
+        return auth_ok[1],auth_ok[2]
 
     pattern = re.compile("[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}")
     if not pattern.match(jobId):
