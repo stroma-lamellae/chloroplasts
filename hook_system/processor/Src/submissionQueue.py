@@ -132,7 +132,7 @@ def processQueue():
 
             allMatches: List[Match] = cMatches
             allMatches += javaMatches
-            with open("./Results/"+jobID+".xml", 'wb') as f:
+            with open(os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml"), 'wb') as f:
                 f.write(xmlGenerator.generateResult(allMatches))
             processed_file = timeQueue.pop()
             os.remove(filePath)
