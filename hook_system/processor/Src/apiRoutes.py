@@ -29,7 +29,7 @@ def submit(userId: str, email: str, data) -> str:
     jobID: str = str(uuid.uuid4())
 
     #Write the tarball to disk to be processed later
-    filename: str = "./Queue/"+jobID+".tar.gz"
+    filename: str = os.path.join(config["DISK"]["Queue"], "Queue", jobID + ".tar.gz") "./Queue/"+jobID+".tar.gz"
     with open(filename, 'wb') as f:
         for line in data.stream:
             f.write(line)
@@ -96,7 +96,7 @@ def fetch(userId: str, jobId: str) -> str:
     if not pattern.match(jobId):
         return ("Forbidden",403)
 
-    resultPath = os.path.join("./Results", jobId + ".xml")
+    resultPath = os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml")
 
     #If the results don't exist return empty results
     if not os.path.exists(resultPath):

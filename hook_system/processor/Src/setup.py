@@ -1,7 +1,6 @@
 import configparser
 import os.path, os
 import errno
-import sqlite3
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 fullConfig = os.path.join(dir_path, "config.ini")
@@ -19,12 +18,17 @@ def createConfig():
     smtpServer= input("Enter SMTP server for Email: ")
     smtpPort  = input("Enter SMTP port for Email: ")
 
+    resultsPath = input("Enter Full Path For Results Folder to be Created: ")
+    queuePath   = input("Enter Full Path For Queue Folder to be Created: ")
+
     config = configparser.ConfigParser()
 
     config["DATABASE"] = {'database_name': db_name, 'database_user': db_user,
             'database_password':db_password}
     config["EMAIL"]    = {'FromAddr': fromEmail, 'FromPassword': fromPass,
             'SMTP_Server':smtpServer, 'SMTP_Port': smtpPort}
+
+    config["DISK"] = {'queue': queuePath, 'result': resultsPath}
 
     with open(fullConfig, 'w') as f:
         config.write(f)
