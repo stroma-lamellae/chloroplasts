@@ -49,7 +49,7 @@ def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
         timer = (filePath, arrow.utcnow(), estimate)
         timeQueue.append(timer)
         local_utc = arrow.utcnow().shift(seconds=estimate)
-        return True, local_utc.to('local').format('YYY-MM-DD HH:mm:ss')
+        return True, local_utc.to('local').format('YYYY-MM-DD HH:mm:ss')
     else:
         return False, ""
 
@@ -128,7 +128,7 @@ def processQueue():
 
             _, tarFilename = os.path.split(filePath)
 
-            jobID: str = tarFilename.replace('.tar.gz','')
+            jobId: str = tarFilename.replace('.tar.gz','')
 
             allMatches: List[Match] = cMatches
             allMatches += javaMatches
@@ -137,7 +137,7 @@ def processQueue():
             processed_file = timeQueue.pop()
             os.remove(filePath)
 
-            notified = __sendEmail(emailAddr,jobID)
+            notified = __sendEmail(emailAddr,jobId)
             #not sure what the best thing to do here is. . .
             endtime = time.time()
             print("Overall processing time for "+processed_file[1]+" files is:"+ endtime-start)
@@ -149,12 +149,12 @@ def processQueue():
 
 
 
-def __sendEmail(emailAddr: str, msg: str) -> bool:
+def __sendEmail(emailAddr: str, jobId: str) -> bool:
 
-    msg = EmailMessage("Your results have been processed and are ready to be"+
+    msg = EmailMessage()
+    msg.set_content("Your results have been processed and are ready to be"+
     " downloaded from the hook. Please log in to your account and request"+
-    " them with job id: "+msg)
-    msg.set_content()
+    " them with your user id and this job id: "+jobId)
     msg["Subject"]= "Your Results are Ready!"
     msg["To"] = emailAddr
     msg["From"] = config["EMAIL"]["FromAddr"]
