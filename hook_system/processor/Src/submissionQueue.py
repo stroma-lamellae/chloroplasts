@@ -46,7 +46,7 @@ def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
     if nCur == nPrior+1:
         estimate = estimateProcessing(numFile)
-        timer = (filepath, arrow.utcnow(), estimate)
+        timer = (filePath, arrow.utcnow(), estimate)
         timeQueue.append(timer)
         local_utc = arrow.utcnow().shift(seconds=estimate)
         return True, local_utc.to('local').format('YYY-MM-DD HH:mm:ss')
@@ -175,4 +175,4 @@ def estimateProcessing(numFile):
         for timer in timeQueue:
             wait_time+=timer[2]
 
-    return wait_time+(multiply(processing_per_file, numFile))
+    return wait_time+(processing_per_file*numFile)

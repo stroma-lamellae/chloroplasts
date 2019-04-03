@@ -5,6 +5,7 @@ from typing import List
 import submissionQueue
 import connexion
 import arrow
+import bcrypt
 import uuid
 import os
 import tarfile as tar
