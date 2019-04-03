@@ -5,34 +5,39 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using ClientServer.Models;
+using ClientServer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClientServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "User")]
     public class UserController : ControllerBase
     {
         private readonly ClientServerContext _context;
-
-        public UserController(ClientServerContext context)
+        private readonly UserManager<AppUser> _userManager;
+        public UserController(ClientServerContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-
+    
         // GET: api/user
         // Gets all of the users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            return await _context.User.ToListAsync();
+            return await _context.AppUser.ToListAsync();
         }
 
         // GET: api/user/#
         // Gets the user with the given id
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<AppUser>> GetUser(string id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -44,46 +49,18 @@ namespace ClientServer.Controllers
         // POST: api/user
         // Creates an user, and returns where it can be found.
         [HttpPost]
-        public async Task<IActionResult> PostUser(User user)
+        public async Task<IActionResult> PostUser(RegistrationViewModel user)
         {
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
-        }
-
-        // PUT: api/user/{id}
-        // Update the user with the given id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
-        {
-            if (id != user.UserId)
+            var userIdentity = new AppUser()
             {
-                return BadRequest();
-            } 
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
+            
+            var result = await _userManager.CreateAsync(userIdentity, user.Password);
 
-            _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // DELETE: api/user/{id}
-        // Removes an user and all of the children items
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
-        {
-            var user = await _context.User.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return new OkObjectResult(result);
         }
     }
 }

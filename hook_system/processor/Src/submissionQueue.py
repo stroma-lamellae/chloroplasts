@@ -14,11 +14,23 @@ import os
 import standardize
 import winnow
 import xmlGenerator
+import configparser
 
 timeQueue = list()
 processing_per_file = 0.001 #TODO: actually time processing of a file
 mutex = threading.Lock()
 submissionQueue: List[Tuple[str, str]] = []
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = os.path.join(dir_path,"config.ini")
+
+if not os.path.isfile(configFilename):
+    print("No configuration file found. Please run Setup before running this.")
+    exit(0)
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
+
 
 def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
@@ -120,7 +132,7 @@ def processQueue():
 
             allMatches: List[Match] = cMatches
             allMatches += javaMatches
-            with open("./Results/"+jobID+".xml", 'wb') as f:
+            with open(os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml"), 'wb') as f:
                 f.write(xmlGenerator.generateResult(allMatches))
             processed_file = timeQueue.pop()
             os.remove(filePath)

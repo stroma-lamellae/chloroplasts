@@ -9,6 +9,13 @@ import uuid
 import os
 import tarfile as tar
 import psycopg2
+import configparser
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = os.path.join(dir_path,"config.ini")
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
 
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
@@ -22,7 +29,7 @@ def submit(userId: str, email: str, data) -> str:
     jobID: str = str(uuid.uuid4())
 
     #Write the tarball to disk to be processed later
-    filename: str = "./Queue/"+jobID+".tar.gz"
+    filename: str = os.path.join(config["DISK"]["Queue"], "Queue", jobID + ".tar.gz")
     with open(filename, 'wb') as f:
         for line in data.stream:
             f.write(line)
@@ -89,7 +96,7 @@ def fetch(userId: str, jobId: str) -> str:
     if not pattern.match(jobId):
         return ("Forbidden",403)
 
-    resultPath = os.path.join("./Results", jobId + ".xml")
+    resultPath = os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml")
 
     #If the results don't exist return empty results
     if not os.path.exists(resultPath):
@@ -107,17 +114,18 @@ def fetch(userId: str, jobId: str) -> str:
 def authorize(userId, email) -> (bool,int,str):
     licence = connexion.request.headers['licence']
     try:
-        #need to look into secure way to store dbusername + password
-        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
         select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
         cur.execute(select_user_id, (email, ))
         db_values = cur.fetchone()
         if db_values:
-            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[1], "utf-8")) == db_values[1]:
+            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[0],"utf-8")) == db_values[0]:
                 print("Authorized Licence")
             if db_values[1] == userId:
                 return (True,"User Authorized, Proceeding to Process",200)
+            else:
+                return (False, "Forbidden", 403)
         else:
             return (False,"Forbidden",403)
     except:
