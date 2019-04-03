@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ClientServer.Models
 {
-    public class ClientServerContext : DbContext
+    public class ClientServerContext : IdentityDbContext<AppUser>
     {
         public ClientServerContext(DbContextOptions<ClientServerContext> options): base (options)
         {
@@ -17,8 +18,10 @@ namespace ClientServer.Models
                 .HasOne(a => a.Result)
                 .WithOne(b => b.Package)
                 .HasForeignKey<Result>(b => b.PackageId);
+            base.OnModelCreating(modelBuilder);
         }
-
+        
+        public DbSet<AppUser> AppUser { get; set; }
         public DbSet<Assignment> Assignment { get; set; }
         public DbSet<Course> Course { get; set; }
         public DbSet<Exclusion> Exclusion { get; set; }
@@ -31,6 +34,5 @@ namespace ClientServer.Models
         public DbSet<Role> Role { get; set; }
         public DbSet<Submission> Submission { get; set; }
         public DbSet<StudentHashMapping> StudentHashMapping {get;set;}
-        public DbSet<User> User { get; set; }
     }
 }

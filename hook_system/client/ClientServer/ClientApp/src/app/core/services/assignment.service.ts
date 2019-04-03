@@ -7,20 +7,24 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AssignmentService {
+  private _apiEndpoint = '/api/assignment';
 
-  private _apiEndpoint = "/api/assignment";
-
-  constructor(private _httpClient: HttpClient) { }
+  constructor(private _httpClient: HttpClient) {}
 
   addAssignment(assignment: Assignment): Observable<Assignment> {
     return this._httpClient.post<Assignment>(this._apiEndpoint, assignment);
   }
 
   updateAssignment(assignment: Assignment): Observable<void> {
-    return this._httpClient.put<void>(this._apiEndpoint + "/" + assignment.assignmentId, assignment);
+    return this._httpClient.put<void>(
+      this._apiEndpoint + '/' + assignment.assignmentId,
+      assignment
+    );
   }
 
   deleteAssignment(assignment: Assignment): Observable<void> {
-    return this._httpClient.delete<void>(this._apiEndpoint + "/" + assignment.assignmentId);
+    return this._httpClient.delete<void>(
+      this._apiEndpoint + '/' + assignment.assignmentId
+    );
   }
 }

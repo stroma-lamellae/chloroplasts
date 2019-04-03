@@ -2,21 +2,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 using ClientServer.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace ClientServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "User")]
     public class CourseController : ControllerBase
     {
         private readonly ClientServerContext _context;
+        private readonly ClaimsPrincipal _caller;
 
-        public CourseController(ClientServerContext context)
+        public CourseController(ClientServerContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _caller = httpContextAccessor.HttpContext.User;
         }
         // GET api/course
         // Gets all of the courses
