@@ -3,6 +3,8 @@ import bcrypt
 import argparse
 import hashlib
 import sys
+import configparser
+import os
 
 
 
@@ -10,8 +12,8 @@ def add_user():
     try:
         licence_hash = bcrypt.hashpw(bytes(args.add, "utf-8"), bcrypt.gensalt())
         licence_string = licence_hash.decode("utf-8")
-        select_licensed_institution = "SELECT institution_name FROM institutions WHERE licence_number = %s;"
-        cur.execute(select_licensed_institution, (licence_string, ))
+        select_licensed_institution = "SELECT licence_number FROM institutions WHERE institution_name = %s;"
+        cur.execute(select_licensed_institution, (args.institution-name, ))
         inst = cur.fetchone()
         if inst is None:
             new_inst = input("Licence not found in Database. Create new "+
@@ -22,6 +24,8 @@ def add_user():
             else:
                 sys.exit("Cannot create user with invalid licence")
             #todo: list institutions + ids
+        if not bcrypt.hashpw(bytes(args.add, "utf-8"), bytes(inst[0], "utf-8")) == inst[0]:
+            sys.exit("Institution already registered with a different licence. Please use the exisiting licence")
         username = input("Enter the name of the person being added to this licence:\n")
         email = input("Enter their email address:\n")
         userid = hashlib.sha1()
@@ -75,9 +79,18 @@ def add_institution(licence):
     conn.commit()
 
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = os.path.join(dir_path,"config.ini")
+
+if not os.path.isfile(configFilename):
+    print("No configuration file found. Please run Setup before running this.")
+    exit(0)
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
+
 parser = argparse.ArgumentParser()
-parser.add_argument('-user', type=str,required=True, help='database user')
-parser.add_argument('-password', type=str,required=True, help='database password')
+parser.add_argument('-institution-name', type=str,required=True, help='name of institution affiliated wtih the licence')
 exclusive = parser.add_mutually_exclusive_group(required=True)
 exclusive.add_argument('-add', type=str, help='add an authorized insitution')
 exclusive.add_argument('-remove', type=str, help='remove an authorized institution')
@@ -85,8 +98,6 @@ exclusive.add_argument('-change', type=str, help='change an existing authroized 
 
 args = parser.parse_args()
 
-dbUsername = args.user
-dbPassword = args.password
 
 try:
     conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
@@ -111,4 +122,3 @@ if conn is not None:
 #completed successfully
 print("Successfully Entered into Database")
 sys.exit(None)
-
