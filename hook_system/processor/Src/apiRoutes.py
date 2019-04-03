@@ -21,7 +21,7 @@ validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
 def submit(userId: str, email: str, data) -> str:
 
-    auth_ok = authorize(userId,email)
+    auth_ok = authorize(userId)
     if not auth_ok[0]:
         return auth_ok[1],auth_ok[2]
 
@@ -88,7 +88,7 @@ def submit(userId: str, email: str, data) -> str:
         return "Unable to Add Submission to Queue", 400
 
 def fetch(userId: str, jobId: str) -> str:
-    auth_ok = authorize(userId, email)
+    auth_ok = authorize(userId)
     if not auth_ok[0]:
         return auth_ok[1],auth_ok[2]
 
@@ -111,19 +111,17 @@ def fetch(userId: str, jobId: str) -> str:
 
     return {'results': xmlResults}
 
-def authorize(userId, email) -> (bool,int,str):
+def authorize(userId) -> (bool,int,str):
     licence = connexion.request.headers['licence']
     try:
         conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
-        select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
-        cur.execute(select_user_id, (email, ))
+        select_licence = "SELECT licence_number, user_name FROM accounts WHERE user_id = %s;"
+        cur.execute(select_licence, (userId, ))
         db_values = cur.fetchone()
         if db_values:
-            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[0],"utf-8")) == db_values[0]:
-                print("Authorized Licence")
-            if db_values[1] == userId:
-                return (True,"User Authorized, Proceeding to Process",200)
+            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[0],"utf-8")) == bytes(db_values[0],"utf-8"):
+                return(True, ("Authorized Licence for user: %s", db_values[1]), 200)
             else:
                 return (False, "Forbidden", 403)
         else:
