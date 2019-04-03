@@ -43,7 +43,7 @@ namespace ClientServer.Services
 
             var client = _clientFactory.CreateClient("processing");
 
-            var requestAddress = "api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
+            var requestAddress = $"api/submit?userId={uploadRequest.UserId}&email={uploadRequest.Email}";
 
             // Create the multipart form portion of the request
             var formDataContent = new MultipartFormDataContent();
@@ -91,7 +91,7 @@ namespace ClientServer.Services
 
             // Send to processing server
             var content = new StringContent(JsonConvert.SerializeObject(resultsRequest), Encoding.UTF8, "application/json");
-            var requestAddress = "api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
+            var requestAddress = $"api/results?userId={resultsRequest.UserId}&jobId={resultsRequest.JobId}";
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
