@@ -29,7 +29,7 @@ def submit(userId: str, email: str, data) -> str:
     jobID: str = str(uuid.uuid4())
 
     #Write the tarball to disk to be processed later
-    filename: str = os.path.join(config["DISK"]["Queue"], "Queue", jobID + ".tar.gz") "./Queue/"+jobID+".tar.gz"
+    filename: str = os.path.join(config["DISK"]["Queue"], "Queue", jobID + ".tar.gz")
     with open(filename, 'wb') as f:
         for line in data.stream:
             f.write(line)
