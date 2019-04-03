@@ -23,7 +23,7 @@ if not os.path.exists(os.path.join(config["DISK"]["RESULT"], "Results")):
 if not os.path.exists(os.path.join(config["DISK"]["Queue"], "Queue")):
     os.mkdir(os.path.join(config["DISK"]["Queue"], "Queue"))
 
-thread = Thread(target=sub missionQueue.processQueue)
+thread = Thread(target=submissionQueue.processQueue)
 thread.start()
 
 # If we're running in stand alone mode, run the application
