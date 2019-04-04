@@ -21,8 +21,7 @@
 
     }
 
-    &__submit {
-        position: relative;
+    &__launch {
 
         button {
             box-shadow: 0px 7px 64px rgba(0, 0, 0, 0.07);
@@ -30,9 +29,10 @@
             border-radius: 6px;
             height: auto;
             padding: 14px;
+            margin: 15px;
             width: 20%;
             position: relative;
-            right: 0px;
+            float: right;
             background: #1A5C80;
             color: $color-primary-white;
         }
@@ -99,14 +99,13 @@
     }
 
     hr {
-        // border: 1px solid $color-text-black;
         margin-top:0px;
     }
 
 }
 
 .supporting {
-    width: 100vw;
+    width: 100%;
     height: auto;
 
     &__doc {
@@ -132,6 +131,7 @@
             background: $color-primary-light-grey;
             color: $color-primary-white;
             margin-left: 30px;
+            margin-bottom: 15px;
         }
 
         &-submit {

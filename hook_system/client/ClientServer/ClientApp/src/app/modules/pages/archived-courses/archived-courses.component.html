@@ -31,7 +31,7 @@
             <label>Program Code</label>
             <select class="form-control" formControlName="program" (change)="programChange()">
               <option value="">Select Program Code</option>
-              <option *ngFor="let course of searchedCourses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
+              <option *ngFor="let course of searchedSemCourses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
             </select>
           </div>
         </div>
@@ -40,7 +40,7 @@
           <label>Course Code</label>
           <select class="form-control" formControlName="course" (change)="courseChange()">
             <option value="">Select Course Code</option>
-            <option *ngFor="let course of searchedCourses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
+            <option *ngFor="let course of searchedProgramCourses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
           </select>
         </div>
       </div>
@@ -53,21 +53,21 @@
       </div>
     </div>
     <div class="archive__courses-view" *ngIf="semesterSelected && !programSelected">
-      <div *ngFor="let course of searchedCourses">
+      <div *ngFor="let course of searchedSemCourses">
         <div>
           <app-course-box [course]="course"></app-course-box>
         </div>
       </div>
     </div>
     <div class="archive__courses-view" *ngIf="programSelected && !courseSelected">
-      <div *ngFor="let course of searchedCourses">
+      <div *ngFor="let course of searchedProgramCourses">
         <div *ngIf="course.programCode == selectedProgram">
           <app-course-box [course]="course"></app-course-box>
         </div>
       </div>
     </div>
     <div class="archive__courses-view" *ngIf="courseSelected">
-      <div *ngFor="let course of searchedCourses">
+      <div *ngFor="let course of searchedCourseCourses">
         <div *ngIf="course.programCode == selectedProgram && course.courseCode == selectedCourse">
           <app-course-box [course]="course"></app-course-box>
         </div>
