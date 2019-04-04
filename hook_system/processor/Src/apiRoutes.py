@@ -78,6 +78,7 @@ def submit(userId: str, email: str, data) -> str:
 
                 fileCount+=1
     if java_files < 1 and cpp_files < 1:
+        os.remove(filename)
         return "Insufficient files to detect plagiarism", 400
 
     #Add the filename to a queue to process
