@@ -12,16 +12,25 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 })
 export class PackageComponent implements OnInit {
   packageForm: FormGroup;
+  supportForm: FormGroup;
 
   courses: Course[];
 
-  filteredCourses: Course[];
+  filteredSemCourses: Course[];
+  filteredProgramCourses: Course[];
+  filteredSupportSemCourses: Course[];
+  filteredSupportProgramCourses: Course[];
 
   selectedCourse: Course;
   selectedCourseCode: string;
   selectedProgramCode: string;
   selectedSemester: string;
   selectedYear: string;
+
+  selectedSupportYear: string;
+  selectedSupportSemester: string;
+  selectedSupportProgramCode: string;
+  selectedSupportCourseCode: string;
 
   selectedAssignmentId: string;
   selectedAssignment: Assignment;
@@ -30,7 +39,6 @@ export class PackageComponent implements OnInit {
 
   supportingAssignments: Assignment[] = [];
   supportingCourse: Course;
-  supportingCourseId: string;
 
   supportingAssignmentId: string;
   supportingAssignment: Assignment;
@@ -52,6 +60,14 @@ export class PackageComponent implements OnInit {
       course: new FormControl(),
       assignment: new FormControl()
     });
+
+    this.supportForm = new FormGroup({
+      supportYear: new FormControl(),
+      supportSemester: new FormControl(),
+      supportProgram: new FormControl(),
+      supportCourse: new FormControl(),
+      supportAssignment: new FormControl()
+    });
   }
 
   // convenience getter for easy access to form fields
@@ -59,17 +75,21 @@ export class PackageComponent implements OnInit {
     return this.packageForm.controls;
   }
 
+  get supportf() {
+    return this.supportForm.controls;
+  }
+
   semesterUpdate() {
-    this.filteredCourses = this.courses.filter(c => c.year.toString() === this.selectedYear)
+    this.filteredSemCourses = this.courses.filter(c => c.year.toString() === this.selectedYear)
       .filter(c => c.semester.toString() === this.selectedSemester);
   }
 
   programUpdate() {
-    this.filteredCourses = this.filteredCourses.filter(c => c.programCode.toString() === this.selectedProgramCode);
+    this.filteredProgramCourses = this.filteredSemCourses.filter(c => c.programCode.toString() === this.selectedProgramCode);
   }
 
   updateAssignments() {
-    this.selectedCourse = this.filteredCourses.find(
+    this.selectedCourse = this.filteredProgramCourses.find(
       c => c.courseCode.toString() === this.selectedCourseCode
     );
     if (this.selectedCourse.assignments) {
@@ -93,9 +113,20 @@ export class PackageComponent implements OnInit {
     this.addAssignment = true;
   }
 
+  supportSemesterUpdate() {
+    this.filteredSupportSemCourses = this.courses.filter(c => c.year.toString() === this.selectedSupportYear)
+      .filter(c => c.semester.toString() === this.selectedSupportSemester);
+  }
+
+  supportProgramUpdate() {
+    this.filteredSupportProgramCourses = this.filteredSupportSemCourses.filter(
+      c => c.programCode.toString() === this.selectedSupportProgramCode
+    );
+  }
+
   supportSelectCourse() {
-    this.supportingCourse = this.courses.find(
-      c => c.courseId.toString() === this.supportingCourseId
+    this.supportingCourse = this.filteredSupportProgramCourses.find(
+      c => c.courseCode.toString() === this.selectedSupportCourseCode
     );
     console.log(this.supportingCourse);
     if (!this.supportingCourse.assignments) {
@@ -119,19 +150,19 @@ export class PackageComponent implements OnInit {
     this.supportingAssignments.push(this.supportingAssignment);
   }
 
-  // submit() {
-    // console.log(this.supportingAssignments);
-    // let pack = new Package();
-    // pack.assignmentId = parseInt(this.selectedAssignmentId);
-    // pack.previousAssignments = [];
-    // for (let i = 0; i < this.supportingAssignments.length; i++) {
-    //   let prevAssignment = new PreviousAssignment();
-    //   prevAssignment.assignmentId = this.supportingAssignments[i].assignmentId;
-    //   pack.previousAssignments.push(prevAssignment);
-    // }
+  submit() {
+    console.log(this.supportingAssignments);
+    let pack = new Package();
+    pack.assignmentId = parseInt(this.selectedAssignmentId);
+    pack.previousAssignments = [];
+    for (let i = 0; i < this.supportingAssignments.length; i++) {
+      let prevAssignment = new PreviousAssignment();
+      prevAssignment.assignmentId = this.supportingAssignments[i].assignmentId;
+      pack.previousAssignments.push(prevAssignment);
+    }
 
-    // this._packageService.uploadPackage(pack).subscribe(res => {
-    //   console.log(res);
-    // });
-  // }
+    this._packageService.uploadPackage(pack).subscribe(res => {
+      console.log(res);
+    });
+  }
 }

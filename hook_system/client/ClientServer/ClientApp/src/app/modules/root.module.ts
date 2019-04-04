@@ -11,7 +11,6 @@ import { CourseDetailComponent } from './components/course-detail/course-detail.
 import { LoginComponent } from './pages/login/login.component';
 import { BulkSubmissionComponent } from './components/bulk-submission/bulk-submission.component';
 import { CourseBoxComponent } from './components/course-box/course-box.component';
-import { AssignmentSelectionComponent } from './components/assignment-selection/assignment-selection.component';
 import { ArchivedCoursesComponent } from './pages/archived-courses/archived-courses.component';
 import { UniquePipe } from './../shared/pipes/unique.pipe';
 import { TestSubmissionComponent } from './pages/test-submission/test-submission.component';
@@ -32,7 +31,6 @@ import { RouterModule } from '@angular/router';
     LoginComponent,
     BulkSubmissionComponent,
     CourseBoxComponent,
-    AssignmentSelectionComponent,
     ArchivedCoursesComponent,
     UniquePipe,
     TestSubmissionComponent,
