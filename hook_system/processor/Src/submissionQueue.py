@@ -137,15 +137,19 @@ def processQueue():
             processed_file = timeQueue.pop()
             os.remove(filePath)
 
+
             notified = __sendEmail(emailAddr,jobId)
             #not sure what the best thing to do here is. . .
             endtime = time.time()
-            print("Overall processing time for "+processed_file[1]+" files is:"+ endtime-start)
+            total_time = time.ctime((int(endtime-start)))
+            total_all_file = time.ctime((int(all_file_time-start)))
+            total_file = time.ctime((int(filetime-start)))
+            print("Overall processing time for "+processed_file[1]+" files is:"+ str(total_time))
             print("Bulk file plagiarism processing time for "+processed_file[1]+
-                    "files is:"+ all_file_time-start)
+                    "files is:"+ str(total_all_file))
             processing_per_file = filetime-start
             print("File processing time for "+processed_file[1]+
-                    "files is:"+ filetime-start)
+                    "files is:"+ str(total_file))
 
 
 
@@ -159,10 +163,7 @@ def __sendEmail(emailAddr: str, jobId: str) -> bool:
     msg["To"] = emailAddr
     msg["From"] = config["EMAIL"]["FromAddr"]
 
-    s = smtplib.SMTP(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
-    s.ehlo()
-    s.starttls()
-    s.ehlo()
+    s = smtplib.SMTP_SSL(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
     s.login(config["EMAIL"]["FromAddr"], config["EMAIL"]["FromPassword"])
     s.sendmail(config["EMAIL"]["FromAddr"], recipients, msg.as_string())
     s.quit()
