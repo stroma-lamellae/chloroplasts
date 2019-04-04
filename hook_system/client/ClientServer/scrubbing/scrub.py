@@ -39,7 +39,7 @@ for section in listdir(folder):
                 newF = open(newFile, 'w')
                 newF.write(origFile)
                 newF.close()
-    if section == "Current Year" or section == "Previous Years":
+    if section == "CurrentYear" or section == "PreviousYears":
         for studentSubmission in listdir(join(folder, section)):
             try:
                 #take note of each folder you are going into

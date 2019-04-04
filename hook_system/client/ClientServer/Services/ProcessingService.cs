@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,14 @@ namespace ClientServer.Services
         private readonly IHttpClientFactory _clientFactory;
         private readonly IXMLService _xmlService;
         private readonly IScrubbingService _scrubbingService;
+        private readonly string _userId;
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
+            _userId = configuration.GetSection("ProcessingConfigurations")["UserId"];
         }
 
         public async Task<ResultsResponse> InitiateUpload(Package package)
@@ -64,7 +67,7 @@ namespace ClientServer.Services
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
             var responseText = await response.Content.ReadAsStringAsync();
-
+            
             var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
             
             return resultsResponse;
@@ -74,8 +77,8 @@ namespace ClientServer.Services
         {
             // TODO: Get real data
             return new UploadRequest { 
-                UserId = 123456, // TODO: Should come from authservice
-                Email = "jb15iq@brocku.ca", // TODO: Should come from user id
+                UserId = _userId, 
+                Email = "jb15iq@brocku.ca", // TODO: Should come from auth service
                 FileName = filename
             };
         }
@@ -83,7 +86,7 @@ namespace ClientServer.Services
         public async Task<ResultsResponse> RequestResults(string jobId)
         {
             var resultsRequest = new ResultsRequest {
-                UserId = 123456, // TODO: Should come from authservice
+                UserId = _userId, 
                 JobId = jobId
             }; 
 
@@ -106,14 +109,14 @@ namespace ClientServer.Services
 
     public class UploadRequest
     {
-        public long UserId { get; set; }
+        public string UserId { get; set; }
         public string Email { get; set; }
         public string FileName { get; set; } 
     }
 
     public class ResultsRequest
     {
-        public long UserId { get; set; }
+        public string UserId { get; set; }
         public string JobId { get; set; }
     }
 
