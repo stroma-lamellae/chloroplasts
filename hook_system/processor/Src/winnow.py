@@ -6,6 +6,7 @@ from hookFileType import HookFileType
 from standardizedFile import StandardizedFile
 from plagiarismOccurence import PlagiarismOccurence
 from match import Match
+import sys
 
 class AnHash:
     startLine: int = -1
@@ -22,9 +23,16 @@ MAX_64           = 0xffffffffffffffff
 #Reference page 9 of the moss paper on how this algorithm works
 #https://theory.stanford.edu/~aiken/publications/papers/sigmod03.pdf
 def winnow(hashes: List[AnHash], w: int) -> List[AnHash]:
+    if len(hashes) == 0:
+        print("Empty file detected, returning empty list")
+        return[]
     if w > len(hashes):
-        print("Error: window length can't be less than number of hashes")
-        exit(1)
+        print("Number of hashes is between 0 and w, returning the smallest number in the list")
+        minHash = sys.maxsize
+        for nhash in hashes:
+            if nhash.hashVal < minHash:
+                minHash = nhash.hashVal
+        return minHash
     
     #Must choose first k-gram manually then the rest of the algorithm will work
     hashesIndex:int  = 0

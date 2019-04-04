@@ -141,15 +141,9 @@ def processQueue():
             notified = __sendEmail(emailAddr,jobId)
             #not sure what the best thing to do here is. . .
             endtime = time.time()
-            total_time = time.ctime((int(endtime-start)))
-            total_all_file = time.ctime((int(all_file_time-start)))
-            total_file = time.ctime((int(filetime-start)))
-            print("Overall processing time for "+processed_file[1]+" files is:"+ str(total_time))
-            print("Bulk file plagiarism processing time for "+processed_file[1]+
-                    "files is:"+ str(total_all_file))
-            processing_per_file = filetime-start
-            print("File processing time for "+processed_file[1]+
-                    "files is:"+ str(total_file))
+            print("Overall processing time for "+processed_file[0]+" files is: "+ str(endtime-start))
+            print("Bulk file plagiarism processing time for "+processed_file[0]+"files is: "+ str(all_file_time-start))
+            print("File processing time for "+processed_file[0]+"files is: "+ str(filetime-start))
 
 
 
@@ -162,10 +156,9 @@ def __sendEmail(emailAddr: str, jobId: str) -> bool:
     msg["Subject"]= "Your Results are Ready!"
     msg["To"] = emailAddr
     msg["From"] = config["EMAIL"]["FromAddr"]
-
     s = smtplib.SMTP_SSL(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
     s.login(config["EMAIL"]["FromAddr"], config["EMAIL"]["FromPassword"])
-    s.sendmail(config["EMAIL"]["FromAddr"], recipients, msg.as_string())
+    s.sendmail(config["EMAIL"]["FromAddr"], emailAddr, msg.as_string())
     s.quit()
 
 
