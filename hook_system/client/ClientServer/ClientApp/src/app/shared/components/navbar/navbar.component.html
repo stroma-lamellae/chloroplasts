@@ -1,6 +1,9 @@
 <div class="app-navbar">
   <div class="app-navbar__icon-band">
-    <span class="fas fa-bars app-navbar__icon" (click)="toggleNavigation()"></span>
+    <span
+      class="fas fa-bars app-navbar__icon"
+      (click)="toggleNavigation()"
+    ></span>
   </div>
   <div class="app-navbar__navigation navigation">
     <div class="navigation__image-container">
@@ -9,24 +12,29 @@
     <div class="navigation__routes routes">
       <div class="routes__section">
         <div class="routes__header">
-          SUBMISSIONS
+          COURSES
         </div>
         <div class="routes__option">
-          <a routerLink="/submission" routerLinkActive="active">View Submissions</a>
+          <a routerLink="/courses" routerLinkActive="active">Current Courses</a>
         </div>
         <div class="routes__option">
-            <a routerLink="/upload" routerLinkActive="active">Upload</a>
+          <a routerLink="/search" routerLinkActive="active">Search Courses</a>
+        </div>
+        <div class="routes__option">
+          <a routerLink="/newcourse" routerLinkActive="active">New Course</a>
         </div>
       </div>
       <div class="routes__section">
         <div class="routes__header">
-          COURSES
+          SUBMISSIONS
         </div>
         <div class="routes__option">
-            <a routerLink="/course" routerLinkActive="active">Current Courses</a>
+          <a routerLink="/submissions" routerLinkActive="active">
+            View Submissions
+          </a>
         </div>
         <div class="routes__option">
-            <a routerLink="/search" routerLinkActive="active">Search Courses</a>
+          <a routerLink="/upload" routerLinkActive="active">Upload</a>
         </div>
       </div>
       <div class="routes__section">
@@ -34,10 +42,10 @@
           HOOK JOBS
         </div>
         <div class="routes__option">
-            <a routerLink="/package" routerLinkActive="active">New Hook Job</a>
+          <a routerLink="/package" routerLinkActive="active">New Hook Job</a>
         </div>
         <div class="routes__option">
-            <a routerLink="/result" routerLinkActive="active">View Results</a>
+          <a routerLink="/results" routerLinkActive="active">View Results</a>
         </div>
       </div>
       <div class="routes__section">
@@ -45,7 +53,7 @@
           ACCOUNT
         </div>
         <div class="routes__option">
-            <a (click)="logout()" >Logout</a>
+          <a (click)="logout()">Logout</a>
         </div>
       </div>
     </div>

@@ -16,8 +16,8 @@ export class CourseService {
     return this._httpClient.get<Course[]>(this._apiEndpoint);
   }
 
-  getYearCourses(year): Observable<Course[]> {
-    return this._httpClient.get<Course[]>(this._apiEndpoint + '/' + year);
+  getCourse(id: Number): Observable<Course> {
+    return this._httpClient.get<Course>(this._apiEndpoint + '/' + id);
   }
 
   getSemesterCourses(year, semester): Observable<Course[]> {
