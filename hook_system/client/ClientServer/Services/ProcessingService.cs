@@ -67,7 +67,7 @@ namespace ClientServer.Services
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
             var responseText = await response.Content.ReadAsStringAsync();
-            
+
             var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
             
             return resultsResponse;
