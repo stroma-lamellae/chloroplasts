@@ -28,14 +28,14 @@ namespace ClientServer.Services
         private readonly IHttpClientFactory _clientFactory;
         private readonly IXMLService _xmlService;
         private readonly IScrubbingService _scrubbingService;
-        private readonly string _userId;
+        private readonly string _institutionId;
 
         public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
-            _userId = configuration.GetSection("ProcessingConfigurations")["UserId"];
+            _institutionId = configuration.GetSection("ProcessingConfigurations")["InstitutionId"];
         }
 
         public async Task<ResultsResponse> InitiateUpload(Package package)
@@ -46,7 +46,7 @@ namespace ClientServer.Services
 
             var client = _clientFactory.CreateClient("processing");
 
-            var requestAddress = $"api/submit?userId={uploadRequest.UserId}&email={uploadRequest.Email}";
+            var requestAddress = $"api/submit?userId={uploadRequest.InstitutionId}&email={uploadRequest.Email}";
 
             // Create the multipart form portion of the request
             var formDataContent = new MultipartFormDataContent();
@@ -77,7 +77,7 @@ namespace ClientServer.Services
         {
             // TODO: Get real data
             return new UploadRequest { 
-                UserId = _userId, 
+                InstitutionId = _institutionId, 
                 Email = "jb15iq@brocku.ca", // TODO: Should come from auth service
                 FileName = filename
             };
@@ -86,7 +86,7 @@ namespace ClientServer.Services
         public async Task<ResultsResponse> RequestResults(string jobId)
         {
             var resultsRequest = new ResultsRequest {
-                UserId = _userId, 
+                InstitutionId = _institutionId, 
                 JobId = jobId
             }; 
 
@@ -94,7 +94,7 @@ namespace ClientServer.Services
 
             // Send to processing server
             var content = new StringContent(JsonConvert.SerializeObject(resultsRequest), Encoding.UTF8, "application/json");
-            var requestAddress = $"api/results?userId={resultsRequest.UserId}&jobId={resultsRequest.JobId}";
+            var requestAddress = $"api/results?userId={resultsRequest.InstitutionId}&jobId={resultsRequest.JobId}";
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
@@ -109,14 +109,14 @@ namespace ClientServer.Services
 
     public class UploadRequest
     {
-        public string UserId { get; set; }
+        public string InstitutionId { get; set; }
         public string Email { get; set; }
         public string FileName { get; set; } 
     }
 
     public class ResultsRequest
     {
-        public string UserId { get; set; }
+        public string InstitutionId { get; set; }
         public string JobId { get; set; }
     }
 
