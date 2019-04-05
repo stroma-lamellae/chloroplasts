@@ -4,6 +4,7 @@ using System.Text;
 using ClientServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using System.Net.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -97,7 +98,16 @@ namespace ClientServer
                .BuildServiceProvider();
 
             // For communicating with the Processing Server
-            services.AddHttpClient();
+            var processingConfig = Configuration.GetSection("ProcessingConfigurations");
+            // Create a handler to ignore HTTPS until we get a signed certificate
+            var httpClientHandler = new HttpClientHandler();
+            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+            
+            services.AddHttpClient("processing", c => 
+            {
+               c.BaseAddress = new Uri(processingConfig["BaseAddress"]);
+               c.DefaultRequestHeaders.Add("licence", processingConfig["Licence"]); 
+            }).ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
             
             // Remove content length limit. This is for our submission uploading
             services.Configure<FormOptions>(x => {
