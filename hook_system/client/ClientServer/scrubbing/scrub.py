@@ -30,15 +30,16 @@ for section in listdir(folder):
     mainDestinationFolder = join(destinationFolder, section)
     os.mkdir(mainDestinationFolder)
     if section == "Exclusions":
-        print("found exclusions")
         for root, directory, files in os.walk(join(folder, section)):
             for filename in files:
-                origFile = open(join(root, filename)).read()
-                # write to scrubbed folder
-                newFile = join(mainDestinationFolder, filename)
-                newF = open(newFile, 'w')
-                newF.write(origFile)
-                newF.close()
+                if filename.endswith(".java") or filename.endswith(".cpp") or filename.endswith(".c") \
+                        or filename.endswith(".hpp") or filename.endswith(".h"):
+                    origFile = open(join(root, filename)).read()
+                    # write to scrubbed folder
+                    newFile = join(mainDestinationFolder, filename)
+                    newF = open(newFile, 'w')
+                    newF.write(origFile)
+                    newF.close()
     if section == "CurrentYear" or section == "PreviousYears":
         for studentSubmission in listdir(join(folder, section)):
             try:
