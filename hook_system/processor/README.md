@@ -26,7 +26,7 @@ To access the UI page for the API go open up the following link **http://\<ip-ad
 To directly access the hookserver database on the server:
 
 ```
-sudo -i -u stromae psql -d hookserver`
+sudo -i -u stromae psql -d hookserver
 ```
 
 To dump the contents of the database:
