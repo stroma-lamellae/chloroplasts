@@ -4,8 +4,8 @@ from hookFile import HookFile
 from hookFileType import HookFileType
 from standardizedFile import StandardizedFile
 from typing import List, Tuple
-import smtplib
 from email.message import EmailMessage
+import smtplib
 import tarfile as tar
 import threading
 import time
@@ -42,13 +42,14 @@ def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
     nCur:int = len(submissionQueue)
 
+    estimate = estimateProcessing(numFile)
+    timer = (filePath, arrow.utcnow(), estimate)
+    timeQueue.append(timer)
+    local_utc = arrow.utcnow().shift(seconds=estimate)
+
     mutex.release()
 
     if nCur == nPrior+1:
-        estimate = estimateProcessing(numFile)
-        timer = (filePath, arrow.utcnow(), estimate)
-        timeQueue.append(timer)
-        local_utc = arrow.utcnow().shift(seconds=estimate)
         return True, local_utc.to('local').format('YYYY-MM-DD HH:mm:ss')
     else:
         return False, ""
@@ -64,6 +65,12 @@ def processQueue():
             time.sleep(5)
         else:
             filePath, emailAddr = submissionQueue.pop(0)
+
+            for i in range(len(timeQueue)):
+                if timeQueue[i][0] == filePath:
+                    del timeQueue[i]
+                    break
+
             mutex.release()
 
             cFiles: List[HookFile] = []
@@ -137,7 +144,6 @@ def processQueue():
             processed_file = timeQueue.pop()
             os.remove(filePath)
 
-
             notified = __sendEmail(emailAddr,jobId)
             #not sure what the best thing to do here is. . .
             endtime = time.time()
@@ -161,6 +167,20 @@ def __sendEmail(emailAddr: str, jobId: str) -> bool:
     s.sendmail(config["EMAIL"]["FromAddr"], emailAddr, msg.as_string())
     s.quit()
 
+def estimateQueue(jobId: str) -> int:
+    mutex.acquire()
+
+    res = 0
+
+    for path, _, estimate in timeQueue:
+        if path.find(jobId) == -1:
+            res += estimate
+        else:
+            break
+
+    mutex.release()
+
+    return res
 
 def estimateProcessing(numFile):
 
