@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,13 +30,15 @@ namespace ClientServer.Services
         private readonly IScrubbingService _scrubbingService;
         private readonly IFileService _fileService;
         private readonly string _tempTestDirectory = "test";
+        private readonly string _institutionId;
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IFileService fileService)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration, IFileService fileService)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
             _fileService = fileService;
+            _institutionId = configuration.GetSection("ProcessingConfigurations")["InstitutionId"];
         }
 
         public async Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true)
@@ -53,11 +56,11 @@ namespace ClientServer.Services
                 _fileService.CompressFolder(_tempTestDirectory, filename);
             }
 
-            var uploadRequest = CreateUploadRequest(package, filename);
+            var uploadRequest = CreateUploadRequest(filename);
 
             var client = _clientFactory.CreateClient("processing");
 
-            var requestAddress = "api/submit?userId=" + uploadRequest.UserId + "&email=" + uploadRequest.Email;
+            var requestAddress = $"api/submit?userId={uploadRequest.InstitutionId}&email={uploadRequest.Email}";
 
             // Create the multipart form portion of the request
             var formDataContent = new MultipartFormDataContent();
@@ -83,32 +86,28 @@ namespace ClientServer.Services
             return resultsResponse;
         }
 
-        public UploadRequest CreateUploadRequest(Package package, string filename) 
+        public UploadRequest CreateUploadRequest(string filename) 
         {
-            // TODO: Scrub package to create tarball
             // TODO: Get real data
             return new UploadRequest { 
-                UserId = 123456, // TODO: Should come from authservice
-                Email = "jb15iq@brocku.ca", // TODO: Should come from user id
-                AuthToken = "Hahhahahahahaha We don't have this yet :)",
+                InstitutionId = _institutionId, 
+                Email = "jb15iq@brocku.ca", // TODO: Should come from auth service
                 FileName = filename
             };
         }
 
         public async Task<ResultsResponse> RequestResults(string jobId)
         {
-            // TODO: Get the resultsRequest to be real
             var resultsRequest = new ResultsRequest {
-                UserId = 123456, // TODO: Should come from authservice
-                JobId = jobId,
-                AuthToken = "Hahhahahahahahah This isn't the same authtoken. Oh well."
+                InstitutionId = _institutionId, 
+                JobId = jobId
             }; 
 
             var client = _clientFactory.CreateClient("processing");
 
             // Send to processing server
             var content = new StringContent(JsonConvert.SerializeObject(resultsRequest), Encoding.UTF8, "application/json");
-            var requestAddress = "api/results?userId=" + resultsRequest.UserId + "&jobId=" + resultsRequest.JobId;
+            var requestAddress = $"api/results?userId={resultsRequest.InstitutionId}&jobId={resultsRequest.JobId}";
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
@@ -123,17 +122,15 @@ namespace ClientServer.Services
 
     public class UploadRequest
     {
-        public long UserId { get; set; }
+        public string InstitutionId { get; set; }
         public string Email { get; set; }
-        public string AuthToken { get; set; }
-        public string FileName { get; set; } // TODO: Make this be a file
+        public string FileName { get; set; } 
     }
 
     public class ResultsRequest
     {
-        public long UserId { get; set; }
+        public string InstitutionId { get; set; }
         public string JobId { get; set; }
-        public string AuthToken { get; set; }
     }
 
     public class ResultsResponse
@@ -141,7 +138,7 @@ namespace ClientServer.Services
         public string Status { get; set; }
         public string JobId { get; set; }
         public DateTime EstimatedCompletion { get; set; }
-        public string Results { get; set; } // TODO: Make this be a file
+        public string Results { get; set; } 
 
         public Result Result { get; set; }
     }

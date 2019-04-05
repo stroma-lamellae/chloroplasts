@@ -9,11 +9,13 @@ using Newtonsoft.Json;
 
 using ClientServer.Models;
 using ClientServer.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClientServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "User")]
     public class PackageController: Controller
     {
         private readonly ClientServerContext _context;

@@ -14,11 +14,23 @@ import os
 import standardize
 import winnow
 import xmlGenerator
+import configparser
 
 timeQueue = list()
 processing_per_file = 0.001 #TODO: actually time processing of a file
 mutex = threading.Lock()
 submissionQueue: List[Tuple[str, str]] = []
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = os.path.join(dir_path,"config.ini")
+
+if not os.path.isfile(configFilename):
+    print("No configuration file found. Please run Setup before running this.")
+    exit(0)
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
+
 
 def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
@@ -34,10 +46,10 @@ def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
     if nCur == nPrior+1:
         estimate = estimateProcessing(numFile)
-        timer = (filepath, arrow.utcnow(), estimate)
+        timer = (filePath, arrow.utcnow(), estimate)
         timeQueue.append(timer)
         local_utc = arrow.utcnow().shift(seconds=estimate)
-        return True, local_utc.to('local').format('YYY-MM-DD HH:mm:ss')
+        return True, local_utc.to('local').format('YYYY-MM-DD HH:mm:ss')
     else:
         return False, ""
 
@@ -116,43 +128,37 @@ def processQueue():
 
             _, tarFilename = os.path.split(filePath)
 
-            jobID: str = tarFilename.replace('.tar.gz','')
+            jobId: str = tarFilename.replace('.tar.gz','')
 
             allMatches: List[Match] = cMatches
             allMatches += javaMatches
-            with open("./Results/"+jobID+".xml", 'wb') as f:
+            with open(os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml"), 'wb') as f:
                 f.write(xmlGenerator.generateResult(allMatches))
             processed_file = timeQueue.pop()
             os.remove(filePath)
 
-            notified = __sendEmail(emailAddr,jobID)
+
+            notified = __sendEmail(emailAddr,jobId)
             #not sure what the best thing to do here is. . .
             endtime = time.time()
-            print("Overall processing time for "+processed_file[1]+" files is:"+ endtime-start)
-            print("Bulk file plagiarism processing time for "+processed_file[1]+
-                    "files is:"+ all_file_time-start)
-            processing_per_file = filetime-start
-            print("File processing time for "+processed_file[1]+
-                    "files is:"+ filetime-start)
+            print("Overall processing time for "+processed_file[0]+" files is: "+ str(endtime-start))
+            print("Bulk file plagiarism processing time for "+processed_file[0]+"files is: "+ str(all_file_time-start))
+            print("File processing time for "+processed_file[0]+"files is: "+ str(filetime-start))
 
 
 
-def __sendEmail(emailAddr: str, msg: str) -> bool:
+def __sendEmail(emailAddr: str, jobId: str) -> bool:
 
-    msg = EmailMessage("Your results have been processed and are ready to be"+
+    msg = EmailMessage()
+    msg.set_content("Your results have been processed and are ready to be"+
     " downloaded from the hook. Please log in to your account and request"+
-    " them with job id: "+msg)
-    msg.set_content()
+    " them with your user id and this job id: "+jobId)
     msg["Subject"]= "Your Results are Ready!"
     msg["To"] = emailAddr
     msg["From"] = config["EMAIL"]["FromAddr"]
-
-    s = smtplib.SMTP(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
-    s.ehlo()
-    s.starttls()
-    s.ehlo()
+    s = smtplib.SMTP_SSL(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
     s.login(config["EMAIL"]["FromAddr"], config["EMAIL"]["FromPassword"])
-    s.sendmail(config["EMAIL"]["FromAddr"], recipients, msg.as_string())
+    s.sendmail(config["EMAIL"]["FromAddr"], emailAddr, msg.as_string())
     s.quit()
 
 
@@ -163,4 +169,4 @@ def estimateProcessing(numFile):
         for timer in timeQueue:
             wait_time+=timer[2]
 
-    return wait_time+(multiply(processing_per_file, numFile))
+    return wait_time+(processing_per_file*numFile)

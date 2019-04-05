@@ -26,12 +26,16 @@ namespace ClientServer.Services
         }
         public async Task<Result> ParseXMLFile(string data)
         {
+            data = data.Replace("R", "r"); // Because the "no results" response from the server has a capital R
             XmlSerializer ser = new XmlSerializer(typeof(Results));
             Results results = ((Results)ser.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(data ?? ""))));
             Result result = new Result();
             result.Matches = new List<Match>();
             result.CompletedDate = DateTime.UtcNow;
-            Console.WriteLine(results.Matches.Length);
+            // Check if the results are available yet
+            if (results.Matches == null || results.Matches.Length == 0) {
+                return null;
+            }
             if (results.Matches != null) {
                 foreach (var match in results.Matches) {
                     Match modelMatch = new Match();

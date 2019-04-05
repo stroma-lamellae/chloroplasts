@@ -7,19 +7,7 @@ Readme for the Processing Server
 1. Python 3 installed on system
 2. Python3-pip installed on system
 3. python3-virtualenv installed on the system
-4. Psycopg2 installed on the system
-```
-pip install psycopg2-binary
-```
-5. Arrow installed on system
-```
-pip install arrow
-```
-6. bcrypt installed on the system and [system specific dependencies](https://pypi.org/project/bcrypt/) installed
-```
-pip install brcypt
-```
-7. Postgresql set up on the system with [this](database-dump.dmp) schema
+4. Postgresql database set up on the system with [this](database-dump.dmp) schema
 
 To first create your virtual enviroment for python run the command `virtualenv -p /usr/bin/python3 env`, for windows instead of `/usr/bin/python3` put the path to your python3 interpreter.
 
@@ -32,4 +20,26 @@ After launching the virtual enviroment you will need to install the dependencies
 The package being used to run the REST server is called *Connexion*, the list of API calls are defined in the *swagger.yml* file and the comments in the file should be sufficient enough to understand on how to modify or create new ones as needed.
 
 To access the UI page for the API go open up the following link **http://\<ip-address>:\<port>/api/ui** where the ip address and port are specified in the *server.py* file
+
+## The Database
+
+To directly access the hookserver database on the server:
+
+```
+sudo -i -u stromae psql -d hookserver
+```
+
+To dump the contents of the database:
+
+Login in stromae:
+
+```
+su stromae
+```
+
+enter the password and then run:
+
+```
+pg_dump -U stromae -W -F t hookserver > PATH\TO\FILE\hook-dump.tar
+```
 

@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using ClientServer.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClientServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "User")]
     public class RoleController : ControllerBase
     {
         private readonly ClientServerContext _context;

@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.com/stroma-lamellae/chloroplasts.svg?token=B4HsPVynZh9evHaDSmTB&branch=master)](https://travis-ci.com/stroma-lamellae/chloroplasts "Travis")
 
+![UML1](https://github.com/stroma-lamellae/chloroplasts/blob/master/hook-colour.jpg)
+
 # chloroplasts
 
 A [MOSS](https://theory.stanford.edu/~aiken/moss/)-like program that aims to
@@ -28,7 +30,5 @@ The freedom of information and the protection of personal information restricts 
 Due to intellectual property rights, the main system which performs the analysis will be housed on a brock server. The client can be the internet. At no time will client information be stored on a brock server.
 The system may support multiple languages. For the minimum requirement, it must support C, C++ and Java.
 
-![UML1](https://github.com/onyiny-ang/chloroplasts/blob/master/UML1.jpeg)
-![UML2](https://github.com/onyiny-ang/chloroplasts/blob/master/UML.jpeg)
 
 

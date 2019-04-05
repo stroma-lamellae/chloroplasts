@@ -12,6 +12,7 @@ TODO
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+.idea/
 
 # Build results
 [Dd]ebug/

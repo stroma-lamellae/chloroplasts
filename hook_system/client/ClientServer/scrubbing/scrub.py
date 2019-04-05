@@ -2,7 +2,6 @@
 import sys
 import os
 import psycopg2
-import tkinter as tk
 
 from tkinter import messagebox
 from os import listdir
@@ -28,17 +27,28 @@ unScrubbedFolders = ""
 numOfUnscrubbedFolders = 0
 
 for section in listdir(folder):
-    os.mkdir(join(destinationFolder, section))
+    mainDestinationFolder = join(destinationFolder, section)
+    os.mkdir(mainDestinationFolder)
+    if section == "Exclusions":
+        print("found exclusions")
+        for root, directory, files in os.walk(join(folder, section)):
+            for filename in files:
+                origFile = open(join(root, filename)).read()
+                # write to scrubbed folder
+                newFile = join(mainDestinationFolder, filename)
+                newF = open(newFile, 'w')
+                newF.write(origFile)
+                newF.close()
     if section == "CurrentYear" or section == "PreviousYears":
         for studentSubmission in listdir(join(folder, section)):
             try:
-                #take not of each folder you are going into
+                #take note of each folder you are going into
                 studentSubmissionFolder = join(join(folder, section), studentSubmission)
 
                 #get the names in plain english, and save them to variables
                 firstName, lastName, stdNum = studentSubmission.split("_")
 
-                #save the hash vaules of the 3 variables from above
+                #save the hash values of the 3 variables from above
                 hashFirstName = str(hash(firstName))
                 hashLastName = str(hash(lastName))
                 hashStdNum = str(hash(stdNum))
@@ -77,19 +87,15 @@ for section in listdir(folder):
                 unScrubbedFolders = "\t" + studentSubmission + "\n"
                 numOfUnscrubbedFolders = numOfUnscrubbedFolders + 1
 
-#if any folder causes an exception, then show an alert at the end with the summary
+#if any folder causes an exception, send a sys.exit error message
 if numOfUnscrubbedFolders == 1:
     alertMessage = "A submission was not able to be scrubbed. It is listed below:\n"
     alertMessage = alertMessage + unScrubbedFolders
-    root = tk.Tk()
-    root.withdraw()
-    messagebox.showwarning('ALERT', alertMessage)
+    sys.exit(alertMessage)
 elif numOfUnscrubbedFolders > 1:
     alertMessage = str(numOfUnscrubbedFolders)+" submissions were not able to be scrubbed. They are listed below:\n"
     alertMessage = alertMessage + unScrubbedFolders
-    root = tk.Tk()
-    root.withdraw()
-    messagebox.showwarning('ALERT', alertMessage)
+    sys.exit(alertMessage)
 
 conn.commit()
 

@@ -5,24 +5,32 @@ from typing import List
 import submissionQueue
 import connexion
 import arrow
+import bcrypt
 import uuid
 import os
 import tarfile as tar
 import psycopg2
+import configparser
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+configFilename = os.path.join(dir_path,"config.ini")
+
+config = configparser.RawConfigParser()
+config.read(configFilename)
 
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
 def submit(userId: str, email: str, data) -> str:
 
-    auth_ok = authorize(userId,email)
+    auth_ok = authorize(userId)
     if not auth_ok[0]:
-        return auth[1],auth[2]
+        return auth_ok[1],auth_ok[2]
 
     #Create a 128 bit job number represented in a hex string
     jobID: str = str(uuid.uuid4())
 
     #Write the tarball to disk to be processed later
-    filename: str = "./Queue/"+jobID+".tar.gz"
+    filename: str = os.path.join(config["DISK"]["Queue"], "Queue", jobID + ".tar.gz")
     with open(filename, 'wb') as f:
         for line in data.stream:
             f.write(line)
@@ -70,6 +78,7 @@ def submit(userId: str, email: str, data) -> str:
 
                 fileCount+=1
     if java_files < 1 and cpp_files < 1:
+        os.remove(filename)
         return "Insufficient files to detect plagiarism", 400
 
     #Add the filename to a queue to process
@@ -81,15 +90,15 @@ def submit(userId: str, email: str, data) -> str:
         return "Unable to Add Submission to Queue", 400
 
 def fetch(userId: str, jobId: str) -> str:
-    auth_ok = authorize(userId, email)
+    auth_ok = authorize(userId)
     if not auth_ok[0]:
-        return auth[1],auth[2]
+        return auth_ok[1],auth_ok[2]
 
     pattern = re.compile("[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}")
     if not pattern.match(jobId):
         return ("Forbidden",403)
 
-    resultPath = os.path.join("./Results", jobId + ".xml")
+    resultPath = os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml")
 
     #If the results don't exist return empty results
     if not os.path.exists(resultPath):
@@ -104,20 +113,19 @@ def fetch(userId: str, jobId: str) -> str:
 
     return {'results': xmlResults}
 
-def authorize(userId, email) -> (bool,int,str):
+def authorize(userId) -> (bool,int,str):
     licence = connexion.request.headers['licence']
     try:
-        #need to look into secure way to store dbusername + password
-        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=["DATABASE"]["DATABASE_PASSWORD"])
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
-        select_user_id = "SELECT licence_number, user_id FROM accounts WHERE user_email = %s;"
-        cur.execute(select_user_id, (email, ))
+        select_licence = "SELECT licence_number, user_name FROM accounts WHERE user_id = %s;"
+        cur.execute(select_licence, (userId, ))
         db_values = cur.fetchone()
         if db_values:
-            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[1], "utf-8")) == db_values[1]:
-                print("Authorized Licence")
-            if db_values[1] == userId:
-                return (True,"User Authorized, Proceeding to Process",200)
+            if bcrypt.hashpw(bytes(licence, "utf-8"), bytes(db_values[0],"utf-8")) == bytes(db_values[0],"utf-8"):
+                return(True, ("Authorized Licence for user: %s", db_values[1]), 200)
+            else:
+                return (False, "Forbidden", 403)
         else:
             return (False,"Forbidden",403)
     except:
