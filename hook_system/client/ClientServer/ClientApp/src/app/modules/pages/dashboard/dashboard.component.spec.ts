@@ -5,6 +5,7 @@ import { UniquePipe } from 'src/app/shared/pipes/unique.pipe';
 import { CourseBoxComponent } from '../../components/course-box/course-box.component';
 import { CourseService } from 'src/app/core/services/course.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -14,7 +15,7 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ DashboardComponent, UniquePipe, CourseBoxComponent ],
       providers: [CourseService],
-      imports: [HttpClientModule]
+      imports: [HttpClientModule, RouterModule]
     })
     .compileComponents();
   }));

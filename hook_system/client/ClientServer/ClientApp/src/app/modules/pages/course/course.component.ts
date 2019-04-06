@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../../core/services/course.service';
 import { Course } from '../../../shared/models/course';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-course',
@@ -8,27 +9,23 @@ import { Course } from '../../../shared/models/course';
   styleUrls: ['./course.component.scss']
 })
 export class CourseComponent implements OnInit {
-  courses: Course[];
+  course: Course;
+  id: number;
+  private sub: any;
 
-  constructor(private _courseService: CourseService) {}
+  constructor(private _courseService: CourseService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this._courseService.getCourses().subscribe(res => {
-      console.log(res);
-      if (res.length > 0) {
-        console.log(res[0].courseCode);
-      }
-      this.courses = res;
+    this.sub  = this.route.params.subscribe(params => {
+      this.id = + params['id'];
     });
-  }
 
-  addCourse() {
-    this.courses.push(new Course());
-  }
-
-  updateCourse(origCourse: Course, newCourse: Course) {
-    if (newCourse == null)
-      this.courses.splice(this.courses.indexOf(origCourse), 1);
-    else origCourse = newCourse;
+    if (isNaN(this.id)) {
+      this.course = new Course();
+    } else {
+      this._courseService.getCourse(this.id).subscribe(res => {
+        this.course = res;
+      });
+    }
   }
 }
