@@ -83,6 +83,7 @@ def submit(userId: str, email: str, data) -> str:
 
     #Add the filename to a queue to process
     added, waitTime = submissionQueue.addToQueue(filename,fileCount, email)
+    addJob(userId, jobID)
 
     if added:
         return {"JobId" : jobID, "EstimatedCompletion" : waitTime}
@@ -107,7 +108,7 @@ def fetch(userId: str, jobId: str) -> str:
 
     #If the results don't exist yet return empty results
     if not os.path.exists(resultPath):
-        return {'results': '<results />', 'status': 'queued', 'wait': ''}
+        return {'results': '<results />', 'status': 'queued', 'wait': submissionQueue.estimateQueue(jobId)}
 
     #Read the results and send them back to the client server
     xmlResults = ""
@@ -140,7 +141,7 @@ def addJob(userId: str, jobId: str):
     try:
         conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
-        mkJob = "INSERT INTO jobs (job_id, user_id) VALUES (%s, %s)"
+        mkJob = "INSERT INTO jobs (job_id, user_id) VALUES (%s, %s);"
         cur.execute(mkJob, (jobId, userId, ))
         conn.commit()
     except:
@@ -150,8 +151,8 @@ def removeJob(jobId: str):
     try:
         conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
         cur = conn.cursor()
-        rmJob = "DELETE FROM jobs WHERE job_id = %s"
-        cur.execute(selectJob, (jobId, ))
+        rmJob = "DELETE FROM jobs WHERE job_id = %s;"
+        cur.execute(rmJob, (jobId, ))
         conn.commit()
     except:
         pass

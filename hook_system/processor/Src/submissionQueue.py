@@ -42,16 +42,16 @@ def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
 
     nCur:int = len(submissionQueue)
 
-    estimate = estimateProcessing(numFile)
-    timer = (filePath, arrow.utcnow(), estimate)
-    timeQueue.append(timer)
-    local_utc = arrow.utcnow().shift(seconds=estimate)
-
-    mutex.release()
-
     if nCur == nPrior+1:
+        estimate = estimateProcessing(numFile)
+        timer = (filePath, arrow.utcnow(), estimate)
+        timeQueue.append(timer)
+        local_utc = arrow.utcnow().shift(seconds=estimate)
+
+        mutex.release()
         return True, local_utc.to('local').format('YYYY-MM-DD HH:mm:ss')
     else:
+        mutex.release()
         return False, ""
 
 def processQueue():
@@ -65,11 +65,6 @@ def processQueue():
             time.sleep(5)
         else:
             filePath, emailAddr = submissionQueue.pop(0)
-
-            for i in range(len(timeQueue)):
-                if timeQueue[i][0] == filePath:
-                    del timeQueue[i]
-                    break
 
             mutex.release()
 
