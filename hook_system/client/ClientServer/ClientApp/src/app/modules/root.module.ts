@@ -14,9 +14,12 @@ import { CourseBoxComponent } from './components/course-box/course-box.component
 import { ArchivedCoursesComponent } from './pages/archived-courses/archived-courses.component';
 import { UniquePipe } from './../shared/pipes/unique.pipe';
 import { TestSubmissionComponent } from './pages/test-submission/test-submission.component';
+import { ViewSubmissionsComponent } from './pages/view-submissions/view-submissions.component';
+import { UploadComponent } from './pages/upload/upload.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   declarations: [
     PackageComponent,
     CourseComponent,
@@ -30,7 +33,9 @@ import { TestSubmissionComponent } from './pages/test-submission/test-submission
     CourseBoxComponent,
     ArchivedCoursesComponent,
     UniquePipe,
-    TestSubmissionComponent
+    TestSubmissionComponent,
+    ViewSubmissionsComponent,
+    UploadComponent
   ]
 })
 export class RootModule {}

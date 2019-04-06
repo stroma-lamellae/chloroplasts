@@ -1,6 +1,2 @@
-<div *ngFor="let course of courses">
-  <app-course-detail [course]="course" (courseChange)="updateCourse(course, $event)"></app-course-detail>
-  <hr />
-</div>
-
-<button (click)="addCourse()">Add Course</button>
+<app-course-detail [course]="course" (courseChange)="updateCourse(course, $event)"></app-course-detail>
+<hr />

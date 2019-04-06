@@ -10,9 +10,7 @@ import { AssignmentComponent } from '../assignment/assignment.component';
   styleUrls: ['./course-detail.component.scss']
 })
 export class CourseDetailComponent implements OnInit {
-
   @Input() course: Course;
-  @Output() courseChange: EventEmitter<Course> = new EventEmitter();
   showAssignments: boolean = false;
 
   constructor(private _courseService: CourseService) { 
@@ -25,19 +23,14 @@ export class CourseDetailComponent implements OnInit {
     if (!this.course.courseId) {
       this._courseService.addCourse(this.course).subscribe(res => {
         this.course = res;
-        this.courseChange.emit(this.course);
       });
     } else {
-      this._courseService.updateCourse(this.course).subscribe(res => {
-        this.courseChange.emit(this.course);
-      });
+      this._courseService.updateCourse(this.course);
     }
   }
 
   delete() {
-    this._courseService.deleteCourse(this.course).subscribe(res => {
-      this.courseChange.emit(null);
-    });
+    this._courseService.deleteCourse(this.course);
   }
 
   toggleAssignments() {
@@ -58,13 +51,10 @@ export class CourseDetailComponent implements OnInit {
     // Needs to update differently based on what was returned
     if (assignment == null) {
       this.course.assignments.splice(this.course.assignments.indexOf(origAssignment), 1);
-      this.courseChange.emit(this.course);
     } else if (!origAssignment.assignmentId) {
       this.course.assignments[this.course.assignments.indexOf(origAssignment)] = assignment;
-      this.courseChange.emit(this.course);
     } else if (origAssignment.assignmentId) {
       this.course.assignments[this.course.assignments.indexOf(origAssignment)] = assignment;
-      this.courseChange.emit(this.course);
     }
   }
 }

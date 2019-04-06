@@ -10,9 +10,11 @@ export class TestService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  uploadTestFile(file: File): Observable<any> {
+  uploadTestFile(file: File, testName: string): Observable<any> {
     let formData = new FormData();
-    formData.append("file", file);
+    formData.append("File", file);
+    formData.append("TestName", testName);
+    formData.append("Email", "myEmail");
 
     return this._httpClient.post(this._apiEndpoint, formData);
   }

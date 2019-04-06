@@ -134,18 +134,8 @@ namespace ClientServer.Services
         // Get's the path for where this submission's files should be stored
         private string GetSubmissionPath(Submission submission)
         {
-            string orig = submission.Assignment.Course.CourseCode;
-            int length = orig.Length;
-            int half = length / 2;
-
-            string courseCode = orig.Substring(0, half);
-            if (half < 1) { // In case we, for some reason, have a Course.CourseCode of length 1
-                courseCode = "z";
-            } 
-            string courseNumber = submission.Assignment.Course.CourseCode.Substring(half, length - half);
-
-            return Path.Combine(submission.Assignment.Course.Year + "", courseCode, 
-                courseNumber, submission.Assignment.Name, submission.SubmissionId + "",
+            return Path.Combine($"{submission.Assignment.Course.Year}", submission.Assignment.Course.ProgramCode, 
+                submission.Assignment.Course.CourseCode, submission.Assignment.Name, $"{submission.SubmissionId}",
                 GetSubmissionFolderName(submission));
         }
 

@@ -77,11 +77,21 @@ namespace ClientServer.Services
 
             // Add the file form part to our form data
             formDataContent.Add(fileContent, "data", uploadRequest.FileName);
-            
+
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
             var responseText = await response.Content.ReadAsStringAsync();
-            var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+            ResultsResponse resultsResponse = null;
+            try {
+                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+                if (resultsResponse.Status == null) resultsResponse.Status = "200"; // Placeholder until server response messages are standardized
+            } catch (JsonReaderException e) {
+                resultsResponse = new ResultsResponse 
+                {
+                    Status = "400",
+                    Results = e.Message
+                };
+            }
             
             return resultsResponse;
         }
@@ -112,10 +122,21 @@ namespace ClientServer.Services
 
             // Handle Response
             var responseText = await response.Content.ReadAsStringAsync();
-            var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+            ResultsResponse resultsResponse;
+            try {
+                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+                if (resultsResponse.Status == null) resultsResponse.Status = "200";
 
-            var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
-            resultsResponse.Result = result;
+                var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
+                resultsResponse.Result = result;
+            } catch (JsonReaderException e) {
+                resultsResponse = new ResultsResponse 
+                {
+                    Status = "400",
+                    Results = e.Message
+                };
+            }
+
             return resultsResponse;
         }
     }
