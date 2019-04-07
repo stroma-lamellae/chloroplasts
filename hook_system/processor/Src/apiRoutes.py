@@ -1,7 +1,7 @@
 from hookFile import HookFile
 from hookFileType import HookFileType
-import re
 from typing import List
+import re
 import submissionQueue
 import connexion
 import arrow
@@ -83,6 +83,7 @@ def submit(userId: str, email: str, data) -> str:
 
     #Add the filename to a queue to process
     added, waitTime = submissionQueue.addToQueue(filename,fileCount, email)
+    addJob(userId, jobID)
 
     if added:
         return {"JobId" : jobID, "EstimatedCompletion" : waitTime}
@@ -94,15 +95,20 @@ def fetch(userId: str, jobId: str) -> str:
     if not auth_ok[0]:
         return auth_ok[1],auth_ok[2]
 
+    #Check if valid job id
     pattern = re.compile("[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}")
     if not pattern.match(jobId):
         return ("Forbidden",403)
 
+    #Check if JobID belongs to user
+    if not checkForOwnership(userId, jobId):
+        return ("Forbidden",403)
+
     resultPath = os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml")
 
-    #If the results don't exist return empty results
+    #If the results don't exist yet return empty results
     if not os.path.exists(resultPath):
-        return {'results': '<?xml version="1.0" encoding="UTF-8" ?><Results></Results>'}
+        return {'results': '<results />', 'status': 'queued', 'wait': submissionQueue.estimateQueue(jobId)}
 
     #Read the results and send them back to the client server
     xmlResults = ""
@@ -110,8 +116,46 @@ def fetch(userId: str, jobId: str) -> str:
         xmlResults = ''.join(f.readlines())
 
     os.remove(resultPath)
+    removeJob(jobId)
 
-    return {'results': xmlResults}
+    return {'results': xmlResults, 'status': 'complete', 'wait':''}
+
+def checkForOwnership(userId: str, jobId: str) ->  bool:
+    try:
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
+        cur = conn.cursor()
+        selectJob = "SELECT job_id FROM jobs WHERE job_id = %s AND user_id = %s"
+        cur.execute(selectJob, (jobId, userId, ))
+        dbVal = cur.fetchone()
+        if dbVal:
+            if jobId == dbVal[0]:
+                return True
+            else:
+                return False
+        else:
+            False
+    except:
+        return False
+
+def addJob(userId: str, jobId: str):
+    try:
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
+        cur = conn.cursor()
+        mkJob = "INSERT INTO jobs (job_id, user_id) VALUES (%s, %s);"
+        cur.execute(mkJob, (jobId, userId, ))
+        conn.commit()
+    except:
+        pass
+
+def removeJob(jobId: str):
+    try:
+        conn = psycopg2.connect(host="localhost", database=config["DATABASE"]["DATABASE_NAME"],user=config["DATABASE"]["DATABASE_USER"],password=config["DATABASE"]["DATABASE_PASSWORD"])
+        cur = conn.cursor()
+        rmJob = "DELETE FROM jobs WHERE job_id = %s;"
+        cur.execute(rmJob, (jobId, ))
+        conn.commit()
+    except:
+        pass
 
 def authorize(userId) -> (bool,int,str):
     licence = connexion.request.headers['licence']
