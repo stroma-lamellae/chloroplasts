@@ -40,4 +40,5 @@ export class Package {
   assignment: Assignment;
   result: Result;
   previousAssignments: PreviousAssignment[];
+  exclusions: File[];
 }

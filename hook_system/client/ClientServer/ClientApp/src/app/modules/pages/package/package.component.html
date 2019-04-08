@@ -113,7 +113,14 @@
   <p class="package__jobs-subtitle">Exclusions</p>
   <hr/>
   <div class="package__exclusions">
-    <input type="file">
+    <div class="existing-files">
+      <div *ngFor="let file of files">
+        {{file.name}} <span (click)="removeFile(file)" style="color: red;">X</span>
+      </div>
+    </div>
+    <div class="dropzone" [class.hover]="fileHover">
+      Drag file here to upload!
+    </div>
   </div>
   <div class="package__launch">
     <button (click)="submit()">LAUNCH</button>
