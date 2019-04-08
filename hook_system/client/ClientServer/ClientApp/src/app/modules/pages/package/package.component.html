@@ -56,7 +56,7 @@
     <div *ngIf="selectedAssignment">
       <div class="supporting__doc" *ngFor="let assignment of supportingAssignments">
         {{assignment.course.year}} - {{assignment.course.programCode}} {{assignment.course.courseCode}} : {{assignment.name}}
-        <button class="supporting__doc-remove">-</button>
+        <button class="supporting__doc-remove" id="0" (click)="removeSupportingAssignment(assignment)">-</button>
       </div>
     </div>
     <div *ngIf="!addAssignment && selectedAssignment">

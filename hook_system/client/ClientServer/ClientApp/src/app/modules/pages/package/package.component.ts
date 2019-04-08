@@ -113,6 +113,12 @@ export class PackageComponent implements OnInit {
     this.addAssignment = true;
   }
 
+  removeSupportingAssignment(a: Assignment) {
+    let removeIndex;
+    removeIndex = this.supportingAssignments.indexOf(a);
+    this.supportingAssignments.splice(removeIndex, 1);
+  }
+
   supportSemesterUpdate() {
     this.filteredSupportSemCourses = this.courses.filter(c => c.year.toString() === this.selectedSupportYear)
       .filter(c => c.semester.toString() === this.selectedSupportSemester);
@@ -148,6 +154,17 @@ export class PackageComponent implements OnInit {
     this.addAssignment = false;
     this.supportingAssignment.course = this.supportingCourse;
     this.supportingAssignments.push(this.supportingAssignment);
+
+    this.selectedSupportYear = null;
+    this.selectedSupportSemester = null;
+    this.selectedSupportProgramCode = null;
+    this.selectedSupportCourseCode = null;
+    this.supportingAssignmentId = null;
+
+    this.supportingCourse = null;
+
+    this.filteredSupportProgramCourses = null;
+    this.filteredSupportSemCourses = null;
   }
 
   submit() {
