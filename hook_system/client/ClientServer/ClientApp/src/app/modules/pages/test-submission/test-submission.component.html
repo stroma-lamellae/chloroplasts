@@ -1,0 +1,39 @@
+<h2>Test Stuff</h2>
+
+<div *ngIf="!package">
+  <div>
+    Submit the test file here to send it to the processing server:
+  </div>
+  <div>
+    <label>Select Test File
+      <input id="file" name="file" type="file" (change)="fileChange($event)" />
+    </label>
+  </div>
+  <div>
+    <label>Enter Test name
+      <input type="text" [(ngModel)]="testName">
+    </label>
+  </div>
+  <div>
+    <button type="submit" (click)="uploadTest()">Submit</button>
+  </div>
+</div>
+<div *ngIf="package && !packageWithResults">
+  <div>
+    Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!
+  </div>
+  <div>
+    <button type="submit" (click)="getResults()">Get Results</button>
+  </div>
+</div>
+<div *ngIf="packageWithResults">
+  <div *ngIf="packageWithResults.result">
+    Your test file had {{packageWithResults.result.matches.length}} matches.
+  </div>
+  <div *ngIf="!packageWithResults.result">
+    Your test file had no matches;
+  </div>
+  <div>
+    <button type="submit" (click)="reset()">Reset</button>
+  </div>
+</div>

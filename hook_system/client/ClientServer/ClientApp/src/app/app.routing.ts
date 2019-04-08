@@ -10,6 +10,7 @@ import { ArchivedCoursesComponent } from './modules/pages/archived-courses/archi
 import { ViewSubmissionsComponent } from './modules/pages/view-submissions/view-submissions.component';
 import { UploadComponent } from './modules/pages/upload/upload.component';
 import { CourseComponent } from './modules/pages/course/course.component';
+import { TestSubmissionComponent } from './modules/pages/test-submission/test-submission.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [DeauthGuard] },
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
   { path: 'package', component: PackageComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
   { path: 'results', component: ResultComponent, canActivate: [AuthGuard] },
+  { path: 'test', component: TestSubmissionComponent },
   //Temp remove later
   { path: 'course/:id', component: CourseComponent, canActivate: [AuthGuard]},
   { path: 'newcourse', component: CourseComponent, canActivate: [AuthGuard]},

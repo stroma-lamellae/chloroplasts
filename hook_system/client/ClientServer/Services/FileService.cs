@@ -36,6 +36,10 @@ namespace ClientServer.Services
         // Saves the files in this submission object.
         // The submission needs a valid SubmissionId, as well as the Assignment and Course loaded
         void PersistSubmissionFiles(Submission submission, string sourceDirBase);
+
+        // Saves the files, except it is expecting a custom folder name
+        // Mainly used for the test submission
+        void PersistSubmissionFiles(Submission submission, string sourceDirBase, string foldername);
     }
 
     public class FileService : IFileService
@@ -99,6 +103,17 @@ namespace ClientServer.Services
             DirectoryCopy(sourcePath, destPath, true);
         }
 
+        // Saves the files, except it is expecting a custom folder name
+        // Mainly used for the test submission
+        public void PersistSubmissionFiles(Submission submission, string sourceDirBase, string foldername)
+        {
+            var submissionPath = GetSubmissionPath(submission);
+            var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submissionPath);
+            submission.FilePath = submissionPath;
+            var sourcePath = Path.Combine(sourceDirBase, foldername);
+            DirectoryCopy(sourcePath, destPath, true);
+        }
+
         // https://stackoverflow.com/questions/1288718/how-to-delete-all-files-and-folders-in-a-directory
         public void EmptyDirectory(string directory)
         {
@@ -119,18 +134,8 @@ namespace ClientServer.Services
         // Get's the path for where this submission's files should be stored
         private string GetSubmissionPath(Submission submission)
         {
-            string orig = submission.Assignment.Course.CourseCode;
-            int length = orig.Length;
-            int half = length / 2;
-
-            string courseCode = orig.Substring(0, half);
-            if (half < 1) { // In case we, for some reason, have a Course.CourseCode of length 1
-                courseCode = "z";
-            } 
-            string courseNumber = submission.Assignment.Course.CourseCode.Substring(half, length - half);
-
-            return Path.Combine(submission.Assignment.Course.Year + "", courseCode, 
-                courseNumber, submission.Assignment.Name, submission.SubmissionId + "",
+            return Path.Combine($"{submission.Assignment.Course.Year}", submission.Assignment.Course.ProgramCode, 
+                submission.Assignment.Course.CourseCode, submission.Assignment.Name, $"{submission.SubmissionId}",
                 GetSubmissionFolderName(submission));
         }
 

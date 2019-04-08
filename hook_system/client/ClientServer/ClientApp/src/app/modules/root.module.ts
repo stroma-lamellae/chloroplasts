@@ -13,6 +13,7 @@ import { BulkSubmissionComponent } from './components/bulk-submission/bulk-submi
 import { CourseBoxComponent } from './components/course-box/course-box.component';
 import { ArchivedCoursesComponent } from './pages/archived-courses/archived-courses.component';
 import { UniquePipe } from './../shared/pipes/unique.pipe';
+import { TestSubmissionComponent } from './pages/test-submission/test-submission.component';
 import { ViewSubmissionsComponent } from './pages/view-submissions/view-submissions.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { RouterModule } from '@angular/router';
@@ -32,6 +33,7 @@ import { RouterModule } from '@angular/router';
     CourseBoxComponent,
     ArchivedCoursesComponent,
     UniquePipe,
+    TestSubmissionComponent,
     ViewSubmissionsComponent,
     UploadComponent
   ]

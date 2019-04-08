@@ -19,7 +19,7 @@ namespace ClientServer.Services
 {
     public interface IProcessingService
     {
-        Task<ResultsResponse> InitiateUpload(Package package);
+        Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true);
         Task<ResultsResponse> RequestResults(string jobId);
     }
 
@@ -28,19 +28,33 @@ namespace ClientServer.Services
         private readonly IHttpClientFactory _clientFactory;
         private readonly IXMLService _xmlService;
         private readonly IScrubbingService _scrubbingService;
+        private readonly IFileService _fileService;
+        private readonly string _tempTestDirectory = "test";
         private readonly string _institutionId;
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration, IFileService fileService)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
+            _fileService = fileService;
             _institutionId = configuration.GetSection("ProcessingConfigurations")["InstitutionId"];
         }
 
-        public async Task<ResultsResponse> InitiateUpload(Package package)
+        public async Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true)
         {
-            var filename = _scrubbingService.ScrubPackage(package);
+            string filename = "";
+            if (scrub) {
+                filename = _scrubbingService.ScrubPackage(package);
+            } else {
+                // Don't scrub files, just compress and send
+                _fileService.EmptyDirectory(_tempTestDirectory);
+                var currAssignmentPath = Path.Combine(_tempTestDirectory, "CurrentYear");
+                _fileService.CopyAssignment(package.Assignment, currAssignmentPath);
+
+                filename = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".tar.gz");
+                _fileService.CompressFolder(_tempTestDirectory, filename);
+            }
 
             var uploadRequest = CreateUploadRequest(filename);
 
@@ -67,8 +81,17 @@ namespace ClientServer.Services
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
             var responseText = await response.Content.ReadAsStringAsync();
-
-            var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+            ResultsResponse resultsResponse = null;
+            try {
+                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+                if (resultsResponse.Status == null) resultsResponse.Status = "200"; // Placeholder until server response messages are standardized
+            } catch (JsonReaderException e) {
+                resultsResponse = new ResultsResponse 
+                {
+                    Status = "400",
+                    Results = e.Message
+                };
+            }
             
             return resultsResponse;
         }
@@ -99,10 +122,21 @@ namespace ClientServer.Services
 
             // Handle Response
             var responseText = await response.Content.ReadAsStringAsync();
-            var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+            ResultsResponse resultsResponse;
+            try {
+                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+                if (resultsResponse.Status == null) resultsResponse.Status = "200";
 
-            var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
-            resultsResponse.Result = result;
+                var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
+                resultsResponse.Result = result;
+            } catch (JsonReaderException e) {
+                resultsResponse = new ResultsResponse 
+                {
+                    Status = "400",
+                    Results = e.Message
+                };
+            }
+
             return resultsResponse;
         }
     }
