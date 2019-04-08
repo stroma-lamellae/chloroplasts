@@ -3,7 +3,8 @@ import { PackageService } from '../../../core/services/package.service';
 import { Package, PreviousAssignment } from '../../../shared/models/package';
 import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from 'src/app/core/services/course.service';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Input, HostListener, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-package',
@@ -11,6 +12,11 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./package.component.scss']
 })
 export class PackageComponent implements OnInit {
+  @Input() message = 'Select files or drag here';
+  fileHover: boolean;
+  @Output('fileListChange') fileList: EventEmitter<File[]>;
+  @Input('fileList') files: File[] = [];
+
   packageForm: FormGroup;
   supportForm: FormGroup;
 
@@ -48,7 +54,9 @@ export class PackageComponent implements OnInit {
   constructor(
     private _courseService: CourseService,
     private _packageService: PackageService
-  ) {}
+  ) {
+    this.fileList = new EventEmitter();
+  }
 
   ngOnInit() {
     this._courseService.getCourses().subscribe(courses => this.courses = courses);
@@ -68,6 +76,8 @@ export class PackageComponent implements OnInit {
       supportCourse: new FormControl(),
       supportAssignment: new FormControl()
     });
+
+    this.fileHover = false;
   }
 
   // convenience getter for easy access to form fields
@@ -167,6 +177,34 @@ export class PackageComponent implements OnInit {
     this.filteredSupportSemCourses = null;
   }
 
+  @HostListener('dragover', ['$event'])
+  public onDragOver($event: DragEvent): void {
+    $event.preventDefault();
+    this.fileHover= true;
+  }
+
+  @HostListener('dragleave', ['$event'])
+  public onDragLeave($event: DragEvent): void {
+    $event.preventDefault();
+    this.fileHover = false;
+  }
+
+  @HostListener('drop', ['$event'])
+  public onDrop($event: DragEvent): void {
+    $event.preventDefault();
+    const files = $event.dataTransfer.files;
+    this.fileHover = false;
+    for (let i = 0; i < files.length; i++) {
+      this.files.push(files.item(i));
+    }
+    this.fileList.emit(this.files);
+  }
+
+  public removeFile(file: File): void {
+    this.files.splice(this.files.indexOf(file), 1);
+    this.fileList.emit(this.files);
+  }
+
   submit() {
     console.log(this.supportingAssignments);
     let pack = new Package();
@@ -177,7 +215,10 @@ export class PackageComponent implements OnInit {
       prevAssignment.assignmentId = this.supportingAssignments[i].assignmentId;
       pack.previousAssignments.push(prevAssignment);
     }
-
+    pack.exclusions = [];
+    for(let i = 0; i < this.files.length; i++) {
+      pack.exclusions.push(this.files[i]);
+    }
     this._packageService.uploadPackage(pack).subscribe(res => {
       console.log(res);
     });
