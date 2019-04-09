@@ -18,7 +18,9 @@
     </div>
   </div>
   <div *ngIf="package && !packageWithResults">
-    <p>Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!</p>
+    <div>
+      Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!
+    </div>
     <div class="test__launch">
       <button type="submit" (click)="getResults()">Get Results</button>
     </div>
