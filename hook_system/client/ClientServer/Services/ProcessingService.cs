@@ -50,7 +50,7 @@ namespace ClientServer.Services
                 // Don't scrub files, just compress and send
                 _fileService.EmptyDirectory(_tempTestDirectory);
                 var currAssignmentPath = Path.Combine(_tempTestDirectory, "CurrentYear");
-                _fileService.CopyAssignment(package.Assignment, currAssignmentPath);
+                _fileService.CopyAssignment(package.Assignment, currAssignmentPath, true);
 
                 filename = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".tar.gz");
                 _fileService.CompressFolder(_tempTestDirectory, filename);
