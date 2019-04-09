@@ -222,5 +222,35 @@ export class PackageComponent implements OnInit {
     this._packageService.uploadPackage(pack).subscribe(res => {
       console.log(res);
     });
+
+    //reset the page
+    this.files = [];
+
+    this.filteredSemCourses = null;
+    this.filteredProgramCourses = null;
+    this.filteredSupportSemCourses = null;
+    this.filteredSupportProgramCourses = null;
+
+    this.selectedCourse = null;
+    this.selectedCourseCode = null;
+    this.selectedProgramCode = null;
+    this.selectedSemester = null;
+    this.selectedYear = null;
+
+    this.selectedSupportYear = null;
+    this.selectedSupportSemester = null;
+    this.selectedSupportProgramCode = null;
+    this.selectedSupportCourseCode = null;
+
+    this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
+
+    this.addAssignment = false;
+
+    this.supportingAssignments = [];
+    this.supportingCourse = null;
+
+    this.supportingAssignmentId = null;
+    this.supportingAssignment = null;
   }
 }
