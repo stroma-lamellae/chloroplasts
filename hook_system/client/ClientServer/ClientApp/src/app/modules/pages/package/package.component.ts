@@ -13,10 +13,12 @@ import { Input, HostListener, Output, EventEmitter } from '@angular/core';
 })
 export class PackageComponent implements OnInit {
   @Input() message = 'Select files or drag here';
-  fileHover: boolean;
-  @Output('fileListChange') fileList: EventEmitter<File[]>;
   @Input('fileList') files: File[] = [];
+  @Output('fileListChange') fileList: EventEmitter<File[]>;
 
+  currYear = (new Date().getFullYear());
+
+  fileHover: boolean;
   packageForm: FormGroup;
   supportForm: FormGroup;
 
@@ -31,7 +33,7 @@ export class PackageComponent implements OnInit {
   selectedCourseCode: string;
   selectedProgramCode: string;
   selectedSemester: string;
-  selectedYear: string;
+  selectedYear: string = this.currYear.toString();
 
   selectedSupportYear: string;
   selectedSupportSemester: string;
@@ -48,8 +50,6 @@ export class PackageComponent implements OnInit {
 
   supportingAssignmentId: string;
   supportingAssignment: Assignment;
-
-  currYear = (new Date().getFullYear());
 
   constructor(
     private _courseService: CourseService,
@@ -89,13 +89,30 @@ export class PackageComponent implements OnInit {
     return this.supportForm.controls;
   }
 
+  yearUpdate() {
+    this.selectedSemester = null;
+    this.selectedProgramCode = null;
+    this.selectedCourse = null;
+    this.selectedAssignmentId = null;
+
+    this.filteredSemCourses = null;
+    this.filteredProgramCourses = null;
+  }
+
   semesterUpdate() {
     this.filteredSemCourses = this.courses.filter(c => c.year.toString() === this.selectedYear)
       .filter(c => c.semester.toString() === this.selectedSemester);
+    
+    this.selectedProgramCode = null;
+    this.selectedCourse = null;
+    this.selectedAssignmentId = null;
+    this.filteredProgramCourses = null;
   }
 
   programUpdate() {
     this.filteredProgramCourses = this.filteredSemCourses.filter(c => c.programCode.toString() === this.selectedProgramCode);
+    this.selectedCourse = null;
+    this.selectedAssignmentId = null;
   }
 
   updateAssignments() {
@@ -109,6 +126,7 @@ export class PackageComponent implements OnInit {
           this.selectedCourse = res;
         });
     }
+    this.selectedAssignmentId = null;
   }
 
   selectAssignment() {
@@ -129,15 +147,31 @@ export class PackageComponent implements OnInit {
     this.supportingAssignments.splice(removeIndex, 1);
   }
 
+  supportYearUpdate() {
+    this.selectedSupportSemester = null;
+    this.selectedSupportProgramCode = null;
+    this.supportingCourse = null;
+    this.supportingAssignment = null;
+
+    this.filteredSupportSemCourses = null;
+    this.filteredSupportProgramCourses = null;
+  }
+
   supportSemesterUpdate() {
     this.filteredSupportSemCourses = this.courses.filter(c => c.year.toString() === this.selectedSupportYear)
       .filter(c => c.semester.toString() === this.selectedSupportSemester);
+    this.selectedSupportProgramCode = null;
+    this.supportingCourse = null;
+    this.supportingAssignment = null;
+    this.filteredSupportProgramCourses = null;
   }
 
   supportProgramUpdate() {
     this.filteredSupportProgramCourses = this.filteredSupportSemCourses.filter(
       c => c.programCode.toString() === this.selectedSupportProgramCode
     );
+    this.supportingCourse = null;
+    this.supportingAssignment = null;
   }
 
   supportSelectCourse() {
@@ -152,6 +186,8 @@ export class PackageComponent implements OnInit {
           this.supportingCourse = res;
         });
     }
+    this.supportingAssignment = null;
+    this.supportingAssignmentId = null;
   }
 
   supportSelectAssignment() {
