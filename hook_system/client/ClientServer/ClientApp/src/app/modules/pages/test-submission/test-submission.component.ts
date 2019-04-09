@@ -11,7 +11,7 @@ import { PackageService } from 'src/app/core/services/package.service';
 export class TestSubmissionComponent implements OnInit {
 
   testFile: File;
-  testName: string = "";
+  testName = '';
   package: Package;
   packageWithResults: Package;
 
@@ -35,7 +35,7 @@ export class TestSubmissionComponent implements OnInit {
     this.package = null;
     this.packageWithResults = null;
     this.testFile = null;
-    this.testName = "";
+    this.testName = '';
   }
 
   fileChange(event) {

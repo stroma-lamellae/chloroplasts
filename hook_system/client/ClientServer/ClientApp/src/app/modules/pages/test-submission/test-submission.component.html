@@ -1,39 +1,37 @@
-<h2>Test Stuff</h2>
-
-<div *ngIf="!package">
-  <div>
-    Submit the test file here to send it to the processing server:
+<div class="app-submission test">
+  <div class="test__graphic">
+    <img class="test__graphic-image" src="../../../../assets/uploadGuy.svg" />
   </div>
-  <div>
-    <label>Select Test File
-      <input id="file" name="file" type="file" (change)="fileChange($event)" />
-    </label>
-  </div>
-  <div>
-    <label>Enter Test name
+  <p class="test__jobs-title">Test the Engine</p>
+  <div *ngIf="!package">
+    <p class="test__jobs-subtitle">Submit the test file here to send it to the processing server:</p>
+    <div class="test__jobs-textbox">
+      <label>Enter Test name</label>
       <input type="text" [(ngModel)]="testName">
-    </label>
+    </div>
+    <div class="test__jobs-input">
+      <label>Select Test File</label>
+      <input id="file" name="file" type="file" (change)="fileChange($event)" />
+    </div>
+    <div class="test__launch">
+      <button type="submit" (click)="uploadTest()">Submit</button>
+    </div>
   </div>
-  <div>
-    <button type="submit" (click)="uploadTest()">Submit</button>
+  <div *ngIf="package && !packageWithResults">
+    <p>Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!</p>
+    <div class="test__launch">
+      <button type="submit" (click)="getResults()">Get Results</button>
+    </div>
   </div>
-</div>
-<div *ngIf="package && !packageWithResults">
-  <div>
-    Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!
-  </div>
-  <div>
-    <button type="submit" (click)="getResults()">Get Results</button>
-  </div>
-</div>
-<div *ngIf="packageWithResults">
-  <div *ngIf="packageWithResults.result">
-    Your test file had {{packageWithResults.result.matches.length}} matches.
-  </div>
-  <div *ngIf="!packageWithResults.result">
-    Your test file had no matches;
-  </div>
-  <div>
-    <button type="submit" (click)="reset()">Reset</button>
+  <div *ngIf="packageWithResults">
+    <div *ngIf="packageWithResults.result">
+      Your test file had {{packageWithResults.result.matches.length}} matches.
+    </div>
+    <div *ngIf="!packageWithResults.result">
+      Your test file had no matches;
+    </div>
+    <div class="test__launch">
+      <button type="submit" (click)="reset()">Reset</button>
+    </div>
   </div>
 </div>
