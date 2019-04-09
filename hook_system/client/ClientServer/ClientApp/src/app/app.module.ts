@@ -11,10 +11,6 @@ import { AppComponent } from './app.component';
 import { RootModule } from './modules/root.module';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
-// import { MatFileUploadModule } from 'angular-material-fileupload';
-// import { FileDropModule } from 'ngx-file-drop';
-
-
 @NgModule({
   declarations: [
     AppComponent,
