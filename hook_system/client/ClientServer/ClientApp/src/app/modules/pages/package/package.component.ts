@@ -5,6 +5,7 @@ import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from 'src/app/core/services/course.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Input, HostListener, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-package',
@@ -53,7 +54,8 @@ export class PackageComponent implements OnInit {
 
   constructor(
     private _courseService: CourseService,
-    private _packageService: PackageService
+    private _packageService: PackageService,
+    private _router: Router
   ) {
     this.fileList = new EventEmitter();
   }
@@ -259,34 +261,7 @@ export class PackageComponent implements OnInit {
       console.log(res);
     });
 
-    //reset the page
-    this.files = [];
-
-    this.filteredSemCourses = null;
-    this.filteredProgramCourses = null;
-    this.filteredSupportSemCourses = null;
-    this.filteredSupportProgramCourses = null;
-
-    this.selectedCourse = null;
-    this.selectedCourseCode = null;
-    this.selectedProgramCode = null;
-    this.selectedSemester = null;
-    this.selectedYear = null;
-
-    this.selectedSupportYear = null;
-    this.selectedSupportSemester = null;
-    this.selectedSupportProgramCode = null;
-    this.selectedSupportCourseCode = null;
-
-    this.selectedAssignmentId = null;
-    this.selectedAssignment = null;
-
-    this.addAssignment = false;
-
-    this.supportingAssignments = [];
-    this.supportingCourse = null;
-
-    this.supportingAssignmentId = null;
-    this.supportingAssignment = null;
+    //redirect the page to the ViewStatus page
+    this._router.navigate(['/results']);
   }
 }
