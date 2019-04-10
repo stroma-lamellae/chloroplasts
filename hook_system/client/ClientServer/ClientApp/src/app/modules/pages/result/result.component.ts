@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Package, Result } from '../../../shared/models/package';
-import { PackageService } from '../../../core/services/package.service';
-import { File } from '../../../shared/models/file';
 import { FileService } from '../../../core/services/file.service';
 import { Submission } from '../../../shared/models/submission';
+import { ResultService } from '../../../core/services/result.service';
+import { ResultSet } from '../../../shared/models/result-set';
 
 @Component({
   selector: 'app-result',
@@ -14,12 +13,11 @@ import { Submission } from '../../../shared/models/submission';
 export class ResultComponent implements OnInit {
   private sub: any;
   id: number;
-  package: Package;
-  result: Result;
+  result: ResultSet;
   submissions: Submission[];
 
   constructor(
-    private _packageService: PackageService,
+    private _resultService: ResultService,
     private _fileService: FileService,
     private route: ActivatedRoute
   ) {}
@@ -30,28 +28,15 @@ export class ResultComponent implements OnInit {
       this.id = +params['id'];
     });
 
-    this._packageService.requestResultsById(this.id).subscribe(packageData => {
-      this.package = packageData;
-      this.result = this.package.result;
-      this.result.matches.forEach(res => {
-        res.lines.forEach(line => {
-          if (!this.submissions.some(s => s.submissionId === line.submissionId)) {
-            this.submissions.push(line.submission);
-          }
-          const index = this.submissions.indexOf(this.submissions.find(s => s.submissionId === line.submissionId));
-          this.submissions[index].viewFiles = [];
-
-          if (!this.submissions[index].viewFiles.some(f => f.filePath === line.filePath)) {
-            this._fileService.getFile(line.submissionId, line.filePath).subscribe(fileData => {
-              this.submissions[index].viewFiles.push(fileData);
-              line.viewFile = fileData;
-            });
-          } else {
-            line.viewFile = this.submissions[index].viewFiles.find(f => f.filePath === line.filePath);
-          }
-        });
-      });
+    this._resultService.getResultByPackageId(this.id).subscribe(res => {
+      this.result = res;
+      for (let i = 0; i < this.result.matches.length; i++) {
+        for (let j = 0; j < this.result.matches[i].lines.length; j++) {
+          const path = this.result.matches[i].lines[j].filePath;
+          this.result.matches[i].lines[j].viewFile =
+            this.result.files.find(f => f.filePath === path);
+        }
+      }
     });
-
   }
 }

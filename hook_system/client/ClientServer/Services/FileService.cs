@@ -2,7 +2,9 @@ using System;
 using ClientServer.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using SharpCompress.Writers;
@@ -46,7 +48,7 @@ namespace ClientServer.Services
 
         // Reads a code file from the Temp/Scrubbed/{filePath} location
         // and returns an array of read lines
-        Task<string[]> ReadFileFromStorageAsync(string filePath);
+        Task<FileResult> ReadFileFromStorageAsync(long submissionId, string lineFilePath, string submissionFilePath);
     }
 
     public class FileService : IFileService
@@ -240,17 +242,33 @@ namespace ClientServer.Services
             return filePath;
         }
 
-        public async  Task<string[]> ReadFileFromStorageAsync(string filePath)
+        public async Task<FileResult> ReadFileFromStorageAsync(long submissionId, string lineFilePath, string submissionFilePath)
         {
-            var path = Path.Join("Temp", filePath);
+            var splitPaths = lineFilePath.Split(Path.DirectorySeparatorChar);
+            var str = splitPaths.Last();
+            var path = Path.Join("Temp",submissionFilePath, str.Substring(str.IndexOf('-')+1));
+            
             var lines = await System.IO.File.ReadAllLinesAsync(path);
-
-            return lines;
+            
+            return new FileResult()
+            {
+                filePath = lineFilePath,
+                lines = lines,
+                submissionId = submissionId
+            };
         }
         
         public string GetStorageDirectory() 
         {
             return RootStorageDirectory;
         }
+    }
+
+    public class FileResult
+    {
+        public long submissionId { get; set; }
+        public string[] lines { get; set; }
+        public string filePath { get; set; }
+        
     }
 }
