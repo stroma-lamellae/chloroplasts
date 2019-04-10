@@ -37,10 +37,6 @@ export class TestSubmissionComponent implements OnInit {
   }
 
   reset() {
-    // this.package = null;
-    // this.packageWithResults = null;
-    // this.testFile = null;
-    // this.testName = '';
     this.router.navigate(['/test']);
   }
 
