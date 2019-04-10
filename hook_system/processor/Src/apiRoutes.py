@@ -46,7 +46,7 @@ def submit(userId: str, email: str, data) -> str:
                 filePathElements: List[str] = os.path.normpath(fileName).split(os.sep)
 
                 #Checking to make sure each file is either 1 folder deep or 2 folders deep
-                if len(filePathElements) != 2 and len(filePathElements) != 3:
+                if len(filePathElements) < 2 :
                     os.remove(filename)
                     return "Unrecognized Folder Structure", 400
 
@@ -68,11 +68,7 @@ def submit(userId: str, email: str, data) -> str:
                     if len(filePathElements[1].split('_')) != 3:
                         os.remove(filename)
                         return "Invalid Student Folder", 400
-                elif filePathElements[0] == "Exclusions":
-                    if len(filePathElements) != 2:
-                        os.remove(filename)
-                        return "Invalid Exclusion Structure", 400
-                else:
+                elif filePathElements[0] != "Exclusions":
                     os.remove(filename)
                     return "Unrecognized Data Category", 400
 
