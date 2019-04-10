@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net;
 
 using ClientServer.Models;
 
@@ -80,20 +81,9 @@ namespace ClientServer.Services
 
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
-            var responseText = await response.Content.ReadAsStringAsync();
-            ResultsResponse resultsResponse = null;
-            try {
-                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
-                if (resultsResponse.Status == null) resultsResponse.Status = "200"; // Placeholder until server response messages are standardized
-            } catch (JsonReaderException e) {
-                resultsResponse = new ResultsResponse 
-                {
-                    Status = "400",
-                    Results = e.Message
-                };
-            }
             
-            return resultsResponse;
+            // Handle Response
+            return await getResultsResponse(response);
         }
 
         public UploadRequest CreateUploadRequest(string filename) 
@@ -121,24 +111,30 @@ namespace ClientServer.Services
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
+            return await getResultsResponse(response);
+        }
+
+        public async Task<ResultsResponse> getResultsResponse(HttpResponseMessage response) 
+        {
             var responseText = await response.Content.ReadAsStringAsync();
             ResultsResponse resultsResponse;
-            try {
-                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
-                if (resultsResponse.Status == null) resultsResponse.Status = "200";
-
-                var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
-                resultsResponse.Result = result;
-            } catch (JsonReaderException e) {
-                resultsResponse = new ResultsResponse 
+            // Server returned some error
+            if (response.StatusCode != HttpStatusCode.OK) {
+                resultsResponse = new ResultsResponse
                 {
                     Status = "400",
-                    Results = e.Message
+                    Results = responseText
                 };
             }
-
-            return resultsResponse;
-        }
+            else {
+                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+                if (resultsResponse.Status.Equals("complete")) {
+                    var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
+                    resultsResponse.Result = result;
+                }
+            }
+            return resultsResponse;    
+        } 
     }
 
     public class UploadRequest
