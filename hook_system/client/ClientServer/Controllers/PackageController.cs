@@ -37,9 +37,11 @@ namespace ClientServer.Controllers
         public async Task<ActionResult<IEnumerable<Package>>> GetPackages()
         {
             return await _context.Package
+                .Include(p => p.Assignment)
+                .ThenInclude(a => a.Course)
                 .Include(p => p.Result)
                     .ThenInclude(r => r.Matches)
-                .OrderBy(p => p.PackageId)
+                .OrderByDescending(p => p.PackageId)
                 .ToListAsync();
         }
 
@@ -65,7 +67,6 @@ namespace ClientServer.Controllers
             await _context.SaveChangesAsync();
             package = await _context.Package
                 .Include(p => p.Assignment)
-                    .ThenInclude(a => a.Submissions)
                 .Include(p => p.PreviousAssignments)
                     .ThenInclude(pa => pa.Assignment)
                         .ThenInclude(a => a.Submissions)
@@ -93,7 +94,14 @@ namespace ClientServer.Controllers
         [HttpGet("{id}/results")]
         public async Task<ActionResult> RequestResults(long id)
         {
-            var package = await _context.Package.FindAsync(id);
+            var package = await _context.Package
+                .Include(p => p.Assignment)
+                    .ThenInclude(a => a.Course)
+                .Include(p => p.Result)
+                    .ThenInclude(r => r.Matches)
+                        .ThenInclude(m => m.Lines)
+                            .ThenInclude(l => l.Submission)
+                .SingleOrDefaultAsync(p => p.PackageId == id);
 
             if (package == null)
             {

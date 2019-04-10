@@ -1,0 +1,38 @@
+.results{
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 20px;
+
+
+
+    width: 100%;
+
+    &__title{
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    &__container{
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    &__list{
+        width: 100%;
+
+        &--header{
+            border-bottom: solid black 2px;
+        }
+
+        &--item{
+            border-bottom: solid gray 2px;
+
+            td{
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+        }
+    }
+}

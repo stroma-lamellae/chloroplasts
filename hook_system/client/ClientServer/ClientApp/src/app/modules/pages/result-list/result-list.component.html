@@ -1,0 +1,31 @@
+<div class="results">
+  <div class="results__title">View Hook Results</div>
+  <div class="results__container">
+    <table class="results__list">
+      <tr class="results__list--header">
+        <th>Date</th>
+        <th>Course</th>
+        <th>Title</th>
+        <th>Matches</th>
+        <th>Status</th>
+      </tr>
+      <tr *ngFor="let package of packages" class="results__list--item">
+        <td>{{ package.estimatedCompletion }}</td>
+        <td>
+          {{ package.assignment.course.programCode }}
+          {{ package.assignment.course.courseCode }}
+        </td>
+        <td> 
+          <a [routerLink]="['/result',package.packageId]">
+            {{ package.assignment.name }}
+          </a>
+        </td>
+        <td *ngIf="package.result === null">no results</td>
+        <td *ngIf="package.result !== null">
+          {{ package.result.matches.length }}
+        </td>
+        <td>A</td>
+      </tr>
+    </table>
+  </div>
+</div>

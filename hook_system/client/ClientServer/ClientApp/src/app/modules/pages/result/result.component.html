@@ -1,10 +1,10 @@
-<h1>All Packages</h1>
-<div *ngFor="let package of packages">
-  <p>Package ID: {{package.packageId}} <br />
-  {{package.result ? "Has Results" : "No Results Yet"}}</p>
-  <div *ngIf="package.result && package.result.matches">
-    This package has {{package.result.matches.length}} matches
+<div class="result">
+  <div class="result__title">View Hook Results</div>
+  <div class="result__container">
+    <div class="result__match" *ngFor="let match of result.matches">
+      <div *ngFor="let file of match.lines[0].viewFile.lines">
+        {{file.filePath}}
+      </div>
+    </div>
   </div>
-  <button *ngIf="!package.result" (click)="getResults(package)">Get Results</button>
-  <hr/>
 </div>

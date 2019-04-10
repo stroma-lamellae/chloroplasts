@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PackageComponent } from './pages/package/package.component';
 import { CourseComponent } from './pages/course/course.component';
-import { ResultComponent } from './pages/result/result.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AssignmentComponent } from './components/assignment/assignment.component';
@@ -17,13 +16,15 @@ import { TestSubmissionComponent } from './pages/test-submission/test-submission
 import { ViewSubmissionsComponent } from './pages/view-submissions/view-submissions.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { RouterModule } from '@angular/router';
+import { ResultListComponent } from './pages/result-list/result-list.component';
+import { ResultComponent } from './pages/result/result.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   declarations: [
     PackageComponent,
     CourseComponent,
-    ResultComponent,
+    ResultListComponent,
     DashboardComponent,
     AssignmentComponent,
     CourseDetailComponent,
@@ -35,7 +36,8 @@ import { RouterModule } from '@angular/router';
     UniquePipe,
     TestSubmissionComponent,
     ViewSubmissionsComponent,
-    UploadComponent
+    UploadComponent,
+    ResultComponent
   ]
 })
 export class RootModule {}

@@ -94,7 +94,7 @@ namespace ClientServer.Controllers
                 {
                     var submission = new Submission { 
                         AssignmentId = assignId, 
-                        StudentFirstname = relativePath.Split("_")[0].Replace("\\", ""),
+                        StudentFirstname = relativePath.Split("_")[0].Replace("\\", "").Replace("/",""),
                         StudentLastname = relativePath.Split("_")[1], 
                         StudentNumber = relativePath.Split("_")[2]
                     };
