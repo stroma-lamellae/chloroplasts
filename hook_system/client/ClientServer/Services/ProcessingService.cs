@@ -123,15 +123,18 @@ namespace ClientServer.Services
                 resultsResponse = new ResultsResponse
                 {
                     Status = "400",
-                    Results = responseText
+                    Results = $"Processing Server responded with: {responseText}"
                 };
             }
             else {
                 resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
-                if (resultsResponse.Status.Equals("complete")) {
+                if (resultsResponse.Status == null && resultsResponse.JobId != null) {
+                    resultsResponse.Status = "200";
+                }
+                if (resultsResponse.Status != null && resultsResponse.Status.Equals("complete")) {
                     var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
                     resultsResponse.Result = result;
-                }
+                } 
             }
             return resultsResponse;    
         } 

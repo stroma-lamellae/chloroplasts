@@ -38,7 +38,7 @@ namespace ClientServer.Controllers
 
             if (result == null)
             {
-                return NotFound();
+                return NotFound($"No results with id {id}");
             }
             return result;
         }

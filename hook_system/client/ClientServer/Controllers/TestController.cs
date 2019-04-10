@@ -135,7 +135,8 @@ namespace ClientServer.Controllers
 
             // Upload the package
             var result = await _processingService.InitiateUpload(package, false);
-            if (result.Status.Equals("400")) { // Processing Server returned an error
+
+            if (result.Status != null && result.Status.Equals("400")) { // Processing Server returned an error
                 return BadRequest(result.Results);
             }
             // Copy the info into our package

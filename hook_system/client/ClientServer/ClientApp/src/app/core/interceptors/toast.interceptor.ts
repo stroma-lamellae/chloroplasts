@@ -12,9 +12,9 @@ export class ToastInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(catchError(err => {
             console.log("toaster caught error");
             console.log(err);
-            // const error = err.error.message || err.statusText;
-            // this.toastr.error(error);
-            return throwError("hi");
+            const error = err.error.title || err.error || err.statusText;
+            this.toastr.error(error);
+            return throwError(err);
         }));
     }
 }

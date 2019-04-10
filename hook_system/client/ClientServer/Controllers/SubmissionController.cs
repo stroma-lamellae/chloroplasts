@@ -146,7 +146,7 @@ namespace ClientServer.Controllers
 
             if (submission == null)
             {
-                return NotFound();
+                return NotFound($"No submission with id {id}");
             }
 
             submission.Files = files;
@@ -163,7 +163,7 @@ namespace ClientServer.Controllers
         {
             if (id != submission.SubmissionId)
             {
-                return BadRequest();
+                return BadRequest($"No submission with id {id}");
             }
 
             _context.Entry(submission).State = EntityState.Modified;
@@ -181,7 +181,7 @@ namespace ClientServer.Controllers
 
             if (submission == null)
             {
-                return NotFound();
+                return NotFound($"No submission with id {id}");
             }
 
             _context.Submission.Remove(submission);
