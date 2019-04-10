@@ -54,8 +54,9 @@ def submit(userId: str, email: str, data) -> str:
 
                 #If a file is sent that is not supported report it
                 if ext not in validFileExt:
-                    os.remove(filename)
-                    return "Invalid File Type: " + ext, 400
+                    continue
+                    #os.remove(filename)
+                    #return "Invalid File Type: " + ext, 400
 
                 if filePathElements[0] == "CurrentYear" and ext in validFileExt:
                     if ext != ".java":
