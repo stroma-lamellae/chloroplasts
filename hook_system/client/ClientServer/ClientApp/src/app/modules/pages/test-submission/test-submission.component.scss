@@ -24,7 +24,6 @@
     &__launch {
 
         button {
-            box-shadow: 0px 7px 64px rgba(0, 0, 0, 0.07);
             border: 0px;
             border-radius: 6px;
             height: auto;
@@ -67,7 +66,7 @@
 
             label {
                 display: block;
-                font-family: SF Pro Text;
+                font-family: "SF Pro Text";
                 font-size: 17px;
                 line-height: 22px;
                 color: $color-text-black;
@@ -86,7 +85,7 @@
 
             label {
                 display: block;
-                font-family: SF Pro Text;
+                font-family: "SF Pro Text";
                 font-size: 17px;
                 line-height: 22px;
                 color: $color-text-black;
@@ -100,7 +99,6 @@
                 clear: both;
                 display: inline;
                 background: $color-primary-white;
-                box-shadow: 0px 7px 64px rgba(0, 0, 0, 0.07);
                 border: 0px;
                 border-radius: 6px;
                 padding: 14px;

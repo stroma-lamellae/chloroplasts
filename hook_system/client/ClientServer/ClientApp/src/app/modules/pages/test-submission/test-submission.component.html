@@ -19,7 +19,7 @@
   </div>
   <div *ngIf="package && !packageWithResults">
     <div>
-      Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!
+      <p>Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!</p>
     </div>
     <div class="test__launch">
       <button type="submit" (click)="getResults()">Get Results</button>
@@ -27,10 +27,10 @@
   </div>
   <div *ngIf="packageWithResults">
     <div *ngIf="packageWithResults.result">
-      Your test file had {{packageWithResults.result.matches.length}} matches.
+      <p>Your test file had {{packageWithResults.result.matches.length}} matches.</p>
     </div>
     <div *ngIf="!packageWithResults.result">
-      Your test file had no matches;
+      <p>test file had no matches.</p>
     </div>
     <div class="test__launch">
       <button type="submit" (click)="reset()">Reset</button>
