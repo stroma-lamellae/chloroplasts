@@ -1,44 +1,106 @@
-.result{
+.result {
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 40px;
+  
+  &__title {
+    padding-top: 20px;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+
+  &__course-info {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  &__container {
     width: 100%;
-    padding-left: 10%;
-    padding-right: 10%;
+  }
 
-    &__title{
-        padding-top: 20px;
-        font-size: 2em;
-        font-weight: bold;
+  &__name-selected {
+    &:hover {
+      background-color: whitesmoke;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  &__name {
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding-left: 10px;
+
+    &:hover {
+      background-color: whitesmoke;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  &__names-list {
+    width: 100%;
+  }
+
+  &__names-container {
+    display: list-item;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: solid 1px gray;
+  }
+
+  &__match {
+    width: 100%;
+    border-bottom: solid 1px gray;
+
+    &--filename {
+      font-weight: bold;
+      text-align: center;
     }
 
-    &__container{
-        width: 100%;
+    &--container {
+      display: flex;
+      max-height: 500px;
+      transition: max-height 0.4s ease;
     }
 
-    &__match{
-        width: 100%;
-        margin-bottom: 10px;
-        &--box{
-            width: 50%;
-            height: 300px;
-            overflow: scroll;
-            background-color: white;
-            padding: 10px;
-        }
-
-        &--left{
-            float: left;
-            
-        }
-
-        &--right{
-            float: right;
-        }
-
-        pre{
-            margin-bottom: 0px;
-        }
+    &--box {
+      width: 50%;
+      overflow: scroll;
+      background-color: white;
+      padding-left: 10px;
     }
+
+    pre {
+      margin-bottom: 0px;
+      overflow-x: hidden;
+      background-color: whitesmoke;
+    }
+  }
+
+  .result__header {
+    background-color: white;
+    line-height: 3em;
+    vertical-align: middle;
+    padding-left: 25px;
+    font-weight: bold;
+    border-bottom: solid 1px gray;
+
+    &:hover {
+      background-color: whitesmoke;
+      cursor: pointer;
+    }
+  }
 }
 
-.highlighted{
-    background-color: rgba(255,0,0,0.2)
+.hidden {
+  transition: max-height 0.4s ease;
+  max-height: 0px;
+}
+
+.highlighted {
+  background-color: rgba(255, 0, 0, 0.2) !important;
 }

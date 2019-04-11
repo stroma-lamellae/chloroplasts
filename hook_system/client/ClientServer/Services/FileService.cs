@@ -246,7 +246,8 @@ namespace ClientServer.Services
         {
             var splitPaths = lineFilePath.Split(Path.DirectorySeparatorChar);
             var str = splitPaths.Last();
-            var path = Path.Join("Temp",submissionFilePath, str.Substring(str.IndexOf('-')+1));
+            var filename = str.Substring(str.IndexOf('-') + 1);
+            var path = Path.Join("Temp", submissionFilePath, filename);
             
             var lines = await System.IO.File.ReadAllLinesAsync(path);
             
@@ -254,7 +255,8 @@ namespace ClientServer.Services
             {
                 filePath = lineFilePath,
                 lines = lines,
-                submissionId = submissionId
+                submissionId = submissionId,
+                fileName = filename
             };
         }
         
@@ -269,6 +271,6 @@ namespace ClientServer.Services
         public long submissionId { get; set; }
         public string[] lines { get; set; }
         public string filePath { get; set; }
-        
+        public string fileName { get; set; }
     }
 }
