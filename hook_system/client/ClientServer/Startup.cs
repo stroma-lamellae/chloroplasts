@@ -145,7 +145,7 @@ namespace ClientServer
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection(); Removed for the clientserver, since https isn't set up yet
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseAuthentication();
