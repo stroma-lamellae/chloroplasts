@@ -24,7 +24,7 @@ def submit(userId: str, email: str, data) -> str:
 
     auth_ok = authorize(userId)
     if not auth_ok[0]:
-        return auth_ok[1],auth_ok[2]
+        return {"JobId" : '', "EstimatedCompletion" : '', "Status": auth_ok[1]}, auth_ok[2]
 
     #Create a 128 bit job number represented in a hex string
     jobID: str = str(uuid.uuid4())
@@ -46,16 +46,17 @@ def submit(userId: str, email: str, data) -> str:
                 filePathElements: List[str] = os.path.normpath(fileName).split(os.sep)
 
                 #Checking to make sure each file is either 1 folder deep or 2 folders deep
-                if len(filePathElements) != 2 and len(filePathElements) != 3:
+                if len(filePathElements) < 2 :
                     os.remove(filename)
-                    return "Unrecognized Folder Structure", 400
+                    return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Unrecognized Folder Structure"}, 400
 
                 ext = fileName[fileName.rfind('.'):]
 
                 #If a file is sent that is not supported report it
                 if ext not in validFileExt:
-                    os.remove(filename)
-                    return "Invalid File Type: " + ext, 400
+                    continue
+                    #os.remove(filename)
+                    #return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Invalid File Type: " + ext}, 400
 
                 if filePathElements[0] == "CurrentYear" and ext in validFileExt:
                     if ext != ".java":
@@ -67,48 +68,44 @@ def submit(userId: str, email: str, data) -> str:
                 if filePathElements[0] == "PreviousYears" or filePathElements[0] == "CurrentYear":
                     if len(filePathElements[1].split('_')) != 3:
                         os.remove(filename)
-                        return "Invalid Student Folder", 400
-                elif filePathElements[0] == "Exclusions":
-                    if len(filePathElements) != 2:
-                        os.remove(filename)
-                        return "Invalid Exclusion Structure", 400
-                else:
+                        return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Invalid Student Folder"}, 400
+                elif filePathElements[0] != "Exclusions":
                     os.remove(filename)
-                    return "Unrecognized Data Category", 400
+                    return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Unrecognized Data Category"}, 400
 
                 fileCount+=1
     if java_files < 1 and cpp_files < 1:
         os.remove(filename)
-        return "Insufficient files to detect plagiarism", 400
+        return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Insufficient files to detect plagiarism"}, 400
 
     #Add the filename to a queue to process
     added, waitTime = submissionQueue.addToQueue(filename,fileCount, email)
     addJob(userId, jobID)
 
     if added:
-        return {"JobId" : jobID, "EstimatedCompletion" : waitTime}
+        return {"JobId" : jobID, "EstimatedCompletion" : waitTime, "Status": "Ok"}
     else:
-        return "Unable to Add Submission to Queue", 400
+        return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Unable to Add Submission to Queue"}, 400
 
 def fetch(userId: str, jobId: str) -> str:
     auth_ok = authorize(userId)
     if not auth_ok[0]:
-        return auth_ok[1],auth_ok[2]
+        return {'Results': '', 'Status': auth_ok[1], 'Wait': ''},auth_ok[2]
 
     #Check if valid job id
     pattern = re.compile("[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}")
     if not pattern.match(jobId):
-        return ("Forbidden",403)
+        return {'Results': '', 'Status': "Forbidden", 'Wait': ''},403
 
     #Check if JobID belongs to user
     if not checkForOwnership(userId, jobId):
-        return ("Forbidden",403)
+        return {'Results': '', 'Status': "Forbidden", 'Wait': ''},403
 
     resultPath = os.path.join(config["DISK"]["RESULT"], "Results", jobId + ".xml")
 
     #If the results don't exist yet return empty results
     if not os.path.exists(resultPath):
-        return {'results': '<results />', 'status': 'queued', 'wait': submissionQueue.estimateQueue(jobId)}
+        return {'Results': '<results />', 'Status': 'Queued', 'Wait': submissionQueue.estimateQueue(jobId)}
 
     #Read the results and send them back to the client server
     xmlResults = ""
@@ -118,7 +115,7 @@ def fetch(userId: str, jobId: str) -> str:
     os.remove(resultPath)
     removeJob(jobId)
 
-    return {'results': xmlResults, 'status': 'complete', 'wait':''}
+    return {'Results': xmlResults, 'Status': 'Ok', 'Wait':''}
 
 def checkForOwnership(userId: str, jobId: str) ->  bool:
     try:
