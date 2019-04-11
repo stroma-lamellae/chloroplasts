@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 using ClientServer.Models;
 
@@ -33,14 +35,19 @@ namespace ClientServer.Services
         private readonly IFileService _fileService;
         private readonly string _tempTestDirectory = "test";
         private readonly string _institutionId;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration, IFileService fileService)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration, 
+                                 IFileService fileService, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
             _fileService = fileService;
             _institutionId = configuration.GetSection("ProcessingConfigurations")["InstitutionId"];
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public async Task<UploadResponse> InitiateUpload(Package package, bool scrub = true)
@@ -58,7 +65,7 @@ namespace ClientServer.Services
                 _fileService.CompressFolder(_tempTestDirectory, filename);
             }
 
-            var uploadRequest = CreateUploadRequest(filename);
+            var uploadRequest = await CreateUploadRequest(filename);
 
             var client = _clientFactory.CreateClient("processing");
 
@@ -93,12 +100,13 @@ namespace ClientServer.Services
             return resultsResponse; 
         }
 
-        public UploadRequest CreateUploadRequest(string filename) 
+        public async Task<UploadRequest> CreateUploadRequest(string filename) 
         {
-            // TODO: Get real data
+            var email = await _userManager.FindByIdAsync(_httpContextAccessor.HttpContext.User.FindFirst("userId").Value);
+
             return new UploadRequest { 
                 InstitutionId = _institutionId, 
-                Email = "jb15iq@brocku.ca", // TODO: Should come from auth service
+                Email = email.ToString(),
                 FileName = filename
             };
         }
