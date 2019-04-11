@@ -10,9 +10,10 @@ export class ToastInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
-            console.log("toaster caught error");
-            console.log(err);
-            const error = err.error.title || err.error || err.statusText;
+            let error = err.error.title || err.error || err.statusText;
+            if (err.status == 500) {
+                error = "Internal Server Error. Please contact the System Administrator.";
+            } 
             this.toastr.error(error);
             return throwError(err);
         }));
