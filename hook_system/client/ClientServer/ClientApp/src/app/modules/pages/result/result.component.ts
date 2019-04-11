@@ -4,7 +4,6 @@ import { FileService } from '../../../core/services/file.service';
 import { Submission } from '../../../shared/models/submission';
 import { ResultService } from '../../../core/services/result.service';
 import { ResultSet } from '../../../shared/models/result-set';
-import { Line } from '../../../shared/models/package';
 
 @Component({
   selector: 'app-result',
