@@ -28,4 +28,8 @@ export class CourseComponent implements OnInit {
       });
     }
   }
+
+  updateCourse(item1, item2) {
+    
+  }
 }
