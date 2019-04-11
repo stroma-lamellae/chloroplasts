@@ -3,32 +3,42 @@
     padding-left: 10%;
     padding-right: 10%;
 
+    &__title{
+        padding-top: 20px;
+        font-size: 2em;
+        font-weight: bold;
+    }
 
     &__container{
         width: 100%;
-        margin-left: 10%;
-        margin-right: 10%;
     }
 
     &__match{
         width: 100%;
         margin-bottom: 10px;
-
-        &--left{
-            float: left;
+        &--box{
             width: 50%;
             height: 300px;
             overflow: scroll;
+            background-color: white;
+            padding: 10px;
+        }
+
+        &--left{
+            float: left;
+            
         }
 
         &--right{
             float: right;
-            width: 50%;
-            height: 300px;
-            overflow: scroll;
         }
+
         pre{
             margin-bottom: 0px;
         }
     }
+}
+
+.highlighted{
+    background-color: rgba(255,0,0,0.2)
 }

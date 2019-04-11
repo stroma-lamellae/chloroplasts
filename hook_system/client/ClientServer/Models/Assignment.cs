@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ClientServer.Models
 {
@@ -11,6 +12,7 @@ namespace ClientServer.Models
         public DateTime OpenDate { get; set; }
         public DateTime CloseDate { get; set; }
         public bool Status { get; set; }
+        
         public virtual Course Course { get; set; }
         public virtual ICollection<Submission> Submissions { get; set; }
     }

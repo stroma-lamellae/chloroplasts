@@ -2,11 +2,15 @@
   <div class="result__title">View Hook Results</div>
   <div class="result__container">
     <div class="result__match" *ngFor="let match of result.matches">
-      <div class="result__match--left">
-        <pre *ngFor="let line of match.lines[0].viewFile.lines">{{line}}</pre>
+      <div class="result__match--left result__match--box">
+        <pre *ngFor="let line of match.lines[0].viewFile.lines; let i = index" [class.highlighted]="i >= match.lines[0].lineStart && i <= match.lines[0].lineEnd"
+          >{{ i }} {{ line }}</pre
+         >
       </div>
-      <div class="result__match--right">
-          <pre *ngFor="let line of match.lines[1].viewFile.lines">{{line}}</pre>
+      <div class="result__match--right result__match--box">
+        <pre *ngFor="let line of match.lines[1].viewFile.lines; let i = index" [class.highlighted]="i >= match.lines[1].lineStart && i <= match.lines[1].lineEnd"
+          >{{ i }} {{ line }}</pre
+        >
       </div>
     </div>
   </div>

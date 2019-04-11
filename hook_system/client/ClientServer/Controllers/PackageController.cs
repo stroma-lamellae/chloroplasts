@@ -67,6 +67,7 @@ namespace ClientServer.Controllers
             await _context.SaveChangesAsync();
             package = await _context.Package
                 .Include(p => p.Assignment)
+                    .ThenInclude(a => a.Submissions)
                 .Include(p => p.PreviousAssignments)
                     .ThenInclude(pa => pa.Assignment)
                         .ThenInclude(a => a.Submissions)
