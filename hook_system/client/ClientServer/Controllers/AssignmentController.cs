@@ -30,7 +30,7 @@ namespace ClientServer.Controllers
 
             if (assignment == null)
             {
-                return NotFound();
+                return NotFound($"No assignment with id {id}");
             }
             return assignment;
         }
@@ -53,7 +53,7 @@ namespace ClientServer.Controllers
         {
             if (id != assignment.AssignmentId)
             {
-                return BadRequest();
+                return BadRequest($"AssignmentId ({assignment.AssignmentId}) doesn't match Id ({id})");
             } 
 
             _context.Entry(assignment).State = EntityState.Modified;
@@ -71,7 +71,7 @@ namespace ClientServer.Controllers
 
             if (assignment == null)
             {
-                return NotFound();
+                return NotFound($"No assignment with id {id}");
             }
 
             _context.Assignment.Remove(assignment);

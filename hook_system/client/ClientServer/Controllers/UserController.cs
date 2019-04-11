@@ -41,7 +41,7 @@ namespace ClientServer.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound($"No user with id {id}");
             }
             return user;
         }
