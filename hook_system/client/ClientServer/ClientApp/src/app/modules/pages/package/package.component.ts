@@ -27,6 +27,9 @@ export class PackageComponent implements OnInit {
   supportingAssignmentId: string;
   supportingAssignment: Assignment;
 
+  // Vars from html
+  courseItems: HTMLOptionElement;
+
   constructor(
     private _courseService: CourseService,
     private _packageService: PackageService

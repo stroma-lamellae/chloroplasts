@@ -28,4 +28,9 @@ export class CourseComponent implements OnInit {
       });
     }
   }
+
+  // TODO: Make this do something
+  updateCourse(item1, item2) {
+    
+  }
 }
