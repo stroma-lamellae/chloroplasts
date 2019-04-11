@@ -128,6 +128,9 @@ namespace ClientServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddEnvironmentVariables();
             // Used to properly configure receive requests from nginx
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
