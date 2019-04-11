@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 using ClientServer.Models;
@@ -68,11 +70,21 @@ namespace ClientServer.Controllers
             course.Assignments.Add(assignment);
 
             // Create all of our submissions based on what was in the zip
-            var extractedFilePath = _fileService.ExtractFile(data.File);
+            string extractedFilePath;
+            try {
+                extractedFilePath = _fileService.ExtractFile(data.File);
+            } catch (InvalidOperationException) {
+                return BadRequest("Incorrect File Type. Should be valid compressed folder (i.e. zip)");
+            }
             List<Submission> submissions = new List<Submission>();
             
             // Create a submission for each directory
             var directories = Directory.GetDirectories(extractedFilePath);
+            // In case the zipping of files led to a parent folder within the zip
+            if (directories.Length == 1) { 
+                extractedFilePath = directories[0];
+                directories = Directory.GetDirectories(extractedFilePath);
+            }
             foreach (var directory in directories)
             {
                 // Use the relative path as the student number, since that will be unique
@@ -136,12 +148,12 @@ namespace ClientServer.Controllers
             // Upload the package
             var result = await _processingService.InitiateUpload(package, false);
 
-            if (result.Status != null && result.Status.Equals("400")) { // Processing Server returned an error
-                return BadRequest(result.Results);
+            if (result.StatusCode != HttpStatusCode.OK) {
+                return BadRequest($"Processing Server Response: {result.Status}");
             }
             // Copy the info into our package
             package.JobId = result.JobId;
-            package.EstimatedCompletion = result.EstimatedCompletion;
+            package.EstimatedCompletion = result.EstimatedCompletionTime;
             _context.Entry(package).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 

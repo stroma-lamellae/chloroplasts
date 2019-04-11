@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace ClientServer.Services
 {
     public interface IProcessingService
     {
-        Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true);
+        Task<UploadResponse> InitiateUpload(Package package, bool scrub = true);
         Task<ResultsResponse> RequestResults(string jobId);
     }
 
@@ -42,7 +43,7 @@ namespace ClientServer.Services
             _institutionId = configuration.GetSection("ProcessingConfigurations")["InstitutionId"];
         }
 
-        public async Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true)
+        public async Task<UploadResponse> InitiateUpload(Package package, bool scrub = true)
         {
             string filename = "";
             if (scrub) {
@@ -83,7 +84,13 @@ namespace ClientServer.Services
             var response = await client.PostAsync(requestAddress, formDataContent);
             
             // Handle Response
-            return await getResultsResponse(response);
+            var responseText = await response.Content.ReadAsStringAsync();
+            var resultsResponse = JsonConvert.DeserializeObject<UploadResponse>(responseText);
+            resultsResponse.StatusCode = response.StatusCode;
+            if (response.StatusCode == HttpStatusCode.OK) {
+                resultsResponse.EstimatedCompletionTime = DateTime.Parse(resultsResponse.EstimatedCompletion);
+            }
+            return resultsResponse; 
         }
 
         public UploadRequest CreateUploadRequest(string filename) 
@@ -111,33 +118,19 @@ namespace ClientServer.Services
             var response = await client.PostAsync(requestAddress, content);
 
             // Handle Response
-            return await getResultsResponse(response);
-        }
-
-        public async Task<ResultsResponse> getResultsResponse(HttpResponseMessage response) 
-        {
             var responseText = await response.Content.ReadAsStringAsync();
-            ResultsResponse resultsResponse;
-            // Server returned some error
-            if (response.StatusCode != HttpStatusCode.OK) {
-                resultsResponse = new ResultsResponse
-                {
-                    Status = "400",
-                    Results = $"Processing Server responded with: {responseText}"
-                };
+            var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+            resultsResponse.StatusCode = response.StatusCode;
+            // If we got results returned
+            if (resultsResponse.Status.Equals("Ok")) {
+                resultsResponse.Result = await _xmlService.ParseXMLFile(resultsResponse.Results);
+            } else {
+                Console.WriteLine(responseText);
+                
+                resultsResponse.EstimatedCompletion = DateTime.Now.AddMinutes(Double.Parse(resultsResponse.Wait));
             }
-            else {
-                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
-                if (resultsResponse.Status == null && resultsResponse.JobId != null) {
-                    resultsResponse.Status = "200";
-                }
-                if (resultsResponse.Status != null && resultsResponse.Status.Equals("complete")) {
-                    var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
-                    resultsResponse.Result = result;
-                } 
-            }
-            return resultsResponse;    
-        } 
+            return resultsResponse;
+        }
     }
 
     public class UploadRequest
@@ -145,6 +138,15 @@ namespace ClientServer.Services
         public string InstitutionId { get; set; }
         public string Email { get; set; }
         public string FileName { get; set; } 
+    }
+
+    public class UploadResponse
+    {
+        public string JobId { get; set; }
+        public string EstimatedCompletion { get; set; }
+        public DateTime EstimatedCompletionTime { get; set; }
+        public string Status { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
     }
 
     public class ResultsRequest
@@ -156,10 +158,11 @@ namespace ClientServer.Services
     public class ResultsResponse
     {
         public string Status { get; set; }
-        public string JobId { get; set; }
-        public DateTime EstimatedCompletion { get; set; }
+        public string Wait { get; set; }
         public string Results { get; set; } 
 
         public Result Result { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public DateTime EstimatedCompletion { get; set; }
     }
 }
