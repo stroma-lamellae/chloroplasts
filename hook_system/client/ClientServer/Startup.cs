@@ -101,14 +101,17 @@ namespace ClientServer
             // For communicating with the Processing Server
             var processingConfig = Configuration.GetSection("ProcessingConfigurations");
             // Create a handler to ignore HTTPS until we get a signed certificate
-            var httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
             
             services.AddHttpClient("processing", c => 
             {
                c.BaseAddress = new Uri(processingConfig["BaseAddress"]);
                c.DefaultRequestHeaders.Add("licence", processingConfig["Licence"]); 
-            }).ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
+            }).ConfigurePrimaryHttpMessageHandler(() => {
+                // httpClientHandler
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                return httpClientHandler;
+            });
             
             // Remove content length limit. This is for our submission uploading
             services.Configure<FormOptions>(x => {

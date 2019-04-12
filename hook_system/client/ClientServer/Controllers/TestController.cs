@@ -54,7 +54,8 @@ namespace ClientServer.Controllers
                     Year = 2019,
                     Semester = 1,
                     ProgramCode = "TEST",
-                    CourseCode = "TEST"
+                    CourseCode = "TEST",
+                    UserId = HttpContext.User.FindFirst("userId").Value
                 };
                 _context.Course.Add(course);
                 course.Assignments = new List<Assignment>();
@@ -91,13 +92,13 @@ namespace ClientServer.Controllers
                 string relativePath = directory.Split(extractedFilePath)[1];
                 // Replace any underscores because the Processing server looks for exactly 3 underscores,
                 //  and we insert underscores based on the FirstName, LastName and StudetNumber
-                relativePath = relativePath.Replace("\\", "").Replace("_", "&underscore&");
+                relativePath = relativePath.Replace("\\", "").Replace("/", "").Replace("_", "&underscore&");
                 
                 // Create the Submission for this folder
                 var submission = new Submission {
                     StudentFirstname = $"ThisIsTestData{data.TestName}",
                     StudentLastname = $"ThisIsTestData{data.TestName}",
-                    StudentNumber = relativePath
+                    StudentNumber = $"{relativePath}{data.TestName}"
                 };
                 submissions.Add(submission);
 
@@ -131,7 +132,7 @@ namespace ClientServer.Controllers
             // Persist all submission files
             foreach (var submission in submissions)
             {
-                _fileService.PersistSubmissionFiles(submission, extractedFilePath, submission.StudentNumber.Replace("&underscore&", "_"));
+                _fileService.PersistSubmissionFiles(submission, extractedFilePath, submission.StudentNumber.Replace("&underscore&", "_").Replace(data.TestName, ""));
                 _context.Entry(submission).State = EntityState.Modified;
             }
 

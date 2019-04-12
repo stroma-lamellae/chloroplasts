@@ -28,12 +28,18 @@
   <div *ngIf="packageWithResults">
     <div *ngIf="packageWithResults.result">
       <p>Your test file had {{packageWithResults.result.matches.length}} matches.</p>
+      <div class="test__launch">
+          <a [routerLink]="['/result',package.packageId]">
+            <button type="submit">View Results</button>
+          </a>
+      </div>
     </div>
     <div *ngIf="!packageWithResults.result">
-      <p>test file had no matches.</p>
-    </div>
-    <div class="test__launch">
-      <button type="submit" (click)="reset()">Reset</button>
+      <p>Your results are not ready yet.</p>
+      <p>Here is your job ID: {{package.jobId}}. When you get an email saying the job with this ID is done, click below to get results!</p>
+      <div class="test__launch">
+        <button type="submit" (click)="getResults()">Get Results</button>
+      </div>
     </div>
   </div>
 </div>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using FileResult = ClientServer.Services.FileResult;
+using System.IO;
 
 namespace ClientServer.Controllers
 {
@@ -85,30 +86,56 @@ namespace ClientServer.Controllers
                 return NotFound();
             }
 
-            var response = await _processingService.RequestResults(package.JobId);
-            if (response.Result != null)
-            {
-                package.Result = response.Result;
-                _context.Entry(package).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+            if (package.Result == null) {
+                var response = await _processingService.RequestResults(package.JobId);
+
+                if (response.StatusCode != HttpStatusCode.OK) 
+                {
+                    return BadRequest($"Processing Server Response: {response.Status}");
+                } 
+                if (response.Status.Equals("Ok")) 
+                {
+                    package.Result = response.Result;
+                    _context.Entry(package).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                } 
+                else 
+                {
+                    package.EstimatedCompletion = response.EstimatedCompletion;
+                    _context.Entry(package).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return BadRequest($"Job is still Queued. No results available.");
+                }
             }
 
             var submissionIds = new List<long>();
             var files = new List<FileResult>();
 
+            var filePaths = new List<string>();
+            var submissions = new List<Submission>();
+
             foreach (var match in package.Result.Matches)
             {
                 foreach (var line in match.Lines)
                 {
+                    Submission submission;
                     if (!submissionIds.Contains(line.SubmissionId))
                     {
-                        var submission = await _context.Submission.FindAsync(line.SubmissionId);
+                        submission = await _context.Submission.FindAsync(line.SubmissionId);
                         if (submission == null)
                         {
                             return NotFound();
                         }
-
                         submissionIds.Add(line.SubmissionId);
+                        submissions.Add(submission);
+                        
+                        
+                    } else {
+                        submission = submissions.ElementAt(submissionIds.IndexOf(line.SubmissionId));
+                    }
+                    var filePath = Path.Combine(line.FilePath, submission.FilePath);
+                    if (!filePaths.Contains(filePath))
+                    {
                         files.Add(await _fileService.ReadFileFromStorageAsync(line.SubmissionId, line.FilePath,
                             submission.FilePath));
                     }
@@ -125,7 +152,7 @@ namespace ClientServer.Controllers
             };
 
             var json = JsonConvert.SerializeObject(jsonResponse,
-                new JsonSerializerSettings() {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+                new JsonSerializerSettings() {ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
             return new OkObjectResult(json);
         }
     }

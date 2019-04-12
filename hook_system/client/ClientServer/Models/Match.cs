@@ -10,5 +10,6 @@ namespace ClientServer.Models
         public long ResultId { get; set; }
         
         public virtual ICollection<Line> Lines { get; set; }
+        public virtual Result Result { get; set; }
     }
 }

@@ -68,6 +68,7 @@ namespace ClientServer.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCourse(Course course)
         {
+            course.UserId = _caller.FindFirst("userId").Value;
             _context.Course.Add(course);
             await _context.SaveChangesAsync();
 

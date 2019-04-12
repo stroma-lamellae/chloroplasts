@@ -16,7 +16,6 @@ namespace ClientServer.Models
         public string StudentLastname { get; set; }
         public long StudentId { get; set; }
         
-        [JsonIgnore]
         public Assignment Assignment { get; set; }
 
         [NotMapped]

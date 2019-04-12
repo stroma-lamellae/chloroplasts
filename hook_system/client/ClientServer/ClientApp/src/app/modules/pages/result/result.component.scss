@@ -94,6 +94,15 @@
       cursor: pointer;
     }
   }
+
+  .result__not_available {
+    background-color: white;
+    line-height: 3em;
+    vertical-align: middle;
+    padding-left: 25px;
+    font-weight: bold;
+    border-bottom: solid 1px gray;
+  }
 }
 
 .hidden {
