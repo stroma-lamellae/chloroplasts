@@ -274,6 +274,7 @@ export class PackageComponent implements OnInit {
     }
     pack.exclusions = [];
     for (let i = 0; i < this.files.length; i++) {
+      // TODO: Figure out why uncommenting below causes error
       // pack.exclusions.push(this.files[i]);
     }
     this._packageService.uploadPackage(pack).subscribe(res => {
