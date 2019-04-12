@@ -39,8 +39,7 @@ jobs:
               - dotnet ef database update
               - dotnet restore
               - dotnet build
-              - cd scrubbing
-              - python3 scrub.py ../../../../test-harness/Year/2018-2019/Fall/COSC/1P02/A1 tmp clientserver password
+
         - stage: initialize angular
           before_script:
               - cd hook_system/client/ClientServer/ClientApp
