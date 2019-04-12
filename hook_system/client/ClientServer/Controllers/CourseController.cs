@@ -58,7 +58,7 @@ namespace ClientServer.Controllers
 
             if (course == null)
             {
-                return NotFound(); // Return 404
+                return NotFound($"No course with id {id}"); // Return 404
             }
             return course; // Return 200
         }
@@ -81,7 +81,7 @@ namespace ClientServer.Controllers
         {
             if (id != course.CourseId)
             {
-                return BadRequest();
+                return BadRequest($"CourseId ({course.CourseId}) doesn't match Id ({id})");
             }
 
             _context.Entry(course).State = EntityState.Modified;
@@ -99,7 +99,7 @@ namespace ClientServer.Controllers
 
             if (course == null)
             {
-                return NotFound();
+                return NotFound($"No course with id {id}");
             }
 
             _context.Course.Remove(course);

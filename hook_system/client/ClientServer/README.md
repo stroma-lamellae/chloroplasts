@@ -92,6 +92,8 @@ Querying Related Data:
     - Create the tables in the database: 
         - `dotnet ef database update`
     
+# Server Setup
+- https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-2.2
 
 # Dotnet Core Helpful Links
 - Base overview of how to structure the api:

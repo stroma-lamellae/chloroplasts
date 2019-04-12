@@ -17,7 +17,8 @@ namespace ClientServer.Services
         // Used after the user uploads a submission
         void PersistSubmissionFiles(Submission submission);
 
-        void CopyAssignment(Assignment assignment, string dest);
+        // ignore: When true, ignores non-code files
+        void CopyAssignment(Assignment assignment, string dest, bool ignore = false);
 
         // Deletes everything within a directory
         void EmptyDirectory(string directory);
@@ -46,16 +47,18 @@ namespace ClientServer.Services
     {
         private readonly string _rootStorageDirectory = "Temp";
 
+        private string[] _allowedExtensions = new string[] {".java", ".c", ".cpp", ".h", ".hpp"};
+
         // Dest is the path relative to the global root storage directory
         //  So far whatever dest you pass in, it will prepend the root storage directory
-        public void CopyAssignment(Assignment assignment, string dest)
+        public void CopyAssignment(Assignment assignment, string dest, bool ignore = false)
         {
             var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, dest);
             foreach (var submission in assignment.Submissions)
             {
                 var submissionPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submission.FilePath);
                 var submissionDest = Path.Combine(destPath, GetSubmissionFolderName(submission));
-                DirectoryCopy(submissionPath, submissionDest, true);
+                DirectoryCopy(submissionPath, submissionDest, true, ignore);
             }
         }
 
@@ -145,7 +148,7 @@ namespace ClientServer.Services
         }
 
         // https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, bool ignore = false)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -168,6 +171,17 @@ namespace ClientServer.Services
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
+                if (ignore) {
+                    var extension = Path.GetExtension(file.FullName);
+                    bool valid = false;
+                    foreach (string item in _allowedExtensions) {
+                        if (extension.Equals(item)) {
+                            valid = true;
+                            break;
+                        }
+                    }
+                    if (!valid) continue;
+                }
                 string temppath = Path.Combine(destDirName, file.Name);
                 file.CopyTo(temppath, false);
             }

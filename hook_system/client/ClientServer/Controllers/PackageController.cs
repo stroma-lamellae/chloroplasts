@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
@@ -50,7 +51,7 @@ namespace ClientServer.Controllers
 
             if (package == null)
             {
-                return NotFound();
+                return NotFound($"No package with id {id}");
             }
             return package;
         }
@@ -74,8 +75,13 @@ namespace ClientServer.Controllers
             // Below initiates the upload. Maybe we don't want this to await?
             // Probably, this will be initiated in some other place (possibly a timed service?)
             var result = await _processingService.InitiateUpload(package); 
+            
+            if (result.StatusCode != HttpStatusCode.OK) {
+                return BadRequest($"Processing Server Response: {result.Status}");
+            }
+            // Otherwise, the upload was successful
             package.JobId = result.JobId;
-            package.EstimatedCompletion = result.EstimatedCompletion;
+            package.EstimatedCompletion = result.EstimatedCompletionTime;
             _context.Entry(package).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
@@ -85,22 +91,28 @@ namespace ClientServer.Controllers
         // GET: api/package/{id}/results
         // Requests the results for a package
         [HttpGet("{id}/results")]
-        public async Task<ActionResult<Package>> RequestResults(long id)
+        public async Task<ActionResult> RequestResults(long id)
         {
             var package = await _context.Package.FindAsync(id);
 
             if (package == null)
             {
-                return NotFound();
+                return NotFound($"No package with id {id}");
             }
 
             var response = await _processingService.RequestResults(package.JobId);
-            if (response.Result != null) {
+
+            if (response.StatusCode != HttpStatusCode.OK) {
+                return BadRequest($"Processing Server Response: {response.Status}");
+            } 
+            if (response.Status.Equals("Ok")) {
                 package.Result = response.Result;
-                _context.Entry(package).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+            } else {
+                package.EstimatedCompletion = response.EstimatedCompletion;
             }
-            return package;
+            _context.Entry(package).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok(package);
         }
 
         // DELETE: api/package/{id}
@@ -112,7 +124,7 @@ namespace ClientServer.Controllers
 
             if (package == null)
             {
-                return NotFound();
+                return NotFound($"No package with id {id}");
             }
 
             _context.Package.Remove(package);

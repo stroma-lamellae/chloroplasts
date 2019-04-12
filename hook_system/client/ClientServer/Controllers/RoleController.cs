@@ -38,7 +38,7 @@ namespace ClientServer.Controllers
 
             if (role == null)
             {
-                return NotFound();
+                return NotFound($"No role with id {id}");
             }
             return role;
         }
@@ -61,7 +61,7 @@ namespace ClientServer.Controllers
         {
             if (id != role.RoleId)
             {
-                return BadRequest();
+                return BadRequest($"RoleId ({role.RoleId}) doesn't match Id ({id})");
             } 
 
             _context.Entry(role).State = EntityState.Modified;
@@ -79,7 +79,7 @@ namespace ClientServer.Controllers
 
             if (role == null)
             {
-                return NotFound();
+                return NotFound($"No role with id {id}");
             }
 
             _context.Role.Remove(role);

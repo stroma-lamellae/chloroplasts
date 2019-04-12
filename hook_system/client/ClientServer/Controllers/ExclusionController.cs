@@ -38,7 +38,7 @@ namespace ClientServer.Controllers
 
             if (exclusion == null)
             {
-                return NotFound();
+                return NotFound($"No exclusion with id {id}");
             }
             return exclusion;
         }
@@ -61,7 +61,7 @@ namespace ClientServer.Controllers
         {
             if (id != exclusion.ExclusionId)
             {
-                return BadRequest();
+                return BadRequest($"ExclusionId ({exclusion.ExclusionId}) doesn't match Id ({id})");
             } 
 
             _context.Entry(exclusion).State = EntityState.Modified;
@@ -79,7 +79,7 @@ namespace ClientServer.Controllers
 
             if (exclusion == null)
             {
-                return NotFound();
+                return NotFound($"No exclusion with id {id}");
             }
 
             _context.Exclusion.Remove(exclusion);

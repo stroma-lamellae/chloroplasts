@@ -41,7 +41,7 @@ namespace ClientServer.Controllers
 
             if (match == null)
             {
-                return NotFound();
+                return NotFound($"No match with id {id}");
             }
             return match;
         }

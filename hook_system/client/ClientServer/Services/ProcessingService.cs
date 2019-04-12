@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 using ClientServer.Models;
 
@@ -19,7 +23,7 @@ namespace ClientServer.Services
 {
     public interface IProcessingService
     {
-        Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true);
+        Task<UploadResponse> InitiateUpload(Package package, bool scrub = true);
         Task<ResultsResponse> RequestResults(string jobId);
     }
 
@@ -31,17 +35,22 @@ namespace ClientServer.Services
         private readonly IFileService _fileService;
         private readonly string _tempTestDirectory = "test";
         private readonly string _institutionId;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
 
-        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration, IFileService fileService)
+        public ProcessingService(IHttpClientFactory clientFactory, IXMLService xmlService, IScrubbingService scrubbingService, IConfiguration configuration, 
+                                 IFileService fileService, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
         {
             _clientFactory = clientFactory;
             _xmlService = xmlService;
             _scrubbingService = scrubbingService;
             _fileService = fileService;
             _institutionId = configuration.GetSection("ProcessingConfigurations")["InstitutionId"];
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
-        public async Task<ResultsResponse> InitiateUpload(Package package, bool scrub = true)
+        public async Task<UploadResponse> InitiateUpload(Package package, bool scrub = true)
         {
             string filename = "";
             if (scrub) {
@@ -50,13 +59,13 @@ namespace ClientServer.Services
                 // Don't scrub files, just compress and send
                 _fileService.EmptyDirectory(_tempTestDirectory);
                 var currAssignmentPath = Path.Combine(_tempTestDirectory, "CurrentYear");
-                _fileService.CopyAssignment(package.Assignment, currAssignmentPath);
+                _fileService.CopyAssignment(package.Assignment, currAssignmentPath, true);
 
                 filename = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".tar.gz");
                 _fileService.CompressFolder(_tempTestDirectory, filename);
             }
 
-            var uploadRequest = CreateUploadRequest(filename);
+            var uploadRequest = await CreateUploadRequest(filename);
 
             var client = _clientFactory.CreateClient("processing");
 
@@ -80,28 +89,24 @@ namespace ClientServer.Services
 
             // Send to the processing server
             var response = await client.PostAsync(requestAddress, formDataContent);
-            var responseText = await response.Content.ReadAsStringAsync();
-            ResultsResponse resultsResponse = null;
-            try {
-                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
-                if (resultsResponse.Status == null) resultsResponse.Status = "200"; // Placeholder until server response messages are standardized
-            } catch (JsonReaderException e) {
-                resultsResponse = new ResultsResponse 
-                {
-                    Status = "400",
-                    Results = e.Message
-                };
-            }
             
-            return resultsResponse;
+            // Handle Response
+            var responseText = await response.Content.ReadAsStringAsync();
+            var resultsResponse = JsonConvert.DeserializeObject<UploadResponse>(responseText);
+            resultsResponse.StatusCode = response.StatusCode;
+            if (response.StatusCode == HttpStatusCode.OK) {
+                resultsResponse.EstimatedCompletionTime = DateTime.Parse(resultsResponse.EstimatedCompletion);
+            }
+            return resultsResponse; 
         }
 
-        public UploadRequest CreateUploadRequest(string filename) 
+        public async Task<UploadRequest> CreateUploadRequest(string filename) 
         {
-            // TODO: Get real data
+            var email = await _userManager.FindByIdAsync(_httpContextAccessor.HttpContext.User.FindFirst("userId").Value);
+
             return new UploadRequest { 
                 InstitutionId = _institutionId, 
-                Email = "jb15iq@brocku.ca", // TODO: Should come from auth service
+                Email = email.ToString(),
                 FileName = filename
             };
         }
@@ -122,21 +127,16 @@ namespace ClientServer.Services
 
             // Handle Response
             var responseText = await response.Content.ReadAsStringAsync();
-            ResultsResponse resultsResponse;
-            try {
-                resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
-                if (resultsResponse.Status == null) resultsResponse.Status = "200";
-
-                var result = await _xmlService.ParseXMLFile(resultsResponse.Results);
-                resultsResponse.Result = result;
-            } catch (JsonReaderException e) {
-                resultsResponse = new ResultsResponse 
-                {
-                    Status = "400",
-                    Results = e.Message
-                };
+            var resultsResponse = JsonConvert.DeserializeObject<ResultsResponse>(responseText);
+            resultsResponse.StatusCode = response.StatusCode;
+            // If we got results returned
+            if (resultsResponse.Status.Equals("Ok")) {
+                resultsResponse.Result = await _xmlService.ParseXMLFile(resultsResponse.Results);
+            } else {
+                Console.WriteLine(responseText);
+                
+                resultsResponse.EstimatedCompletion = DateTime.Now.AddMinutes(Double.Parse(resultsResponse.Wait));
             }
-
             return resultsResponse;
         }
     }
@@ -148,6 +148,15 @@ namespace ClientServer.Services
         public string FileName { get; set; } 
     }
 
+    public class UploadResponse
+    {
+        public string JobId { get; set; }
+        public string EstimatedCompletion { get; set; }
+        public DateTime EstimatedCompletionTime { get; set; }
+        public string Status { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+    }
+
     public class ResultsRequest
     {
         public string InstitutionId { get; set; }
@@ -157,10 +166,11 @@ namespace ClientServer.Services
     public class ResultsResponse
     {
         public string Status { get; set; }
-        public string JobId { get; set; }
-        public DateTime EstimatedCompletion { get; set; }
+        public string Wait { get; set; }
         public string Results { get; set; } 
 
         public Result Result { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public DateTime EstimatedCompletion { get; set; }
     }
 }
