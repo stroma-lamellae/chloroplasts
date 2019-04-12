@@ -49,7 +49,11 @@ namespace ClientServer.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Package>> GetPackage(long id)
         {
-            var package = await _context.Package.FindAsync(id);
+            var package = await _context.Package
+                .Include(p => p.Assignment)
+                    .ThenInclude(a => a.Course)
+                .Where(p => p.PackageId == id)
+                .FirstAsync();
 
             if (package == null)
             {

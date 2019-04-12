@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FileService } from '../../../core/services/file.service';
 import { Submission } from '../../../shared/models/submission';
 import { ResultService } from '../../../core/services/result.service';
 import { ResultSet } from '../../../shared/models/result-set';
+import { PackageService } from '../../../core/services/package.service';
+import { Package } from '../../../shared/models/package';
 
 @Component({
   selector: 'app-result',
@@ -20,11 +21,12 @@ export class ResultComponent implements OnInit {
   rightToggles: boolean[];
   leftChoices: number[];
   rightChoices: number[];
+  package: Package;
 
   constructor(
     private _resultService: ResultService,
-    private _fileService: FileService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _packageService: PackageService
   ) {}
 
   ngOnInit() {
@@ -32,7 +34,9 @@ export class ResultComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
-
+    this._packageService.getPackage(this.id).subscribe(res => {
+      this.package = res;
+    });
     this._resultService.getResultByPackageId(this.id).subscribe(res => {
       this.result = res;
       this.toggles = new Array(this.result.matches.length);
