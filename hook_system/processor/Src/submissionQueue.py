@@ -75,10 +75,11 @@ def processQueue():
 
                 javaFiles: List[HookFile] = []
                 javaWhitelist: List[HookFile] = []
-
+                num_files = 0
                 start = time.time()
                 with tar.open(filePath, mode='r') as tarFile:
                     for fileName in tarFile.getnames():
+                        num_files+=1
                         if tarFile.getmember(fileName).isfile():
 
                             #Break up the file path into it's respective folders
@@ -110,8 +111,6 @@ def processQueue():
                                     javaWhitelist.append(HookFile(fileName, "", None, tarFile.extractfile(fileName).read().decode('utf-8')))
                                 elif ext == ".cpp" or ext == ".c" or ext == ".hpp" or ext == ".h":
                                     cWhitelist.append(HookFile(fileName, "", None, tarFile.extractfile(fileName).read().decode('utf-8')))
-                        filetime = time.time()
-                    all_file_time = time.time()
                 """
                 The MOSS paper on Winnowing goes into detail on how the winnowing algorithm work's and why it is necessary to standardize the input.
                 Section 3 of the paper explains the winnowing algorithm while Section 5.2 describes how to use the algorithm for plagiarism detection.
@@ -144,9 +143,8 @@ def processQueue():
                 notified = __sendEmail(emailAddr,jobId)
                 #not sure what the best thing to do here is. . .
                 endtime = time.time()
-                print("Overall processing time for "+processed_file[0]+" files is: "+ str(endtime-start))
-                print("Bulk file plagiarism processing time for "+processed_file[0]+"files is: "+ str(all_file_time-start))
-                print("File processing time for "+processed_file[0]+"files is: "+ str(filetime-start))
+                processing_per_file = (endtime-start)/num_files
+                print("Overall processing time for "+processed_file[0]+" files is: "+ str(processing_per_file)
         except Exception as e:
             print(e)
             try: #Try to release it incase it hasn't been released
@@ -163,7 +161,7 @@ def processQueue():
                 s = smtplib.SMTP_SSL(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
                 s.login(config["EMAIL"]["FromAddr"], config["EMAIL"]["FromPassword"])
                 s.sendmail(config["EMAIL"]["FromAddr"], emailAddr, msg.as_string())
-                s.quit()        
+                s.quit()
             except:
                 pass
 
@@ -186,7 +184,7 @@ def __sendEmail(emailAddr: str, jobId: str) -> bool:
     except Exception as e:
         print("Failed to send email notification")
         print(e)
-        
+
 
 def estimateQueue(jobId: str) -> int:
     mutex.acquire()
@@ -200,8 +198,9 @@ def estimateQueue(jobId: str) -> int:
             break
 
     mutex.release()
+    local_utc = arrow.utcnow().shift(seconds=res)
 
-    return res
+    return local_utc.to('local').format('YYYY-MM-DD HH:mm:ss')
 
 def estimateProcessing(numFile):
 
