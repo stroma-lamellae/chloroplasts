@@ -15,7 +15,7 @@ export class ToastInterceptor implements HttpInterceptor {
                 error = "Internal Server Error. Please contact the System Administrator.";
             } else {
                 if (err.error) {
-                    error = err.error.title || err.error || err.statusText;
+                    error = err.error.title || err.error.login_failure || err.error || err.statusText;
                 } else {
                     error = err.error || err.statusText;
                 }

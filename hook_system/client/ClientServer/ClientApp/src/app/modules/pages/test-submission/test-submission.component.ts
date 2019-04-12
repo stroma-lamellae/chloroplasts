@@ -36,13 +36,6 @@ export class TestSubmissionComponent implements OnInit {
     });
   }
 
-  reset() {
-    this.package = null;
-    this.packageWithResults = null;
-    this.testFile = null;
-    this.testName = '';
-  }
-
   fileChange(event) {
     this.testFile = event.target.files[0];
   }
