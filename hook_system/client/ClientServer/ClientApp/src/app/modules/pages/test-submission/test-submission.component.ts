@@ -41,7 +41,6 @@ export class TestSubmissionComponent implements OnInit {
     this.packageWithResults = null;
     this.testFile = null;
     this.testName = '';
-    // this.router.navigate(['/test']);
   }
 
   fileChange(event) {
