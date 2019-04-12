@@ -246,7 +246,12 @@ namespace ClientServer.Services
         {
             var splitPaths = lineFilePath.Split(Path.DirectorySeparatorChar);
             var str = splitPaths.Last();
-            var filename = str.Substring(str.IndexOf('-') + 1);
+            Console.WriteLine(str);
+            var filename = str;
+            // Handle scrubbed data
+            if (filename.StartsWith("Scrubbed-")) {
+                filename = filename.Substring(filename.IndexOf('-') + 1);
+            }
             var path = Path.Join("Temp", submissionFilePath, filename);
             
             var lines = await System.IO.File.ReadAllLinesAsync(path);

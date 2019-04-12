@@ -88,6 +88,10 @@
     padding-left: 25px;
     font-weight: bold;
     border-bottom: solid 1px gray;
+    
+    display: flex;
+    justify-content: space-between;
+    padding-right: 25px;
 
     &:hover {
       background-color: whitesmoke;

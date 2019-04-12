@@ -50,13 +50,38 @@ export class ResultComponent implements OnInit {
       this.leftToggles.fill(false);
       this.rightToggles.fill(false);
       for (let i = 0; i < this.result.matches.length; i++) {
+        this.result.matches[i].maxPercentage = "0";
         for (let j = 0; j < this.result.matches[i].lines.length; j++) {
           const path = this.result.matches[i].lines[j].filePath;
-          this.result.matches[i].lines[j].viewFile = this.result.files.find(
+          let line = this.result.matches[i].lines[j];
+          line.viewFile = this.result.files.find(
             f => f.filePath === path
           );
+          // Find out how much of the file this match is
+          line.percentage = (((line.lineEnd - line.lineStart) / line.viewFile.lines.length)*100).toFixed(0);
+          // Save the highest percentage into the match
+          if (parseInt(line.percentage) > parseInt(this.result.matches[i].maxPercentage)) {
+            this.result.matches[i].maxPercentage = line.percentage;
+          }
+
+          // Try and fix test naming, so that the TA doesn't get confused by
+          //  the file name
+          // TODO: Remove after Stage 3 is done
+          if (line.submission.studentFirstname.includes("ThisIsTestData")) {
+            line.submission.studentFirstname = "";
+            line.submission.studentLastname = "Folder";
+            line.submission.studentNumber = line.submission.studentNumber.replace(this.result.assignmentName, "");
+            while (line.submission.studentNumber.includes("&underscore&")) {
+              line.submission.studentNumber = line.submission.studentNumber.replace("&underscore&", "_");
+            }
+            
+          }
         }
       }
+      this.result.matches.sort((a,b) => {
+        return parseInt(b.maxPercentage) - parseInt(a.maxPercentage);
+      })
+
     });
   }
 

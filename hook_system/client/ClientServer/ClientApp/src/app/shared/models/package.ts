@@ -12,12 +12,14 @@ export class Line {
   match: Match;
   submission: Submission;
   viewFile: File;
+  percentage: string;
 }
 
 export class Match {
   matchId: number;
   resultId: number;
   lines: Line[];
+  maxPercentage: string;
 }
 
 export class Result {
