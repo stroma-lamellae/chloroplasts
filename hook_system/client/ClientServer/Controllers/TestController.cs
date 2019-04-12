@@ -91,7 +91,7 @@ namespace ClientServer.Controllers
                 string relativePath = directory.Split(extractedFilePath)[1];
                 // Replace any underscores because the Processing server looks for exactly 3 underscores,
                 //  and we insert underscores based on the FirstName, LastName and StudetNumber
-                relativePath = relativePath.Replace("\\", "").Replace("_", "&underscore&");
+                relativePath = relativePath.Replace("\\", "").Replace("/", "").Replace("_", "&underscore&");
                 
                 // Create the Submission for this folder
                 var submission = new Submission {
