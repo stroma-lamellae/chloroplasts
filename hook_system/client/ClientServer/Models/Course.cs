@@ -12,7 +12,6 @@ namespace ClientServer.Models
         public string ProgramCode { get; set; }
         public string CourseCode { get; set; }
         
-        // [JsonIgnore]
         public virtual List<Assignment> Assignments { get; set; }
     }
 }

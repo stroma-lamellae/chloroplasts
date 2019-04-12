@@ -12,7 +12,6 @@ namespace ClientServer.Models
 
         public string FilePath { get; set; }
         
-        [JsonIgnore]
         public virtual Match Match { get; set; }
         public virtual Submission Submission { get; set; }
     }
