@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TestService } from 'src/app/core/services/test.service';
 import { Package } from 'src/app/shared/models/package';
 import { PackageService } from 'src/app/core/services/package.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-test-submission',
@@ -11,11 +12,15 @@ import { PackageService } from 'src/app/core/services/package.service';
 export class TestSubmissionComponent implements OnInit {
 
   testFile: File;
-  testName: string = "";
+  testName = '';
   package: Package;
   packageWithResults: Package;
 
-  constructor(private _testService: TestService, private _packageService: PackageService) { }
+  constructor(
+    private _testService: TestService, 
+    private _packageService: PackageService,
+    private router: Router
+  ) { }
 
   ngOnInit() { }
 
@@ -35,7 +40,7 @@ export class TestSubmissionComponent implements OnInit {
     this.package = null;
     this.packageWithResults = null;
     this.testFile = null;
-    this.testName = "";
+    this.testName = '';
   }
 
   fileChange(event) {
