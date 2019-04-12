@@ -97,7 +97,7 @@ namespace ClientServer.Controllers
                 var submission = new Submission {
                     StudentFirstname = $"ThisIsTestData{data.TestName}",
                     StudentLastname = $"ThisIsTestData{data.TestName}",
-                    StudentNumber = relativePath
+                    StudentNumber = $"{relativePath}{data.TestName}"
                 };
                 submissions.Add(submission);
 
@@ -131,7 +131,7 @@ namespace ClientServer.Controllers
             // Persist all submission files
             foreach (var submission in submissions)
             {
-                _fileService.PersistSubmissionFiles(submission, extractedFilePath, submission.StudentNumber.Replace("&underscore&", "_"));
+                _fileService.PersistSubmissionFiles(submission, extractedFilePath, submission.StudentNumber.Replace("&underscore&", "_").Replace(data.TestName, ""));
                 _context.Entry(submission).State = EntityState.Modified;
             }
 
