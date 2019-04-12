@@ -24,4 +24,11 @@ export class PackageService {
       this._apiEndpoint + '/' + pack.packageId + '/results'
     );
   }
+
+  requestResultsById(id: number): Observable<Package> {
+    return this._httpClient.get<Package>(
+      this._apiEndpoint + '/' + id + '/results'
+    );
+  }
+
 }

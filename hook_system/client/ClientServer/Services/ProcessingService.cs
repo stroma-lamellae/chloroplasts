@@ -134,8 +134,10 @@ namespace ClientServer.Services
                 resultsResponse.Result = await _xmlService.ParseXMLFile(resultsResponse.Results);
             } else {
                 Console.WriteLine(responseText);
-                
-                resultsResponse.EstimatedCompletion = DateTime.Now.AddMinutes(Double.Parse(resultsResponse.Wait));
+                if (resultsResponse.Wait != "")
+                {
+                    resultsResponse.EstimatedCompletion = DateTime.Now.AddMinutes(Double.Parse(resultsResponse.Wait));
+                }
             }
             return resultsResponse;
         }

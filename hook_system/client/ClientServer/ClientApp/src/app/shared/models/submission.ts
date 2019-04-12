@@ -1,3 +1,5 @@
+import { File } from '../../shared/models/file';
+
 export class Submission {
     submissionId: number;
     assignmentId: number;
@@ -5,4 +7,5 @@ export class Submission {
     studentLastname: string;
     studentFirstname: string;
     files: FileList;
+    viewFiles: File[];
 }

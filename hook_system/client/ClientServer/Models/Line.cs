@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace ClientServer.Models
 {
     public class Line
@@ -7,8 +9,10 @@ namespace ClientServer.Models
         public long SubmissionId { get; set; }
         public int LineStart { get; set; }
         public int LineEnd { get; set; }
+
         public string FilePath { get; set; }
         
+        [JsonIgnore]
         public virtual Match Match { get; set; }
         public virtual Submission Submission { get; set; }
     }

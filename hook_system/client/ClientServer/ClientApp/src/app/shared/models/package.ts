@@ -1,5 +1,6 @@
 import { Assignment } from './course';
 import { Submission } from './submission';
+import { File } from './file';
 
 export class Line {
   lineId: number;
@@ -10,6 +11,7 @@ export class Line {
   filePath: string;
   match: Match;
   submission: Submission;
+  viewFile: File;
 }
 
 export class Match {

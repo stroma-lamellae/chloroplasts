@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace ClientServer.Models
 {
@@ -14,6 +15,8 @@ namespace ClientServer.Models
         public string StudentFirstname { get; set; }
         public string StudentLastname { get; set; }
         public long StudentId { get; set; }
+        
+        [JsonIgnore]
         public Assignment Assignment { get; set; }
 
         [NotMapped]

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ClientServer.Models
 {
@@ -10,7 +11,8 @@ namespace ClientServer.Models
         public int Semester { get; set; }
         public string ProgramCode { get; set; }
         public string CourseCode { get; set; }
-
+        
+        [JsonIgnore]
         public virtual List<Assignment> Assignments { get; set; }
     }
 }
