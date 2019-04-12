@@ -9,7 +9,7 @@
       *ngFor="let match of result.matches; let j = index"
     >
       <div class="result__header" (click)="toggleMatch(j)">
-        Match {{ j + 1 }}
+        <span>Match {{ j + 1 }}</span> <span>{{match.maxPercentage}}% Matching</span> <span>{{ match.lines.length }} Matching Files</span>
       </div>
       <div class="result__match--container" [class.hidden]="!toggles[j]">
         <div class="result__match--left result__match--box" (click)="toggleLeftNames(j)">
@@ -24,7 +24,7 @@
               class="result__names-list"
               *ngFor="let name of match.lines; let x = index"
             >
-              <div class="result__name" *ngIf="x !== leftChoices[j]" (click)="updateLeftChoice(j,x)">
+              <div class="result__name" *ngIf="x !== leftChoices[j] && x !== rightChoices[j]" (click)="updateLeftChoice(j,x)">
                 {{ name.submission.studentFirstname }}
                 {{ name.submission.studentLastname }}-{{
                   name.submission.studentNumber
@@ -59,7 +59,7 @@
               class="result__names-list"
               *ngFor="let name of match.lines; let x = index"
             >
-              <div class="result__name" *ngIf="x !== rightChoices[j]" (click)="updateRightChoice(j,x)">
+              <div class="result__name" *ngIf="x !== rightChoices[j] && x !== leftChoices[j]" (click)="updateRightChoice(j,x)">
                 {{ name.submission.studentFirstname }}
                 {{ name.submission.studentLastname }}-{{
                   name.submission.studentNumber
