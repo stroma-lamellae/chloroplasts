@@ -152,7 +152,7 @@ namespace ClientServer.Controllers
             };
 
             var json = JsonConvert.SerializeObject(jsonResponse,
-                new JsonSerializerSettings() {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+                new JsonSerializerSettings() {ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
             return new OkObjectResult(json);
         }
     }

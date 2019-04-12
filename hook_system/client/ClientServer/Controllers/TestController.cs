@@ -54,7 +54,8 @@ namespace ClientServer.Controllers
                     Year = 2019,
                     Semester = 1,
                     ProgramCode = "TEST",
-                    CourseCode = "TEST"
+                    CourseCode = "TEST",
+                    UserId = HttpContext.User.FindFirst("userId").Value
                 };
                 _context.Course.Add(course);
                 course.Assignments = new List<Assignment>();
