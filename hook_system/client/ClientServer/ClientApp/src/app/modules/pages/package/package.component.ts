@@ -18,6 +18,7 @@ export class PackageComponent implements OnInit {
   @Output('fileListChange') fileList: EventEmitter<File[]>;
 
   currYear = (new Date().getFullYear());
+  Semester = ['Fall', 'Winter', 'Summer'];
 
   fileHover: boolean;
   packageForm: FormGroup;
@@ -25,8 +26,10 @@ export class PackageComponent implements OnInit {
 
   courses: Course[];
 
+  filteredYearCourses: Course[];
   filteredSemCourses: Course[];
   filteredProgramCourses: Course[];
+  filteredSupportYearCourses: Course[];
   filteredSupportSemCourses: Course[];
   filteredSupportProgramCourses: Course[];
 
@@ -34,7 +37,7 @@ export class PackageComponent implements OnInit {
   selectedCourseCode: string;
   selectedProgramCode: string;
   selectedSemester: string;
-  selectedYear: string = this.currYear.toString();
+  selectedYear: string; // = this.currYear.toString();
 
   selectedSupportYear: string;
   selectedSupportSemester: string;
@@ -80,6 +83,7 @@ export class PackageComponent implements OnInit {
     });
 
     this.fileHover = false;
+
   }
 
   // convenience getter for easy access to form fields
@@ -92,6 +96,10 @@ export class PackageComponent implements OnInit {
   }
 
   yearUpdate() {
+    this.filteredYearCourses = this.courses.filter(
+      c => c.year.toString() === this.selectedYear
+    );
+
     this.selectedSemester = null;
     this.selectedProgramCode = null;
     this.selectedCourse = null;
@@ -102,9 +110,10 @@ export class PackageComponent implements OnInit {
   }
 
   semesterUpdate() {
-    this.filteredSemCourses = this.courses.filter(c => c.year.toString() === this.selectedYear)
-      .filter(c => c.semester.toString() === this.selectedSemester);
-    
+    this.filteredSemCourses = this.filteredYearCourses.filter(
+      c => c.semester.toString() === this.selectedSemester
+    );
+
     this.selectedProgramCode = null;
     this.selectedCourse = null;
     this.selectedAssignmentId = null;
@@ -112,7 +121,9 @@ export class PackageComponent implements OnInit {
   }
 
   programUpdate() {
-    this.filteredProgramCourses = this.filteredSemCourses.filter(c => c.programCode.toString() === this.selectedProgramCode);
+    this.filteredProgramCourses = this.filteredSemCourses.filter(
+      c => c.programCode.toString() === this.selectedProgramCode
+    );
     this.selectedCourse = null;
     this.selectedAssignmentId = null;
   }
@@ -150,6 +161,9 @@ export class PackageComponent implements OnInit {
   }
 
   supportYearUpdate() {
+    this.filteredSupportYearCourses = this.courses.filter(
+      c => c.year.toString() === this.selectedSupportYear
+    );
     this.selectedSupportSemester = null;
     this.selectedSupportProgramCode = null;
     this.supportingCourse = null;
@@ -160,8 +174,10 @@ export class PackageComponent implements OnInit {
   }
 
   supportSemesterUpdate() {
-    this.filteredSupportSemCourses = this.courses.filter(c => c.year.toString() === this.selectedSupportYear)
-      .filter(c => c.semester.toString() === this.selectedSupportSemester);
+    this.filteredSupportSemCourses = this.filteredSupportYearCourses.filter(
+      c => c.semester.toString() === this.selectedSupportSemester
+    );
+
     this.selectedSupportProgramCode = null;
     this.supportingCourse = null;
     this.supportingAssignment = null;
@@ -218,7 +234,7 @@ export class PackageComponent implements OnInit {
   @HostListener('dragover', ['$event'])
   public onDragOver($event: DragEvent): void {
     $event.preventDefault();
-    this.fileHover= true;
+    this.fileHover = true;
   }
 
   @HostListener('dragleave', ['$event'])
@@ -254,14 +270,14 @@ export class PackageComponent implements OnInit {
       pack.previousAssignments.push(prevAssignment);
     }
     pack.exclusions = [];
-    for(let i = 0; i < this.files.length; i++) {
+    for (let i = 0; i < this.files.length; i++) {
       pack.exclusions.push(this.files[i]);
     }
     this._packageService.uploadPackage(pack).subscribe(res => {
       console.log(res);
     });
 
-    //redirect the page to the ViewStatus page
+    // redirect the page to the ViewStatus page
     this._router.navigate(['/results']);
   }
 }

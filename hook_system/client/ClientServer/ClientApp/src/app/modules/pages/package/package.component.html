@@ -19,9 +19,7 @@
       <div class="form-group">
         <label>Semester</label>
         <select class="form-control" formControlName="semester" [(ngModel)]="selectedSemester" (change)="semesterUpdate()">
-          <option [value]='0'>Fall</option>
-          <option [value]='1'>Winter</option>
-          <option [value]='2'>Summer</option>
+          <option [value]="course.semester" *ngFor="let course of filteredYearCourses | unique:'semester'">{{Semester[course.semester]}}</option>
         </select>
       </div>
     </div>
@@ -75,9 +73,7 @@
         <div class="form-group">
           <label>Select semester</label>
           <select [(ngModel)]="selectedSupportSemester" (change)="supportSemesterUpdate()">
-            <option [value]='0'>Fall</option>
-            <option [value]='1'>Winter</option>
-            <option [value]='2'>Summer</option>
+            <option [value]="course.semester" *ngFor="let course of filteredSupportYearCourses | unique:'semester'">{{Semester[course.semester]}}</option>
           </select>
         </div>
       </div>
