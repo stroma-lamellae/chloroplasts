@@ -3,7 +3,6 @@ import sys
 import os
 import psycopg2
 
-from tkinter import messagebox
 from os import listdir
 from os.path import join
 

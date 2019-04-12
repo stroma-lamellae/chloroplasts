@@ -13,7 +13,9 @@ export class ArchivedCoursesComponent implements OnInit {
 
   courseForm: FormGroup;
   allCourses: Course[];
-  searchedCourses: Course[];
+  searchedSemCourses: Course[];
+  searchedProgramCourses: Course[];
+  searchedCourseCourses: Course[];
 
   academicYear: string;
   currYear1: any;
@@ -100,7 +102,7 @@ export class ArchivedCoursesComponent implements OnInit {
     }
 
     this.courseService.getSemesterCourses(this.selectedYear, this.selectedSemester)
-    .subscribe(allCourses => this.searchedCourses = allCourses);
+    .subscribe(allCourses => this.searchedSemCourses = allCourses);
   }
 
   programChange(): void {
@@ -115,6 +117,8 @@ export class ArchivedCoursesComponent implements OnInit {
       this.selectedProgram = this.f.program.value;
     }
 
+    this.searchedProgramCourses = this.searchedSemCourses.filter(c => c.programCode.toString() === this.f.program.value);
+
   }
 
   courseChange(): void {
@@ -125,6 +129,9 @@ export class ArchivedCoursesComponent implements OnInit {
       this.courseSelected = true;
       this.selectedCourse = this.f.course.value;
     }
+
+    this.searchedCourseCourses = this.searchedProgramCourses.filter(c => c.courseCode.toString() === this.f.course.value);
+
   }
 
 }
