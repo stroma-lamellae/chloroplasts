@@ -44,7 +44,7 @@ namespace ClientServer.Services
                         line.SubmissionId = await DeHash(sub.Hash);
                         line.LineStart = sub.LineStart;
                         line.LineEnd = sub.LineFinish;
-                        line.FilePath = sub.File;
+                        line.FilePath = sub.File.Split(sub.Hash)[1].Substring(1);
                         modelMatch.Lines.Add(line);
                     }
                     
