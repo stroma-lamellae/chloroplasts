@@ -50,15 +50,15 @@ namespace ClientServer.Services
             //  Then sort by line start
             //  Then sort by line end
             Array.Sort(results.Matches, (x, y) => {
-                var diff = y.Submissions.Count - x.Submissions.Count;
+                var diff = y.Submissions.Count() - x.Submissions.Count();
                 if (diff != 0) return diff;
 
-                for (int i = 0; i < x.Submissions.Count; i++) {
+                for (int i = 0; i < x.Submissions.Count(); i++) {
                     var val = String.Compare(x.Submissions[i].Hash, y.Submissions[i].Hash);
                     if (val != 0) return val;
                 }
                 
-                for (int i = 0; i < minIdx; i++) {
+                for (int i = 0; i < x.Submissions.Count(); i++) {
                     var val = String.Compare(x.Submissions[i].File, y.Submissions[i].File);
                     if (val != 0) return val;
                 }
@@ -69,16 +69,19 @@ namespace ClientServer.Services
             });
 
             // Combine similar matches
-            List<XMLMatch> matches = new List();
+            List<XMLMatch> matches = new List<XMLMatch>();
             matches.Add(results.Matches[0]);
-            for (int i = 1; i < results.Matches.Count; i++) {
+            for (int i = 1; i < results.Matches.Count(); i++) {
                 // Check if this match could be combined with the previous match
                 // Needs to have the same submissions, but different line starts and line ends
                 var match = results.Matches[i];
                 var lastMatch = matches.Last();
-                if (match.Submissions.Count != lastMatch.Submissions.Count) continue;
+                if (match.Submissions.Count() != lastMatch.Submissions.Count()) {
+                    matches.Add(match);
+                    continue;
+                }
                 bool keepGoing = true;
-                for (int j = 0; j < match.Submissions.Count; j++) {
+                for (int j = 0; j < match.Submissions.Count(); j++) {
                     if (!match.Submissions[j].Hash.Equals(lastMatch.Submissions[j].Hash)) {
                         keepGoing = false;
                         break;
@@ -88,7 +91,10 @@ namespace ClientServer.Services
                         break;
                     }
                 }
-                if (!keepGoing) continue;
+                if (!keepGoing) {
+                    matches.Add(match);
+                    continue;
+                }
                 // By now, the hashes and files match for each submission within the matches
                 // Now, check if we can combine the line start and line finish
                 // We can combine them in four cases: (If all submission follow the same pattern)
@@ -110,7 +116,8 @@ namespace ClientServer.Services
 
                 // Determine pattern first, then take action
                 int pattern = -1;
-                for (int j = 0; j < match.Submissions.Count; j++) {
+                bool shouldAggregate = true;
+                for (int j = 0; j < match.Submissions.Count(); j++) {
                     int thisPattern = -1;
 
                     int lineStartDiff = lastMatch.Submissions[j].LineStart - match.Submissions[j].LineStart;
@@ -120,26 +127,48 @@ namespace ClientServer.Services
                         else thisPattern = 2;
                     } else if (lineStartDiff < 0) { // Line 1 starts before line 2
                         if (lineEndDiff == 0) thisPattern = 1;
-                        else if (lineEndDiff < 0) thisPattern = 3; // Line 
+                        else if (lineEndDiff < 0) thisPattern = 3; 
                         else thisPattern = 1;
+                    } else { // Line 1 starts after line 2
+                        if (lineEndDiff == 0) thisPattern = 2;
+                        else if (lineEndDiff < 0) thisPattern = 2;
+                        else thisPattern = 4;
                     }
-                    // Check for patterns 1 and 3
-                    if (lastMatch.Submissions[j].LineStart <= match.Submissions[j].LineStart) {
-                        // Pattern 1
-                        if (lastMatch.Submissions[j].LineFinish >= match.Submissions[j].LineFinish) {
-                            thisPattern = 1;
-                        } else {
-                            thisPattern = 3;
-                        }
-                    } else {
-
+                    
+                    if (pattern == -1) {
+                        pattern = thisPattern;
+                    } else if (pattern != thisPattern) {
+                        shouldAggregate = false;
+                        break;
                     }
                 }
+                if (!shouldAggregate) {
+                    matches.Add(match);
+                    continue;
+                }
 
+                switch (pattern) {
+                    case 1: // Don't add second match
+                        break;
+                    case 2: // Remove first match, add second match
+                        matches.Remove(lastMatch);
+                        matches.Add(match);
+                        break;
+                    case 3: // Extend first match right
+                        for (int j = 0; j < lastMatch.Submissions.Count(); j++) {
+                            lastMatch.Submissions[j].LineFinish = match.Submissions[j].LineFinish;
+                        }
+                        break;
+                    case 4: // Extend first match left
+                        for (int j = 0; j < lastMatch.Submissions.Count(); j++) {
+                            lastMatch.Submissions[j].LineStart = match.Submissions[j].LineStart;
+                        }
+                        break;
+                }
 
             }   
 
-            foreach (var match in results.Matches) {
+            foreach (var match in matches) {
                 Match modelMatch = new Match();
                 modelMatch.Lines = new List<Line>();
                 foreach (var sub in match.Submissions) {
