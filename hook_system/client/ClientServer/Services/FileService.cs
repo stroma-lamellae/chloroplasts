@@ -1,6 +1,10 @@
+using System;
 using ClientServer.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using SharpCompress.Writers;
@@ -41,22 +45,26 @@ namespace ClientServer.Services
         // Saves the files, except it is expecting a custom folder name
         // Mainly used for the test submission
         void PersistSubmissionFiles(Submission submission, string sourceDirBase, string foldername);
+
+        // Reads a code file from the Temp/Scrubbed/{filePath} location
+        // and returns an array of read lines
+        Task<FileResult> ReadFileFromStorageAsync(long submissionId, string lineFilePath, string submissionFilePath);
     }
 
     public class FileService : IFileService
     {
-        private readonly string _rootStorageDirectory = "Temp";
+        private const string RootStorageDirectory = "Temp";
 
-        private string[] _allowedExtensions = new string[] {".java", ".c", ".cpp", ".h", ".hpp"};
+        private readonly string[] _allowedExtensions = new string[] {".java", ".c", ".cpp", ".h", ".hpp"};
 
         // Dest is the path relative to the global root storage directory
         //  So far whatever dest you pass in, it will prepend the root storage directory
         public void CopyAssignment(Assignment assignment, string dest, bool ignore = false)
         {
-            var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, dest);
+            var destPath = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, dest);
             foreach (var submission in assignment.Submissions)
             {
-                var submissionPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submission.FilePath);
+                var submissionPath = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, submission.FilePath);
                 var submissionDest = Path.Combine(destPath, GetSubmissionFolderName(submission));
                 DirectoryCopy(submissionPath, submissionDest, true, ignore);
             }
@@ -67,7 +75,7 @@ namespace ClientServer.Services
         public void PersistSubmissionFiles(Submission submission)
         {
             var submissionPath = GetSubmissionPath(submission);
-            var basePath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submissionPath);
+            var basePath = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, submissionPath);
             submission.FilePath = submissionPath;
                 
             // Save each file in the folder
@@ -99,7 +107,7 @@ namespace ClientServer.Services
         public void PersistSubmissionFiles(Submission submission, string sourceDirBase)
         {
             var submissionPath = GetSubmissionPath(submission);
-            var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submissionPath);
+            var destPath = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, submissionPath);
             submission.FilePath = submissionPath;
             // var sourcePath = sourceDirBase + Path.DirectorySeparatorChar + GetSubmissionFolderName(submission);
             var sourcePath = Path.Combine(sourceDirBase, GetSubmissionFolderName(submission));
@@ -111,7 +119,7 @@ namespace ClientServer.Services
         public void PersistSubmissionFiles(Submission submission, string sourceDirBase, string foldername)
         {
             var submissionPath = GetSubmissionPath(submission);
-            var destPath = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, submissionPath);
+            var destPath = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, submissionPath);
             submission.FilePath = submissionPath;
             var sourcePath = Path.Combine(sourceDirBase, foldername);
             DirectoryCopy(sourcePath, destPath, true);
@@ -120,7 +128,7 @@ namespace ClientServer.Services
         // https://stackoverflow.com/questions/1288718/how-to-delete-all-files-and-folders-in-a-directory
         public void EmptyDirectory(string directory)
         {
-            var directoryLoc = Path.Combine(Directory.GetCurrentDirectory(), _rootStorageDirectory, directory);
+            var directoryLoc = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, directory);
             Directory.CreateDirectory(directoryLoc);
             DirectoryInfo di = new DirectoryInfo(directoryLoc);
 
@@ -199,8 +207,8 @@ namespace ClientServer.Services
 
         public void CompressFolder(string source, string dest)
         {
-            var sourcePath = Path.Combine(_rootStorageDirectory, source);
-            var destPath = Path.Combine(_rootStorageDirectory, dest);
+            var sourcePath = Path.Combine(RootStorageDirectory, source);
+            var destPath = Path.Combine(RootStorageDirectory, dest);
 
             var options = new WriterOptions(CompressionType.GZip);
             options.LeaveStreamOpen = true;
@@ -234,9 +242,35 @@ namespace ClientServer.Services
             return filePath;
         }
 
+        public async Task<FileResult> ReadFileFromStorageAsync(long submissionId, string lineFilePath, string submissionFilePath)
+        {
+            var splitPaths = lineFilePath.Split(Path.DirectorySeparatorChar);
+            var str = splitPaths.Last();
+            var filename = str.Substring(str.IndexOf('-') + 1);
+            var path = Path.Join("Temp", submissionFilePath, filename);
+            
+            var lines = await System.IO.File.ReadAllLinesAsync(path);
+            
+            return new FileResult()
+            {
+                filePath = lineFilePath,
+                lines = lines,
+                submissionId = submissionId,
+                fileName = filename
+            };
+        }
+        
         public string GetStorageDirectory() 
         {
-            return _rootStorageDirectory;
+            return RootStorageDirectory;
         }
+    }
+
+    public class FileResult
+    {
+        public long submissionId { get; set; }
+        public string[] lines { get; set; }
+        public string filePath { get; set; }
+        public string fileName { get; set; }
     }
 }
