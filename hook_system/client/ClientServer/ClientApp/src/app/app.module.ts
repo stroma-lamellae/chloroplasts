@@ -11,6 +11,10 @@ import { AppComponent } from './app.component';
 import { RootModule } from './modules/root.module';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ToastInterceptor } from './core/interceptors/toast.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,11 +26,14 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
     FormsModule,
     ReactiveFormsModule,
     RootModule,
-    routing
+    routing,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ToastInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
