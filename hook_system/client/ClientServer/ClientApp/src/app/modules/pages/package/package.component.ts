@@ -37,7 +37,7 @@ export class PackageComponent implements OnInit {
   selectedCourseCode: string;
   selectedProgramCode: string;
   selectedSemester: string;
-  selectedYear: string; // = this.currYear.toString();
+  selectedYear: string;
 
   selectedSupportYear: string;
   selectedSupportSemester: string;
