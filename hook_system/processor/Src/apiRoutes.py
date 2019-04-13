@@ -38,6 +38,7 @@ def submit(userId: str, email: str, data) -> str:
     fileCount = 0
     java_files = 0
     cpp_files = 0
+    fileType = True  #default to True to give processing time for java files
     with tar.open(filename, mode='r') as tarFile:
         for fileName in tarFile.getnames():
             if tarFile.getmember(fileName).isfile():
@@ -77,9 +78,11 @@ def submit(userId: str, email: str, data) -> str:
     if java_files < 1 and cpp_files < 1:
         os.remove(filename)
         return {"JobId" : '', "EstimatedCompletion" : '', "Status": "Insufficient files to detect plagiarism"}, 400
+    if java_files < cpp_files:
+        fileType = False
 
     #Add the filename to a queue to process
-    added, waitTime = submissionQueue.addToQueue(filename,fileCount, email)
+    added, waitTime = submissionQueue.addToQueue(filename,fileCount,fileType, email)
     addJob(userId, jobID)
 
     if added:
@@ -111,9 +114,9 @@ def fetch(userId: str, jobId: str) -> str:
     xmlResults = ""
     with open(resultPath, 'r') as f:
         xmlResults = ''.join(f.readlines())
-
-    os.remove(resultPath)
-    removeJob(jobId)
+#    Remove these with a cronjob to extend the ability to download
+#    os.remove(resultPath)
+#    removeJob(jobId)
 
     return {'Results': xmlResults, 'Status': 'Ok', 'Wait':''}
 

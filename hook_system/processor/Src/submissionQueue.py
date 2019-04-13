@@ -17,7 +17,8 @@ import xmlGenerator
 import configparser
 
 timeQueue = list()
-processing_per_file = 0.001 #TODO: actually time processing of a file
+java_processing_per_file = 0.205
+c_processing_per_file = 15.62
 mutex = threading.Lock()
 submissionQueue: List[Tuple[str, str]] = []
 
@@ -32,7 +33,7 @@ config = configparser.RawConfigParser()
 config.read(configFilename)
 
 
-def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
+def addToQueue(filePath: str, numFile: int, java: bool, emailAddr: str) -> Tuple[bool, str]:
 
     mutex.acquire()
 
@@ -43,7 +44,7 @@ def addToQueue(filePath: str, numFile: int, emailAddr: str) -> Tuple[bool, str]:
     nCur:int = len(submissionQueue)
 
     if nCur == nPrior+1:
-        estimate = estimateProcessing(numFile)
+        estimate = estimateProcessing(numFile, java)
         timer = (filePath, arrow.utcnow(), estimate)
         timeQueue.append(timer)
         local_utc = arrow.utcnow().shift(seconds=estimate)
@@ -202,11 +203,14 @@ def estimateQueue(jobId: str) -> int:
 
     return local_utc.to('local').format('YYYY-MM-DD HH:mm:ss')
 
-def estimateProcessing(numFile):
+def estimateProcessing(numFile, java):
 
     wait_time = 0
     if timeQueue:
         for timer in timeQueue:
             wait_time+=timer[2]
+    if java:
+        return wait_time+(java_processing_per_file*numFile)
+    else:
+        return wait_time+(c_processing_per_file*numFile)
 
-    return wait_time+(processing_per_file*numFile)
