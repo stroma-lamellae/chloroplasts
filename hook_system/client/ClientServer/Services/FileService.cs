@@ -244,10 +244,7 @@ namespace ClientServer.Services
 
         public async Task<FileResult> ReadFileFromStorageAsync(long submissionId, string lineFilePath, string submissionFilePath)
         {
-            var splitPaths = lineFilePath.Split(Path.DirectorySeparatorChar);
-            var str = splitPaths.Last();
-            Console.WriteLine(str);
-            var filename = str;
+            var filename = lineFilePath;
             // Handle scrubbed data
             if (filename.StartsWith("Scrubbed-")) {
                 filename = filename.Substring(filename.IndexOf('-') + 1);
