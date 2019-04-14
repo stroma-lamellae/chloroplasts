@@ -34,11 +34,13 @@
         }
     }
 
-    &__add {
+    &__new {
+        position: relative;
 
-        &-input {
+        &-input,
+        &-inputDate {
             float: left;
-            margin: 20px;
+            margin: 15px;
             width: 20%;
 
             label {
@@ -59,9 +61,71 @@
                 height: auto;
                 min-width: 50%;
                 padding: 14px;
-                width: 95%;
+                width: 100%;
             }
 
+        }
+
+        &-inputLarge {
+            float: left;
+            margin: 20px;
+            width: 30%;
+
+            label {
+                display: block;
+                font-family: "SF Pro Text";
+                font-size: 17px;
+                line-height: 22px;
+                color: $color-text-black;
+                font-weight: bold;
+                margin: 4px;
+            }
+
+            select, input {
+                display: block;
+                background: $color-primary-white;
+                border: 0px;
+                border-radius: 6px;
+                height: auto;
+                min-width: 50%;
+                padding: 14px;
+                width: 100%;
+            }
+
+        }
+
+        &-inputRemove, 
+        &-inputAdd {
+            float: left;
+            position: relative;
+            font-family: "Arial Rounded MT Bold";
+            font-size: 30px;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            border: 0px;
+            border-radius: 20px;
+            background: #1A5C80;
+            color: $color-primary-white;
+            margin-left: 15px;
+            margin-bottom: 15px;
+            top: 50px;
+        }
+
+        &-inputCreate {
+            clear: both;
+            height: 55px;
+            width: 15%;
+            // font-display: bold;
+            background: $color-primary-blue;
+            color: $color-primary-white;
+            border: 0px;
+            border-radius: 6px;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            padding: 15px;
+            margin: 40px;
         }
 
     }
