@@ -1,2 +1,45 @@
-<app-course-detail [course]="course" (courseChange)="updateCourse(course, $event)"></app-course-detail>
-<hr />
+<div class="app-course course">
+    <div class="course__graphic">
+        <img class="course__graphic-image" src="../../../../assets/addNewCourse.svg"/>
+    </div>
+    <div class="course__view-title">
+        <p class="course__view-title">Add New Course</p>
+    </div>
+    <form [formGroup]="newCourseForm" class="package__jobs-form">
+        <div class="course__add-input">
+          <div class="form-group">
+            <label>Year</label>
+            <select class="form-control" formControlName="year">
+                <option [value]="2019">2019</option>
+                <option [value]="2020">2020</option>
+            </select>
+          </div>
+        </div>
+        <div class="course__add-input">
+          <div class="form-group">
+            <label>Semester</label>
+            <select class="form-control" formControlName="semester">
+              <option [value]="0">Fall</option>
+              <option [value]="1">Winter</option>
+              <option [value]="2">Summer</option>
+            </select>
+          </div>
+        </div>
+        <div class="course__add-input">
+          <div class="form-group">
+            <label>Program Code</label>
+            <input type="text" class="form-control" formControlName="program"/>
+          </div>
+        </div>
+        <div class="course__add-input">
+          <div class="form-group">
+            <label>Course Code</label>
+            <input type="text" class="form-control" formControlName="course"/>
+          </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- <app-course-detail [course]="course" (courseChange)="updateCourse(course, $event)"></app-course-detail>
+<hr /> -->
