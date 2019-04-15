@@ -145,7 +145,7 @@ def processQueue():
                 #not sure what the best thing to do here is. . .
                 endtime = time.time()
                 processing_per_file = (endtime-start)/num_files
-                print("Overall processing time for "+processed_file[0]+" files is: "+ str(processing_per_file)
+                print("Overall processing time for "+processed_file[0]+" files is: "+ str(processing_per_file))
         except Exception as e:
             print(e)
             try: #Try to release it incase it hasn't been released

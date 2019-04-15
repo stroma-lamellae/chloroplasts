@@ -28,12 +28,14 @@ def winnow(hashes: List[AnHash], w: int) -> List[AnHash]:
         return[]
     if w > len(hashes):
         print("Number of hashes is between 0 and w, returning the smallest number in the list")
+        mhash = AnHash
         minHash = sys.maxsize
         for nhash in hashes:
             if nhash.hashVal < minHash:
                 minHash = nhash.hashVal
-        return minHash
-    
+                mHash = nhash
+        return [mHash]
+
     #Must choose first k-gram manually then the rest of the algorithm will work
     hashesIndex:int  = 0
     h: List[AnHash] = []
@@ -74,12 +76,12 @@ def winnow(hashes: List[AnHash], w: int) -> List[AnHash]:
             if h[r].hashVal < h[minHash].hashVal:
                 minHash = r
                 fingerPrints.append(h[minHash])
-        
+
     return fingerPrints
 
 #Create a list of k-gram hashes from a data string
 def kGramHash(k: int, data: str, origFile: HookFile) -> List[AnHash]:
-    
+
     # Create map of how many linebreaks before each literal char
     nNewLinesPrior: Dict[int] = {}
     nNewLines: int = 0
@@ -91,7 +93,7 @@ def kGramHash(k: int, data: str, origFile: HookFile) -> List[AnHash]:
         else:
             nNewLinesPrior[nLiterals] = nNewLines
             nLiterals+=1
-    
+
     data = data.replace('\n','')
 
     kGramList: List[AnHash] = []
