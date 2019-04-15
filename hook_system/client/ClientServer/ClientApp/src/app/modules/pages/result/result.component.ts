@@ -84,7 +84,8 @@ export class ResultComponent implements OnInit {
         return parseInt(b.maxPercentage) - parseInt(a.maxPercentage);
       });
       this.loading = false;
-
+    }, err => {
+      this.loading = false;
     });
   }
 
