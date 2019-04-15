@@ -52,10 +52,18 @@
     border: solid 1px gray;
   }
 
+  &__scroll-box
+    {
+      overflow: scroll;
+      width: 50%;
+    }
+
   &__match {
     width: 100%;
     border-bottom: solid 1px gray;
-
+    
+    
+    
     &--filename {
       font-weight: bold;
       text-align: center;
@@ -68,10 +76,9 @@
     }
 
     &--box {
-      width: 50%;
-      overflow: scroll;
       background-color: white;
       padding-left: 10px;
+      width: fit-content;
     }
 
     pre {
