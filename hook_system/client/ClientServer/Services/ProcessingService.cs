@@ -24,7 +24,7 @@ namespace ClientServer.Services
     public interface IProcessingService
     {
         Task<UploadResponse> InitiateUpload(Package package, bool scrub = true);
-        Task<ResultsResponse> RequestResults(string jobId);
+        Task<ResultsResponse> RequestResults(Package package);
     }
 
     public class ProcessingService : IProcessingService
@@ -111,11 +111,11 @@ namespace ClientServer.Services
             };
         }
 
-        public async Task<ResultsResponse> RequestResults(string jobId)
+        public async Task<ResultsResponse> RequestResults(Package package)
         {
             var resultsRequest = new ResultsRequest {
                 InstitutionId = _institutionId, 
-                JobId = jobId
+                JobId = package.JobId
             }; 
 
             var client = _clientFactory.CreateClient("processing");
@@ -131,12 +131,12 @@ namespace ClientServer.Services
             resultsResponse.StatusCode = response.StatusCode;
             // If we got results returned
             if (resultsResponse.Status.Equals("Ok")) {
-                resultsResponse.Result = await _xmlService.ParseXMLFile(resultsResponse.Results);
+                resultsResponse.Result = await _xmlService.ParseXMLFile(package, resultsResponse.Results);
             } else {
                 Console.WriteLine(responseText);
                 if (resultsResponse.Wait != "")
                 {
-                    resultsResponse.EstimatedCompletion = DateTime.Now.AddMinutes(Double.Parse(resultsResponse.Wait));
+                    resultsResponse.EstimatedCompletion = DateTime.Parse(resultsResponse.Wait);
                 }
             }
             return resultsResponse;

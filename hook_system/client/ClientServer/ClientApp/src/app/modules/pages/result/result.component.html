@@ -85,9 +85,14 @@
       </div>
     </div>
   </div>
-  <div class="result__container" *ngIf="!result">
+  <div class="result__container" *ngIf="!result && !loading">
     <div class="result__not_available">
       Job is still queued, no results available.
+    </div>
+  </div>
+  <div class="result__container" *ngIf="!result && loading">
+    <div class="result__not_available">
+      Loading...
     </div>
   </div>
 </div>

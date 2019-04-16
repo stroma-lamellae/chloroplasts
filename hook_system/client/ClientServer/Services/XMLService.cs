@@ -13,7 +13,7 @@ namespace ClientServer.Services
 {
     public interface IXMLService
     {
-        Task<Result> ParseXMLFile(string data);
+        Task<Result> ParseXMLFile(Package package, string data);
     }
 
     public class XMLService: IXMLService
@@ -24,7 +24,7 @@ namespace ClientServer.Services
         {
             _context = context;
         }
-        public async Task<Result> ParseXMLFile(string data)
+        public async Task<Result> ParseXMLFile(Package package, string data)
         {
             XmlSerializer ser = new XmlSerializer(typeof(Results));
             Results results = ((Results)ser.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(data ?? ""))));
@@ -173,7 +173,7 @@ namespace ClientServer.Services
                 modelMatch.Lines = new List<Line>();
                 foreach (var sub in match.Submissions) {
                     var line = new Line();
-                    line.SubmissionId = await DeHash(sub.Hash);
+                    line.SubmissionId = await DeHash(package, sub.Hash);
                     line.LineStart = sub.LineStart;
                     line.LineEnd = sub.LineFinish;
                     line.FilePath = sub.File.Split(sub.Hash)[1].Substring(1);
@@ -186,15 +186,24 @@ namespace ClientServer.Services
         }
 
         // Looks up the hash, and returns the submission id
-        private async Task<long> DeHash(string hash)
+        private async Task<long> DeHash(Package package, string hash)
         {
             var hashMapping = await _context.StudentHashMapping
                 .Where(s => s.Hash_StudentNumber == hash)
                 .FirstAsync();
+            // Ensure that we only pull up submissions in the assignments we
+            //  are looking for
+            var ids = new List<long>();
+            ids.Add(package.AssignmentId);
+            foreach (var assignment in package.PreviousAssignments)
+            {
+                ids.Add(assignment.AssignmentId);
+            }
             var submission = await _context.Submission
                 .Where(s => s.StudentFirstname == hashMapping.Firstname)
                 .Where(s => s.StudentLastname == hashMapping.Lastname)
                 .Where(s => s.StudentNumber == hashMapping.StudentNumber)
+                .Where(s => ids.Contains(s.AssignmentId)) 
                 .FirstAsync();
             return submission.SubmissionId;
         }

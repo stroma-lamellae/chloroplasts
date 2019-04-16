@@ -75,6 +75,7 @@ namespace ClientServer.Controllers
             var package = await _context.Package
                 .Include(p => p.Assignment)
                 .ThenInclude(a => a.Course)
+                .Include(p => p.PreviousAssignments)
                 .Include(p => p.Result)
                 .ThenInclude(r => r.Matches)
                 .ThenInclude(m => m.Lines)
@@ -87,7 +88,7 @@ namespace ClientServer.Controllers
             }
 
             if (package.Result == null) {
-                var response = await _processingService.RequestResults(package.JobId);
+                var response = await _processingService.RequestResults(package);
 
                 if (response.StatusCode != HttpStatusCode.OK) 
                 {

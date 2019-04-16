@@ -22,6 +22,7 @@ export class ResultComponent implements OnInit {
   leftChoices: number[];
   rightChoices: number[];
   package: Package;
+  loading = true;
 
   constructor(
     private _resultService: ResultService,
@@ -53,9 +54,10 @@ export class ResultComponent implements OnInit {
         this.result.matches[i].maxPercentage = "0";
         for (let j = 0; j < this.result.matches[i].lines.length; j++) {
           const path = this.result.matches[i].lines[j].filePath;
+          const submissionId = this.result.matches[i].lines[j].submissionId;
           let line = this.result.matches[i].lines[j];
           line.viewFile = this.result.files.find(
-            f => f.filePath === path
+            f => f.submissionId == submissionId && f.filePath == path
           );
           // Find out how much of the file this match is
           line.percentage = (((line.lineEnd - line.lineStart) / line.viewFile.lines.length)*100).toFixed(0);
@@ -80,8 +82,10 @@ export class ResultComponent implements OnInit {
       }
       this.result.matches.sort((a,b) => {
         return parseInt(b.maxPercentage) - parseInt(a.maxPercentage);
-      })
-
+      });
+      this.loading = false;
+    }, err => {
+      this.loading = false;
     });
   }
 
