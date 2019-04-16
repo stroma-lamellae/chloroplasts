@@ -5,7 +5,6 @@ import { ResultService } from '../../../core/services/result.service';
 import { ResultSet } from '../../../shared/models/result-set';
 import { PackageService } from '../../../core/services/package.service';
 import { Package } from '../../../shared/models/package';
-import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-result',
