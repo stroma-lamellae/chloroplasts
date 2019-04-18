@@ -1,26 +1,22 @@
-<div>
-  <div>
-    <label>Assignment Name:
-      <input [(ngModel)]="assignment.name" />
-    </label>
+<div class="app-assignment assignment">
+  <div class="assignment__new-input">
+    <label>Assignment Name:</label>
+    <input [(ngModel)]="assignment.name" type="text"/>
   </div>
-  <div>
-    <label>Open Date:
-      <input [(ngModel)]="assignment.openDate" />
-    </label>
+  <div class="assignment__new-input">
+    <label>Open Date:</label>
+    <input [(ngModel)]="assignment.openDate" type="datetime-local"/>
   </div>
-  <div>
-    <label>Close Date:
-      <input [(ngModel)]="assignment.closeDate" />
-    </label>
+  <div class="assignment__new-input">
+    <label>Close Date:</label>
+    <input [(ngModel)]="assignment.closeDate" type="datetime-local"/>
   </div>
-  <div>
-    <label>Status:
-      <input [(ngModel)]="assignment.status" type="checkbox" />
-    </label>
+  <div class="assignment__new-input">
+    <label>Status:</label>
+    <input [(ngModel)]="assignment.status" type="checkbox" />
   </div>
   <div id="buttons">
-    <div *ngIf="assignment.assignmentId">
+    <div *ngIf="assignment.assignmentId" class="assignment__new-button">
       <button (click)="update()">Update</button>
       <button (click)="delete()">Delete</button>
       <button (click)="toggleSubmission()">Make Submission</button>
@@ -32,7 +28,7 @@
     <div *ngIf="showBulkSubmission">
       <app-bulk-submission [assignmentId]="assignment.assignmentId" (submissionMade)="bulkSubmissionMade($event)"></app-bulk-submission>
     </div>
-    <div *ngIf="!assignment.assignmentId">
+    <div *ngIf="!assignment.assignmentId" class="assignment__new-button">
       <button (click)="update()">Create</button>
     </div>
   </div>

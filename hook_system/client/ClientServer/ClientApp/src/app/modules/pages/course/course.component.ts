@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../../core/services/course.service';
 import { Course } from '../../../shared/models/course';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-course',
@@ -11,18 +10,14 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class CourseComponent implements OnInit {
 
-  newCourseForm: FormGroup;
-
   course: Course;
   id: number;
   private sub: any;
 
-  currYear = (new Date().getFullYear().toString());
-
-  selectedYear: string = this.currYear;
+  title: string;
 
   constructor(
-    private _courseService: CourseService, 
+    private _courseService: CourseService,
     private route: ActivatedRoute
   ) {}
 
@@ -33,22 +28,17 @@ export class CourseComponent implements OnInit {
 
     if (isNaN(this.id)) {
       this.course = new Course();
+      this.title = 'Add a New Course';
     } else {
       this._courseService.getCourse(this.id).subscribe(res => {
         this.course = res;
       });
+      this.title = 'Update Course';
     }
-
-    this.newCourseForm = new FormGroup({
-      year: new FormControl(),
-      semester: new FormControl(),
-      program: new FormControl(),
-      course: new FormControl()
-    });
   }
 
   // TODO: Make this do something
-  updateCourse(item1, item2) {
+  // updateCourse(item1, item2) {
     
-  }
+  // }
 }
