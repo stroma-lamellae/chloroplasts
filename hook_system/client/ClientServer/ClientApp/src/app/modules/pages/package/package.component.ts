@@ -3,7 +3,6 @@ import { PackageService } from '../../../core/services/package.service';
 import { Package, PreviousAssignment } from '../../../shared/models/package';
 import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from 'src/app/core/services/course.service';
-import { FormGroup, FormControl } from '@angular/forms';
 import { Input, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -13,22 +12,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./package.component.scss']
 })
 export class PackageComponent implements OnInit {
-  @Input() message = 'Select files or drag here';
-  @Input('fileList') files: File[] = [];
-  @Output('fileListChange') fileList: EventEmitter<File[]>;
+  @Input('fileList') fileList: File[] = [];
+  @Output('fileListChange') fileListChange: EventEmitter<File[]>;
 
   currYear = (new Date().getFullYear());
   Semester = ['Fall', 'Winter', 'Summer'];
 
   fileHover: boolean;
-  packageForm: FormGroup;
-  supportForm: FormGroup;
 
   courses: Course[];
 
   filteredYearCourses: Course[];
   filteredSemCourses: Course[];
   filteredProgramCourses: Course[];
+
   filteredSupportYearCourses: Course[];
   filteredSupportSemCourses: Course[];
   filteredSupportProgramCourses: Course[];
@@ -43,17 +40,17 @@ export class PackageComponent implements OnInit {
   selectedSupportSemester: string;
   selectedSupportProgramCode: string;
   selectedSupportCourseCode: string;
+  supportingCourse: Course;
 
   selectedAssignmentId: string;
   selectedAssignment: Assignment;
 
+  supportingAssignmentId: string;
+  supportingAssignment: Assignment;
+
   addAssignment = false;
 
   supportingAssignments: Assignment[] = [];
-  supportingCourse: Course;
-
-  supportingAssignmentId: string;
-  supportingAssignment: Assignment;
 
   // Vars from html
   courseItems: HTMLOptionElement;
@@ -63,39 +60,14 @@ export class PackageComponent implements OnInit {
     private _packageService: PackageService,
     private _router: Router
   ) {
-    this.fileList = new EventEmitter();
+    this.fileListChange = new EventEmitter();
   }
 
   ngOnInit() {
     this._courseService.getCourses().subscribe(courses => this.courses = courses);
 
-    this.packageForm = new FormGroup({
-      year: new FormControl(),
-      semester: new FormControl(),
-      program: new FormControl(),
-      course: new FormControl(),
-      assignment: new FormControl()
-    });
-
-    this.supportForm = new FormGroup({
-      supportYear: new FormControl(),
-      supportSemester: new FormControl(),
-      supportProgram: new FormControl(),
-      supportCourse: new FormControl(),
-      supportAssignment: new FormControl()
-    });
-
     this.fileHover = false;
 
-  }
-
-  // convenience getter for easy access to form fields
-  get f() {
-    return this.packageForm.controls;
-  }
-
-  get supportf() {
-    return this.supportForm.controls;
   }
 
   yearUpdate() {
@@ -105,11 +77,15 @@ export class PackageComponent implements OnInit {
 
     this.selectedSemester = null;
     this.selectedProgramCode = null;
+    this.selectedCourseCode = null;
     this.selectedCourse = null;
+
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
 
     this.filteredSemCourses = null;
     this.filteredProgramCourses = null;
+
   }
 
   semesterUpdate() {
@@ -118,8 +94,12 @@ export class PackageComponent implements OnInit {
     );
 
     this.selectedProgramCode = null;
+    this.selectedCourseCode = null;
     this.selectedCourse = null;
+
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
+
     this.filteredProgramCourses = null;
   }
 
@@ -127,11 +107,15 @@ export class PackageComponent implements OnInit {
     this.filteredProgramCourses = this.filteredSemCourses.filter(
       c => c.programCode.toString() === this.selectedProgramCode
     );
+
+    this.selectedCourseCode = null;
     this.selectedCourse = null;
+
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
   }
 
-  updateAssignments() {
+  courseUpdate() {
     this.selectedCourse = this.filteredProgramCourses.find(
       c => c.courseCode.toString() === this.selectedCourseCode
     );
@@ -142,7 +126,9 @@ export class PackageComponent implements OnInit {
           this.selectedCourse = res;
         });
     }
+
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
   }
 
   selectAssignment() {
@@ -158,7 +144,7 @@ export class PackageComponent implements OnInit {
   }
 
   removeSupportingAssignment(a: Assignment) {
-    let removeIndex;
+    let removeIndex: number;
     removeIndex = this.supportingAssignments.indexOf(a);
     this.supportingAssignments.splice(removeIndex, 1);
   }
@@ -167,10 +153,14 @@ export class PackageComponent implements OnInit {
     this.filteredSupportYearCourses = this.courses.filter(
       c => c.year.toString() === this.selectedSupportYear
     );
+
     this.selectedSupportSemester = null;
     this.selectedSupportProgramCode = null;
     this.supportingCourse = null;
+    this.selectedSupportCourseCode = null;
+
     this.supportingAssignment = null;
+    this.supportingAssignmentId = null;
 
     this.filteredSupportSemCourses = null;
     this.filteredSupportProgramCourses = null;
@@ -183,7 +173,11 @@ export class PackageComponent implements OnInit {
 
     this.selectedSupportProgramCode = null;
     this.supportingCourse = null;
+    this.selectedSupportCourseCode = null;
+
     this.supportingAssignment = null;
+    this.supportingAssignmentId = null;
+
     this.filteredSupportProgramCourses = null;
   }
 
@@ -191,8 +185,12 @@ export class PackageComponent implements OnInit {
     this.filteredSupportProgramCourses = this.filteredSupportSemCourses.filter(
       c => c.programCode.toString() === this.selectedSupportProgramCode
     );
+
     this.supportingCourse = null;
+    this.selectedSupportCourseCode = null;
+
     this.supportingAssignment = null;
+    this.supportingAssignmentId = null;
   }
 
   supportSelectCourse() {
@@ -207,6 +205,7 @@ export class PackageComponent implements OnInit {
           this.supportingCourse = res;
         });
     }
+
     this.supportingAssignment = null;
     this.supportingAssignmentId = null;
   }
@@ -227,6 +226,7 @@ export class PackageComponent implements OnInit {
     this.selectedSupportProgramCode = null;
     this.selectedSupportCourseCode = null;
     this.supportingAssignmentId = null;
+    this.supportingAssignment = null;
 
     this.supportingCourse = null;
 
@@ -249,33 +249,33 @@ export class PackageComponent implements OnInit {
   @HostListener('drop', ['$event'])
   public onDrop($event: DragEvent): void {
     $event.preventDefault();
-    const files = $event.dataTransfer.files;
+    const fileList = $event.dataTransfer.files;
     this.fileHover = false;
-    for (let i = 0; i < files.length; i++) {
-      this.files.push(files.item(i));
+    for (let i = 0; i < fileList.length; i++) {
+      this.fileList.push(fileList.item(i));
     }
-    this.fileList.emit(this.files);
+    this.fileListChange.emit(this.fileList);
   }
 
   public removeFile(file: File): void {
-    this.files.splice(this.files.indexOf(file), 1);
-    this.fileList.emit(this.files);
+    this.fileList.splice(this.fileList.indexOf(file), 1);
+    this.fileListChange.emit(this.fileList);
   }
 
   submit() {
     console.log(this.supportingAssignments);
-    let pack = new Package();
+    const pack = new Package();
     pack.assignmentId = parseInt(this.selectedAssignmentId);
     pack.previousAssignments = [];
     for (let i = 0; i < this.supportingAssignments.length; i++) {
-      let prevAssignment = new PreviousAssignment();
+      const prevAssignment = new PreviousAssignment();
       prevAssignment.assignmentId = this.supportingAssignments[i].assignmentId;
       pack.previousAssignments.push(prevAssignment);
     }
     pack.exclusions = [];
-    for (let i = 0; i < this.files.length; i++) {
+    for (let i = 0; i < this.fileList.length; i++) {
       // TODO: Figure out why uncommenting below causes error
-      // pack.exclusions.push(this.files[i]);
+      // pack.exclusions.push(this.fileList[i]);
     }
     this._packageService.uploadPackage(pack).subscribe(res => {
       console.log(res);

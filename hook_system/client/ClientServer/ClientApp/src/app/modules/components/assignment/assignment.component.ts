@@ -40,19 +40,19 @@ export class AssignmentComponent implements OnInit {
     });
   }
 
-  toggleSubmission() {
-    this.showSubmission = !this.showSubmission;
-  }
+  // toggleSubmission() {
+  //   this.showSubmission = !this.showSubmission;
+  // }
 
-  toggleBulkSubmission() {
-    this.showBulkSubmission = !this.showBulkSubmission;
-  }
+  // toggleBulkSubmission() {
+  //   this.showBulkSubmission = !this.showBulkSubmission;
+  // }
 
-  submissionMade() {
-    this.showSubmission = false;
-  }
+  // submissionMade() {
+  //   this.showSubmission = false;
+  // }
 
-  bulkSubmissionMade() {
-    this.showBulkSubmission = false;
-  }
+  // bulkSubmissionMade() {
+  //   this.showBulkSubmission = false;
+  // }
 }
