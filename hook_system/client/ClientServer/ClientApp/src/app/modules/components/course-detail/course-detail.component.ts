@@ -14,7 +14,10 @@ export class CourseDetailComponent implements OnInit {
   @Input() course: Course;
   showAssignments = false;
 
+  lowerSemesters = ['fall', 'winter', 'summer'];
   semesters = ['Fall', 'Winter', 'Summer'];
+
+  semesterString: string;
 
   constructor(
     private _courseService: CourseService,
@@ -23,6 +26,10 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit() {
     this.course = new Course();
+  }
+
+  semesterUpdate() {
+    this.course.semester = this.lowerSemesters.indexOf(this.semesterString.toLowerCase());
   }
 
   submit() {

@@ -36,9 +36,5 @@ export class CourseComponent implements OnInit {
       this.title = 'Update Course';
     }
   }
-
-  // TODO: Make this do something
-  // updateCourse(item1, item2) {
-    
-  // }
+  
 }

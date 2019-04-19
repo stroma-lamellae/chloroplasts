@@ -16,7 +16,8 @@
   </div>
   <div class="course__new-input">
     <label>Semester:
-      <input [(ngModel)]="course.semester" type="number"/>
+      <input *ngIf="!this.course.courseId" [(ngModel)]="semesterString" (change)="semesterUpdate()" type="text"/>
+      <input *ngIf="this.course.courseId" [(ngModel)]="semesters[course.semester]" type="text"/>
     </label>
   </div>
   <div>
