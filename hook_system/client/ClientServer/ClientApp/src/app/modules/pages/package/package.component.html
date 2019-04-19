@@ -42,6 +42,7 @@
     <div class="form-group">
       <label>Assignment</label>
       <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
+        <option> </option> <!--included so that an assignment isn't automatically selected -->
         <option [value]="assignment.assignmentId" *ngFor="let assignment of selectedCourse.assignments">{{assignment.name}}</option>
       </select>
     </div>
