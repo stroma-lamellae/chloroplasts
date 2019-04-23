@@ -3,7 +3,7 @@
 .upload {
     width: 100%;
     height: auto;
-    min-height: 100vh;
+    min-height: 100%;
     border-top: 30%;
     padding-top: 5vh;
     padding-left: 6vw;
@@ -38,6 +38,7 @@
     }
 
     &__jobs {
+        height: 100%;
         
         &-title {
             clear: both;
@@ -102,6 +103,7 @@
 }
 
 .dropzone {
+    clear: both;
     position: relative;
     border: 1px dashed $color-primary-blue;
     background: $color-primary-white;

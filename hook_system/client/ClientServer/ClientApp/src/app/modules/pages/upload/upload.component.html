@@ -1,10 +1,9 @@
 <div class="app-upload upload">
   <div class="upload__graphic">
-    <img class="upload__graphic-image" src="../../../../assets/uploadGuy.svg" />
+    <img class="upload__graphic-image" src="../../../../assets/addNewCourse.svg" />
   </div>
   <div class="upload__jobs">
-  <p class="upload__jobs-title">New Hook Job</p>
-  <p class="upload__jobs-subtitle">Assignments to be Processed:</p>
+  <p class="upload__jobs-title">Upload Assignment Submissions</p>
   </div>
   <!-- <form [formGroup]="packageForm" class="package__jobs-form"> -->
     <div class="upload__jobs-input">
@@ -15,7 +14,7 @@
         </select>
       </div>
     </div>
-    <div class="upload__jobs-input" *ngIf="selectedYear">
+    <div class="upload__jobs-input">
       <div class="form-group">
         <label>Semester</label>
         <select [(ngModel)]="selectedSemester" (change)="semesterUpdate()">
@@ -23,7 +22,7 @@
         </select>
       </div>
     </div>
-    <div class="upload__jobs-input" *ngIf="selectedSemester">
+    <div class="upload__jobs-input">
       <div class="form-group">
         <label>Program Code</label>
         <select [(ngModel)]="selectedProgramCode" (change)="programUpdate()">
@@ -31,7 +30,7 @@
         </select>
       </div>
     </div>
-    <div class="upload__jobs-input" *ngIf="selectedProgramCode">
+    <div class="upload__jobs-input">
       <div class="form-group">
         <label>Course Code</label>
         <select [(ngModel)]="selectedCourseCode" (change)="updateAssignments()">
@@ -39,7 +38,7 @@
         </select>
       </div>
     </div>
-    <div class="upload__jobs-input" *ngIf="selectedCourse">
+    <div class="upload__jobs-input">
       <div class="form-group">
         <label>Assignment</label>
         <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
@@ -60,6 +59,6 @@
     </div>
   </div>
   <div class="upload__submit">
-    <button (click)="submit()">SUBMIT</button>
+    <button (click)="uploadSubmission()">SUBMIT</button>
   </div>
 </div>
