@@ -5,48 +5,46 @@
   <div class="upload__jobs">
   <p class="upload__jobs-title">Upload Assignment Submissions</p>
   </div>
-  <!-- <form [formGroup]="packageForm" class="package__jobs-form"> -->
-    <div class="upload__jobs-input">
-      <div class="form-group">
-        <label>Current Year</label>
-        <select [(ngModel)]="selectedYear" (change)="yearUpdate()">
-          <option *ngFor="let course of courses | unique:'year'" value={{course.year}}>{{course.year}}</option>
-        </select>
-      </div>
+  <div class="upload__jobs-input">
+    <div class="form-group">
+      <label>Current Year</label>
+      <select [(ngModel)]="selectedYear" (change)="yearUpdate()">
+        <option *ngFor="let course of courses | unique:'year'" value={{course.year}}>{{course.year}}</option>
+      </select>
     </div>
-    <div class="upload__jobs-input">
-      <div class="form-group">
-        <label>Semester</label>
-        <select [(ngModel)]="selectedSemester" (change)="semesterUpdate()">
-          <option [value]="course.semester" *ngFor="let course of filteredYearCourses | unique:'semester'">{{Semester[course.semester]}}</option>
-        </select>
-      </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedYear">
+    <div class="form-group">
+      <label>Semester</label>
+      <select [(ngModel)]="selectedSemester" (change)="semesterUpdate()">
+        <option [value]="course.semester" *ngFor="let course of filteredYearCourses | unique:'semester'">{{Semester[course.semester]}}</option>
+      </select>
     </div>
-    <div class="upload__jobs-input">
-      <div class="form-group">
-        <label>Program Code</label>
-        <select [(ngModel)]="selectedProgramCode" (change)="programUpdate()">
-            <option *ngFor="let course of filteredSemCourses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
-        </select>
-      </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedSemester">
+    <div class="form-group">
+      <label>Program Code</label>
+      <select [(ngModel)]="selectedProgramCode" (change)="programUpdate()">
+          <option *ngFor="let course of filteredSemCourses | unique:'programCode'" value={{course.programCode}}>{{course.programCode}}</option>
+      </select>
     </div>
-    <div class="upload__jobs-input">
-      <div class="form-group">
-        <label>Course Code</label>
-        <select [(ngModel)]="selectedCourseCode" (change)="updateAssignments()">
-            <option *ngFor="let course of filteredProgramCourses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
-        </select>
-      </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedProgramCode">
+    <div class="form-group">
+      <label>Course Code</label>
+      <select [(ngModel)]="selectedCourseCode" (change)="updateAssignments()">
+          <option *ngFor="let course of filteredProgramCourses | unique:'courseCode'" value={{course.courseCode}}>{{course.courseCode}}</option>
+      </select>
     </div>
-    <div class="upload__jobs-input">
-      <div class="form-group">
-        <label>Assignment</label>
-        <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
-            <option *ngFor="let assignment of selectedCourse.assignments" value={{assignment.assignmentId}}>{{assignment.name}}</option>
-        </select>
-      </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedCourse">
+    <div class="form-group">
+      <label>Assignment</label>
+      <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
+          <option *ngFor="let assignment of selectedCourse.assignments" value={{assignment.assignmentId}}>{{assignment.name}}</option>
+      </select>
     </div>
-  <!-- </form> -->
+  </div>
   <div class="upload__files">
     <div class="existing-files">
       <div *ngFor="let file of files">
