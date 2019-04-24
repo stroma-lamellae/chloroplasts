@@ -1,0 +1,37 @@
+@import '../../../../variables';
+
+.course {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    border-top: 30%;
+    padding-top: 5vh;
+    padding-left: 6vw;
+    padding-right: 3vw;
+
+    &__graphic {
+
+        &-image {
+            position: fixed;
+            left: 25%;
+            bottom: 0px;
+            padding: 30pt;
+            z-index: -5;
+        }
+
+    }
+
+    &__view {
+        
+        &-title {
+            clear: both;
+            font-weight: bold;
+            color: $color-text-black;
+            font-size: 22px;
+            position: relative;
+            width: 100%;
+            margin-bottom:0px;
+            padding-top: 20px;
+        }
+    }
+}

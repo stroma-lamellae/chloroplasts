@@ -1,2 +1,10 @@
-<app-course-detail [course]="course" (courseChange)="updateCourse(course, $event)"></app-course-detail>
-<hr />
+<div class="app-course course">
+  <div class="course__graphic">
+      <img class="course__graphic-image" src="../../../../assets/addNewCourse.svg"/>
+  </div>
+  <div class="course__view-title">
+      <p class="course__view-title">{{title}}</p>
+  </div>
+  <app-course-detail [course]="course"></app-course-detail>
+  <!-- <app-course-detail [course]="course" (courseChange)="updateCourse(course, $event)"></app-course-detail> -->
+</div>

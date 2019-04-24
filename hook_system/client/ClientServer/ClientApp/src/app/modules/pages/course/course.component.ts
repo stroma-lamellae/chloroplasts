@@ -9,11 +9,17 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./course.component.scss']
 })
 export class CourseComponent implements OnInit {
+
   course: Course;
   id: number;
   private sub: any;
 
-  constructor(private _courseService: CourseService, private route: ActivatedRoute) {}
+  title: string;
+
+  constructor(
+    private _courseService: CourseService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.sub  = this.route.params.subscribe(params => {
@@ -22,15 +28,13 @@ export class CourseComponent implements OnInit {
 
     if (isNaN(this.id)) {
       this.course = new Course();
+      this.title = 'Add a New Course';
     } else {
       this._courseService.getCourse(this.id).subscribe(res => {
         this.course = res;
       });
+      this.title = 'Update Course';
     }
   }
-
-  // TODO: Make this do something
-  updateCourse(item1, item2) {
-    
-  }
+  
 }

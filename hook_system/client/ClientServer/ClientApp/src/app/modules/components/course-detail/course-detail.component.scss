@@ -1,0 +1,86 @@
+@import '../../../../variables';
+
+.course {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    border-top: 30%;
+    padding-top: 5vh;
+    padding-left: 6vw;
+    padding-right: 3vw;
+
+    &__view {
+        
+        &-title {
+            clear: both;
+            font-weight: bold;
+            color: $color-text-black;
+            font-size: 22px;
+            position: relative;
+            width: 100%;
+            margin-bottom:0px;
+            padding-top: 20px;
+        }
+    }
+
+    &__new {
+        position: relative;
+        height: 100%;
+
+        &-assignments {
+            clear: both;
+            width: 100%;
+            height: auto;
+        }
+
+        &-input {
+            float: left;
+            margin: 15px;
+            width: 20%;
+
+            label {
+                display: block;
+                font-family: "SF Pro Text";
+                font-size: 17px;
+                line-height: 22px;
+                color: $color-text-black;
+                font-weight: bold;
+                margin: 4px;
+            }
+
+            select, input {
+                display: block;
+                background: $color-primary-white;
+                border: 0px;
+                border-radius: 6px;
+                height: auto;
+                min-width: 50%;
+                padding: 14px;
+                width: 100%;
+            }
+
+        }
+
+        &-button {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            button {
+                float: right;
+                height: 55px;
+                width: 15%;
+                background: $color-primary-blue;
+                color: $color-primary-white;
+                border: 0px;
+                border-radius: 6px;
+                bottom: 0px;
+                padding: 15px;
+                margin: 40px;
+            }
+
+        }
+
+    }
+
+}

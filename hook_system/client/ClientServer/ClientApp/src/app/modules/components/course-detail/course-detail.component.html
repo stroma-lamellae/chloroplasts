@@ -1,37 +1,45 @@
 <div>
-  <div>
-      <label>Program Code:
-        <input [(ngModel)]="course.programCode" />
-      </label>
-    </div>
-  <div>
-    <label>Course Code:
-      <input [(ngModel)]="course.courseCode" />
+  <div class="course__new-input">
+    <label>Program Code:
+      <input [(ngModel)]="course.programCode" type="text" />
     </label>
   </div>
-  <div>
+  <div class="course__new-input">
+    <label>Course Code:
+      <input [(ngModel)]="course.courseCode" type="text"/>
+    </label>
+  </div>
+  <div class="course__new-input">
     <label>Year:
       <input [(ngModel)]="course.year" type="number" />
     </label>
   </div>
-  <div>
+  <div class="course__new-input">
     <label>Semester:
-      <input [(ngModel)]="course.semester" type="number" />
+      <input *ngIf="!this.course.courseId" [(ngModel)]="semesterString" (change)="semesterUpdate()" type="text"/>
+      <input *ngIf="this.course.courseId" [(ngModel)]="semesters[course.semester]" type="text"/>
     </label>
   </div>
   <div>
-    <div *ngIf="course.courseId">
+    <div *ngIf="course.courseId" class="course__new-button">
       <button (click)="submit()">Update</button>
       <button (click)="delete()">Delete</button>
       <button (click)="toggleAssignments()">{{showAssignments ? "Hide" : "Show"}} Assignments</button>
     </div>
-    <button *ngIf="!course.courseId" (click)="submit()" >Create</button>
-  </div>
-  <div style="position: relative; left: 50px; border-left: 2px solid black;" *ngIf="showAssignments && course.assignments">
-    <div *ngFor="let assignment of course.assignments">
-      <app-assignment [assignment]="assignment" (assignmentChange)="updateAssignment(assignment, $event)"></app-assignment>
-      <hr />
+    <div *ngIf="!course.courseId" class="course__new-button">
+      <button (click)="submit()">Create</button>
     </div>
-    <button (click)="addAssignment()">Add Assignment</button>
+  </div>
+  <div *ngIf="showAssignments && course.assignments">
+    <div class="course__view-title">
+      <p>Assignments</p>
+    </div>
+    <div *ngFor="let assignment of course.assignments" class="course__new-assignments">
+      <app-assignment [assignment]="assignment" (assignmentChange)="updateAssignment(assignment, $event)"></app-assignment>
+      <!-- <hr /> -->
+    </div>
+    <div class="course__new-button">
+      <button (click)="addAssignment()">Add Assignment</button>
+    </div>
   </div>
 </div>
