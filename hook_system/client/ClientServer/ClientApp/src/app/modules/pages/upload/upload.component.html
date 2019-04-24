@@ -41,7 +41,8 @@
     <div class="form-group">
       <label>Assignment</label>
       <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
-          <option *ngFor="let assignment of selectedCourse.assignments" value={{assignment.assignmentId}}>{{assignment.name}}</option>
+        <option> </option>
+        <option *ngFor="let assignment of selectedCourse.assignments" value={{assignment.assignmentId}}>{{assignment.name}}</option>
       </select>
     </div>
   </div>
@@ -53,7 +54,7 @@
     </div>
     <div class="dropzone" [class.hover]="fileHover">
       <img class="dropzone__image" src="../../../../assets/cloud_upload.png" />
-      <p class="dropzone__text">Drag file here to upload!</p>
+      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden /> from your computer</p>
     </div>
   </div>
   <div class="upload__submit">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { SubmissionService } from 'src/app/core/services/submission.service';
 import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from 'src/app/core/services/course.service';
@@ -9,9 +9,13 @@ import { CourseService } from 'src/app/core/services/course.service';
   styleUrls: ['./upload.component.scss']
 })
 export class UploadComponent implements OnInit {
+  // @Input('fileList') files: File[] = [];
+  // @Output('fileListChange') fileList: EventEmitter<File[]>;
   @Output() submissionMade: EventEmitter<any> = new EventEmitter();
-  @Input() assignmentId: number;
+  // @Input() assignmentId: number;
   bulkSubmissionFile: File;
+
+  Semester = ['Fall', 'Winter', 'Summer'];
 
   courses: Course[];
 
@@ -31,6 +35,8 @@ export class UploadComponent implements OnInit {
   selectedAssignmentId: number;
   selectedAssignment: Assignment;
 
+  fileHover = false;
+
   constructor(
     private _submissionService: SubmissionService,
     private _courseService: CourseService,
@@ -44,6 +50,30 @@ export class UploadComponent implements OnInit {
     this._submissionService.uploadBulkSubmission(this.bulkSubmissionFile, this.selectedAssignmentId).subscribe(res => {
       this.submissionMade.emit(res);
     });
+  }
+
+  @HostListener('dragover', ['$event'])
+  public onDragOver($event: DragEvent): void {
+    $event.preventDefault();
+    this.fileHover = true;
+  }
+
+  @HostListener('dragleave', ['$event'])
+  public onDragLeave($event: DragEvent): void {
+    $event.preventDefault();
+    this.fileHover = false;
+  }
+
+  @HostListener('drop', ['$event'])
+  public onDrop($event: DragEvent): void {
+    $event.preventDefault();
+    const files = $event.dataTransfer.files;
+    this.fileHover = false;
+    // for (let i = 0; i < files.length; i++) {
+    //   this.files.push(files.item(i));
+    // }
+    // this.fileList.emit(this.files);
+    this.bulkSubmissionFile = files[0];
   }
 
   yearUpdate() {

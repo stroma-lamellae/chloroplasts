@@ -122,5 +122,9 @@
     &__text {
         bottom: 0px;
         text-align: center;
+
+        a {
+            color: $color-primary-blue;
+        }
     }
 }
