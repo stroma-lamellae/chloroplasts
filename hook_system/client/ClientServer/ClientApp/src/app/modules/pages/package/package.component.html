@@ -115,7 +115,7 @@
     </div>
     <div class="dropzone" [class.hover]="fileHover">
       <img class="dropzone__image" src="../../../../assets/cloud_upload.png" />
-      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden /> from your computer</p>
+      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden (change)="fileChange($event)"/> from your computer</p>
     </div>
   </div>
   <div class="package__launch">

@@ -47,14 +47,14 @@
     </div>
   </div>
   <div class="upload__files">
-    <div class="existing-files">
-      <div *ngFor="let file of files">
-        {{file.name}} <span (click)="removeFile(file)" style="color: red;">X</span>
+    <div class="upload__files-existing">
+      <div *ngIf="bulkSubmissionFile">
+        {{bulkSubmissionFile.name}} <span (click)="removeFile()" style="color: red;">X</span>
       </div>
     </div>
-    <div class="dropzone" [class.hover]="fileHover">
+    <div class="dropzone" [class.hover]="fileHover" *ngIf="!bulkSubmissionFile">
       <img class="dropzone__image" src="../../../../assets/cloud_upload.png" />
-      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden /> from your computer</p>
+      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden (change)="fileChange($event)"/> from your computer</p>
     </div>
   </div>
   <div class="upload__submit">

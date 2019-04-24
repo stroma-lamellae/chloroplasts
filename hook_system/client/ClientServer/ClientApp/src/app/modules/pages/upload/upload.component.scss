@@ -96,6 +96,13 @@
 
     }
 
+    &__files {
+
+        &-existing {
+            clear: both;
+        }
+    }
+
 }
 
 .dropzone.hover {

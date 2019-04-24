@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@a
 import { SubmissionService } from 'src/app/core/services/submission.service';
 import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from 'src/app/core/services/course.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload',
@@ -9,11 +10,8 @@ import { CourseService } from 'src/app/core/services/course.service';
   styleUrls: ['./upload.component.scss']
 })
 export class UploadComponent implements OnInit {
-  // @Input('fileList') files: File[] = [];
-  // @Output('fileListChange') fileList: EventEmitter<File[]>;
+  @Input() bulkSubmissionFile: File;
   @Output() submissionMade: EventEmitter<any> = new EventEmitter();
-  // @Input() assignmentId: number;
-  bulkSubmissionFile: File;
 
   Semester = ['Fall', 'Winter', 'Summer'];
 
@@ -40,6 +38,7 @@ export class UploadComponent implements OnInit {
   constructor(
     private _submissionService: SubmissionService,
     private _courseService: CourseService,
+    private _router: Router
   ) { }
 
   ngOnInit() {
@@ -50,6 +49,17 @@ export class UploadComponent implements OnInit {
     this._submissionService.uploadBulkSubmission(this.bulkSubmissionFile, this.selectedAssignmentId).subscribe(res => {
       this.submissionMade.emit(res);
     });
+
+    // redirect the page to the ViewStatus page
+    this._router.navigate(['/dashboard']);
+  }
+
+  fileChange(event) {
+    this.bulkSubmissionFile = event.target.files[0];
+  }
+
+  removeFile() {
+    this.bulkSubmissionFile = null;
   }
 
   @HostListener('dragover', ['$event'])
@@ -69,10 +79,6 @@ export class UploadComponent implements OnInit {
     $event.preventDefault();
     const files = $event.dataTransfer.files;
     this.fileHover = false;
-    // for (let i = 0; i < files.length; i++) {
-    //   this.files.push(files.item(i));
-    // }
-    // this.fileList.emit(this.files);
     this.bulkSubmissionFile = files[0];
   }
 

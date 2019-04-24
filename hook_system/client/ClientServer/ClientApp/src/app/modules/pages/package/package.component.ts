@@ -257,6 +257,10 @@ export class PackageComponent implements OnInit {
     this.fileListChange.emit(this.fileList);
   }
 
+  fileChange(event) {
+    this.files.push(event.target.files[0]);
+  }
+
   public removeFile(file: File): void {
     this.fileList.splice(this.fileList.indexOf(file), 1);
     this.fileListChange.emit(this.fileList);
