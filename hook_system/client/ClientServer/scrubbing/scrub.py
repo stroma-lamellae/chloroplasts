@@ -46,7 +46,7 @@ for section in listdir(folder):
                 studentSubmissionFolder = join(join(folder, section), studentSubmission)
 
                 #get the names in plain english, and save them to variables
-                firstName, lastName, stdNum = studentSubmission.split("_")
+                firstName, lastName, stdNum, subId = studentSubmission.split("_")
 
                 #save the hash values of the 3 variables from above
                 hashFirstName = str(hash(firstName))
@@ -54,7 +54,7 @@ for section in listdir(folder):
                 hashStdNum = str(hash(stdNum))
 
                 #create directory to save the scrubbed data to
-                scrubbedStudentFolder = join(join(destinationFolder, section), hashFirstName+"_"+hashLastName+"_"+hashStdNum)
+                scrubbedStudentFolder = join(join(destinationFolder, section), hashFirstName+"_"+hashLastName+"_"+subId)
 
                 #Create the folder so the files have somewhere to go
                 os.mkdir(scrubbedStudentFolder)
@@ -78,12 +78,13 @@ for section in listdir(folder):
                             replace = f.replace(firstName, hashFirstName).replace(lastName, hashLastName)\
                                 .replace(stdNum, hashStdNum)
                             #write to scrubbed file
-                            newFolder = join(scrubbedStudentFolder, "Scrubbed-"+filename)
+                            betweenPath = root.replace(studentSubmissionFolder + os.path.sep, '')
+                            os.makedirs(join(scrubbedStudentFolder, betweenPath))
+                            newFolder = join(scrubbedStudentFolder, betweenPath, filename)
                             newF = open(newFolder, 'w')
                             newF.write(replace)
                             newF.close()
             except:
-                #this code will be executed if the folder is not named properly
                 unScrubbedFolders = "\t" + studentSubmission + "\n"
                 numOfUnscrubbedFolders = numOfUnscrubbedFolders + 1
 

@@ -65,7 +65,9 @@ namespace ClientServer.Services
             foreach (var submission in assignment.Submissions)
             {
                 var submissionPath = Path.Combine(Directory.GetCurrentDirectory(), RootStorageDirectory, submission.FilePath);
-                var submissionDest = Path.Combine(destPath, GetSubmissionFolderName(submission));
+                var subFolderName = GetSubmissionFolderName(submission);
+                if (!ignore) subFolderName = $"{subFolderName}_{submission.SubmissionId}";
+                var submissionDest = Path.Combine(destPath, subFolderName);
                 DirectoryCopy(submissionPath, submissionDest, true, ignore);
             }
         }

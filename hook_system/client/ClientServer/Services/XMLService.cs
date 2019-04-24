@@ -188,24 +188,9 @@ namespace ClientServer.Services
         // Looks up the hash, and returns the submission id
         private async Task<long> DeHash(Package package, string hash)
         {
-            var hashMapping = await _context.StudentHashMapping
-                .Where(s => s.Hash_StudentNumber == hash)
-                .FirstAsync();
-            // Ensure that we only pull up submissions in the assignments we
-            //  are looking for
-            var ids = new List<long>();
-            ids.Add(package.AssignmentId);
-            foreach (var assignment in package.PreviousAssignments)
-            {
-                ids.Add(assignment.AssignmentId);
-            }
-            var submission = await _context.Submission
-                .Where(s => s.StudentFirstname == hashMapping.Firstname)
-                .Where(s => s.StudentLastname == hashMapping.Lastname)
-                .Where(s => s.StudentNumber == hashMapping.StudentNumber)
-                .Where(s => ids.Contains(s.AssignmentId)) 
-                .FirstAsync();
-            return submission.SubmissionId;
+            long result;
+            long.TryParse(hash, out result);
+            return result;
         }
     }
 
