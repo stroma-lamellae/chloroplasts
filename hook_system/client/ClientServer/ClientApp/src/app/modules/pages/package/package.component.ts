@@ -258,7 +258,7 @@ export class PackageComponent implements OnInit {
   }
 
   fileChange(event) {
-    this.files.push(event.target.files[0]);
+    this.fileList.push(event.target.files[0]);
   }
 
   public removeFile(file: File): void {

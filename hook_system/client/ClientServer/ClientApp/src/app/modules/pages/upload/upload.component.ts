@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class UploadComponent implements OnInit {
   @Input() bulkSubmissionFile: File;
+  @Input() selectedAssignmentId: number;
   @Output() submissionMade: EventEmitter<any> = new EventEmitter();
 
   Semester = ['Fall', 'Winter', 'Summer'];
@@ -20,9 +21,6 @@ export class UploadComponent implements OnInit {
   filteredYearCourses: Course[];
   filteredSemCourses: Course[];
   filteredProgramCourses: Course[];
-  filteredSupportYearCourses: Course[];
-  filteredSupportSemCourses: Course[];
-  filteredSupportProgramCourses: Course[];
 
   selectedCourse: Course;
   selectedCourseCode: string;
@@ -30,7 +28,6 @@ export class UploadComponent implements OnInit {
   selectedSemester: string;
   selectedYear: string;
 
-  selectedAssignmentId: number;
   selectedAssignment: Assignment;
 
   fileHover = false;
@@ -90,7 +87,9 @@ export class UploadComponent implements OnInit {
     this.selectedSemester = null;
     this.selectedProgramCode = null;
     this.selectedCourse = null;
+    this.selectedCourseCode = null;
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
 
     this.filteredSemCourses = null;
     this.filteredProgramCourses = null;
@@ -103,7 +102,10 @@ export class UploadComponent implements OnInit {
 
     this.selectedProgramCode = null;
     this.selectedCourse = null;
+    this.selectedCourseCode = null;
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
+
     this.filteredProgramCourses = null;
   }
 
@@ -112,7 +114,9 @@ export class UploadComponent implements OnInit {
       c => c.programCode.toString() === this.selectedProgramCode
     );
     this.selectedCourse = null;
+    this.selectedCourseCode = null;
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
   }
 
   updateAssignments() {
@@ -127,6 +131,7 @@ export class UploadComponent implements OnInit {
         });
     }
     this.selectedAssignmentId = null;
+    this.selectedAssignment = null;
   }
 
   selectAssignment() {

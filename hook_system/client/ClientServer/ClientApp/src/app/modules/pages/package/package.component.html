@@ -109,7 +109,7 @@
   <hr/>
   <div class="package__exclusions">
     <div class="existing-files">
-      <div *ngFor="let file of files">
+      <div *ngFor="let file of fileList">
         {{file.name}} <span (click)="removeFile(file)" style="color: red;">X</span>
       </div>
     </div>
