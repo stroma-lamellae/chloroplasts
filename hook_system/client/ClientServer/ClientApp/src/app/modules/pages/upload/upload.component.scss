@@ -1,0 +1,137 @@
+@import '../../../../variables';
+
+.upload {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    border-top: 30%;
+    padding-top: 5vh;
+    padding-left: 6vw;
+    padding-right: 3vw;
+
+    &__graphic {
+
+        &-image {
+            position: fixed;
+            left: 25%;
+            bottom: 0px;
+            padding: 30pt;
+        }
+
+    }
+
+    &__submit {
+
+        button {
+            border: 0px;
+            border-radius: 6px;
+            height: auto;
+            padding: 14px;
+            margin: 15px;
+            width: 20%;
+            position: relative;
+            float: right;
+            background: #1A5C80;
+            color: $color-primary-white;
+        }
+
+    }
+
+    &__jobs {
+        height: 100%;
+        
+        &-title {
+            clear: both;
+            font-weight: bold;
+            color: $color-text-black;
+            font-size: 22px;
+            position: relative;
+            width: 100%;
+            margin-bottom:0px;
+            padding-top: 20px;
+        }
+
+        &-subtitle {
+            clear: both;
+            font-weight: bold;
+            color: $color-text-black;
+            font-size: 17px;
+            position: relative;
+            width: 100%;
+            margin-bottom:0px;
+        }
+
+        &-input {
+            float: left;
+            margin: 20px;
+            width: 15%;
+
+            label {
+                display: block;
+                font-family: "SF Pro Text";
+                font-size: 17px;
+                line-height: 22px;
+                color: $color-text-black;
+                font-weight: bold;
+                margin: 4px;
+            }
+
+            select {
+                display: block;
+                background: $color-primary-white;
+                border: 0px;
+                border-radius: 6px;
+                height: auto;
+                min-width: 50%;
+                padding: 14px;
+                width: 95%;
+            }
+
+            input {
+                clear: both;
+                display: inline;
+            }
+
+        }
+
+    }
+
+    &__files {
+
+        &-existing {
+            clear: both;
+        }
+    }
+
+}
+
+.dropzone.hover {
+    border: 2px dashed $color-primary-blue;
+}
+
+.dropzone {
+    clear: both;
+    position: relative;
+    border: 1px dashed $color-primary-blue;
+    background: $color-primary-white;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px;
+    
+    &__image {
+        height: 80px;
+        width: 80px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    &__text {
+        bottom: 0px;
+        text-align: center;
+
+        a {
+            color: $color-primary-blue;
+        }
+    }
+}

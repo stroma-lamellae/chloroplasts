@@ -29,7 +29,11 @@ export class CourseDetailComponent implements OnInit {
   }
 
   semesterUpdate() {
-    this.course.semester = this.lowerSemesters.indexOf(this.semesterString.toLowerCase());
+    if (!this.course.courseId) {
+      this.course.semester = this.lowerSemesters.indexOf(this.semesterString.toLowerCase());
+    } else {
+      this.course.semester = this.lowerSemesters.indexOf(this.semesters[this.course.semester]);
+    }
   }
 
   submit() {

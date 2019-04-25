@@ -109,13 +109,13 @@
   <hr/>
   <div class="package__exclusions">
     <div class="existing-files">
-      <div *ngFor="let file of files">
+      <div *ngFor="let file of fileList">
         {{file.name}} <span (click)="removeFile(file)" style="color: red;">X</span>
       </div>
     </div>
     <div class="dropzone" [class.hover]="fileHover">
       <img class="dropzone__image" src="../../../../assets/cloud_upload.png" />
-      <p class="dropzone__text">Drag file here to upload!</p>
+      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden (change)="fileChange($event)"/> from your computer</p>
     </div>
   </div>
   <div class="package__launch">

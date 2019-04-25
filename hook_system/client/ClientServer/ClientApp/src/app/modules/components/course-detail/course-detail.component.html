@@ -1,24 +1,20 @@
 <div>
   <div class="course__new-input">
-    <label>Program Code:
-      <input [(ngModel)]="course.programCode" type="text" />
-    </label>
-  </div>
-  <div class="course__new-input">
-    <label>Course Code:
-      <input [(ngModel)]="course.courseCode" type="text"/>
-    </label>
-  </div>
-  <div class="course__new-input">
-    <label>Year:
+    <label>Year:</label>
       <input [(ngModel)]="course.year" type="number" />
-    </label>
   </div>
   <div class="course__new-input">
-    <label>Semester:
+    <label>Semester:</label>
       <input *ngIf="!this.course.courseId" [(ngModel)]="semesterString" (change)="semesterUpdate()" type="text"/>
-      <input *ngIf="this.course.courseId" [(ngModel)]="semesters[course.semester]" type="text"/>
-    </label>
+      <input *ngIf="this.course.courseId" [(ngModel)]="semesters[course.semester]" (change)="semesterUpdate()" type="text"/>
+  </div>
+  <div class="course__new-input">
+    <label>Program Code:</label>
+      <input [(ngModel)]="course.programCode" type="text" />
+  </div>
+  <div class="course__new-input">
+    <label>Course Code:</label>
+      <input [(ngModel)]="course.courseCode" type="text"/>
   </div>
   <div>
     <div *ngIf="course.courseId" class="course__new-button">
@@ -36,7 +32,6 @@
     </div>
     <div *ngFor="let assignment of course.assignments" class="course__new-assignments">
       <app-assignment [assignment]="assignment" (assignmentChange)="updateAssignment(assignment, $event)"></app-assignment>
-      <!-- <hr /> -->
     </div>
     <div class="course__new-button">
       <button (click)="addAssignment()">Add Assignment</button>
