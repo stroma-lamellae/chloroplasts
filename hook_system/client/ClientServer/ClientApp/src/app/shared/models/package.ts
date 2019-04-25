@@ -13,6 +13,7 @@ export class Line {
   submission: Submission;
   viewFile: File;
   percentage: string;
+  numLines: number;
 }
 
 export class Match {
@@ -20,6 +21,7 @@ export class Match {
   resultId: number;
   lines: Line[];
   maxPercentage: string;
+  maxLines: number;
 }
 
 export class Result {
