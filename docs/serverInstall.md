@@ -64,7 +64,7 @@ Header always set X-Content-Type-Options nosniff
 SSLOptions +StrictRequire
 ```
 
-- Now create a file `/etc/apache2/sites-available/app.conf` with the text below replacing `/home/4F00/chloroplasts/` with the running directory chosen earlier.
+- Now create a file `/etc/apache2/sites-available/app.conf` with the text below in it. Replace each instance of `/home/4F00/chloroplasts/` with the running directory chosen earlier.
 ```
 <IfModule mod_ssl.c>
 <VirtualHost *:port>
@@ -119,7 +119,7 @@ sudo apt-get update
 sudo apt-get install python-certbot-apache
 ```
 
-- Then create a file `/etc/apache2/sites-available/app.conf` with the text below replacing `/home/4F00/chloroplasts/` with the running directory chosen earlier and `dn.tld` with your FQDN.
+- Then create a file `/etc/apache2/sites-available/app.conf` with the text below in it. Replace each instance of  `/home/4F00/chloroplasts/` with the running directory chosen earlier and `dn.tld` with your FQDN.
 ```
 <VirtualHost *:port>
 	ServerName dn.tld
