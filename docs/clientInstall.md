@@ -37,14 +37,6 @@ dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 
-## Set up scrubbing script
-- Locate the scrubbing folder inside the client code folder then create a virtual environment and install the the dependencies in it.
-```
-virtualenv -p python3 env
-source env/bin/activate
-pip install -r requirements.txt
-```
-
 ## Set up webserver
 - Start by installing NGINX, `sudo apt-get install nginx`.
 - Run `dotnet publish -c Release` inside the ClientServer folder, this will create a release inside `./bin/Release/netcoreapp2.2/publish/`. Now copy that `publish/` folder to `/var/www/` and name the folder `ClientServer`.
