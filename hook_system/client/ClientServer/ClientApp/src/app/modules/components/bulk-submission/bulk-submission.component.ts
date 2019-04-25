@@ -19,7 +19,7 @@ export class BulkSubmissionComponent implements OnInit {
   uploadSubmission() {
     this._submissionService.uploadBulkSubmission(this.bulkSubmissionFile, this.assignmentId).subscribe(res => {
       this.submissionMade.emit(res);
-    })
+    });
   }
 
   fileChange(event) {

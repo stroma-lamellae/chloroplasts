@@ -1,3 +1,63 @@
-<p>
-  upload works!
-</p>
+<div class="app-upload upload">
+  <div class="upload__graphic">
+    <img class="upload__graphic-image" src="../../../../assets/addNewCourse.svg" />
+  </div>
+  <div class="upload__jobs">
+  <p class="upload__jobs-title">Upload Assignment Submissions</p>
+  </div>
+  <div class="upload__jobs-input">
+    <div class="form-group">
+      <label>Current Year</label>
+      <select [(ngModel)]="selectedYear" (change)="yearUpdate()">
+        <option [value]="course.year" *ngFor="let course of courses | unique:'year'">{{course.year}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedYear">
+    <div class="form-group">
+      <label>Semester</label>
+      <select [(ngModel)]="selectedSemester" (change)="semesterUpdate()">
+        <option [value]="course.semester" *ngFor="let course of filteredYearCourses | unique:'course.semester'">{{Semester[course.semester]}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedSemester">
+    <div class="form-group">
+      <label>Program Code</label>
+      <select [(ngModel)]="selectedProgramCode" (change)="programUpdate()">
+          <option [value]="course.programCode" *ngFor="let course of filteredSemCourses | unique:'programCode'">{{course.programCode}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedProgramCode">
+    <div class="form-group">
+      <label>Course Code</label>
+      <select [(ngModel)]="selectedCourseCode" (change)="updateAssignments()">
+          <option [value]="course.courseCode" *ngFor="let course of filteredProgramCourses | unique:'courseCode'">{{course.courseCode}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="upload__jobs-input" *ngIf="selectedCourse">
+    <div class="form-group">
+      <label>Assignment</label>
+      <select [(ngModel)]="selectedAssignmentId" (change)="selectAssignment()">
+        <option> </option>
+        <option [value]="assignment.assignmentId" *ngFor="let assignment of selectedCourse.assignments">{{assignment.name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="upload__files">
+    <div class="upload__files-existing">
+      <div *ngIf="bulkSubmissionFile">
+        {{bulkSubmissionFile.name}} <span (click)="removeFile()" style="color: red;">X</span>
+      </div>
+    </div>
+    <div class="dropzone" [class.hover]="fileHover" *ngIf="!bulkSubmissionFile">
+      <img class="dropzone__image" src="../../../../assets/cloud_upload.png" />
+      <p class="dropzone__text">Drag file here to upload! Or <a (click)="file.click()">browse</a> <input type="file" #file hidden (change)="fileChange($event)"/> from your computer</p>
+    </div>
+  </div>
+  <div class="upload__submit">
+    <button (click)="uploadSubmission()">SUBMIT</button>
+  </div>
+</div>

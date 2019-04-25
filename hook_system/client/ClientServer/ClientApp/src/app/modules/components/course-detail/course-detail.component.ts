@@ -3,6 +3,7 @@ import { Course, Assignment } from '../../../shared/models/course';
 import { CourseService } from '../../../core/services/course.service';
 import { Observable } from 'rxjs';
 import { AssignmentComponent } from '../assignment/assignment.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-course-detail',
@@ -11,13 +12,29 @@ import { AssignmentComponent } from '../assignment/assignment.component';
 })
 export class CourseDetailComponent implements OnInit {
   @Input() course: Course;
-  showAssignments: boolean = false;
+  showAssignments = false;
 
-  constructor(private _courseService: CourseService) { 
+  lowerSemesters = ['fall', 'winter', 'summer'];
+  semesters = ['Fall', 'Winter', 'Summer'];
+
+  semesterString: string;
+
+  constructor(
+    private _courseService: CourseService,
+    private _router: Router
+  ) { }
+
+  ngOnInit() {
     this.course = new Course();
   }
 
-  ngOnInit() { }
+  semesterUpdate() {
+    if (!this.course.courseId) {
+      this.course.semester = this.lowerSemesters.indexOf(this.semesterString.toLowerCase());
+    } else {
+      this.course.semester = this.lowerSemesters.indexOf(this.semesters[this.course.semester]);
+    }
+  }
 
   submit() {
     if (!this.course.courseId) {
@@ -25,12 +42,18 @@ export class CourseDetailComponent implements OnInit {
         this.course = res;
       });
     } else {
-      this._courseService.updateCourse(this.course);
+      this._courseService.updateCourse(this.course).subscribe();
     }
+
+    // redirect the page to the dashboard page
+    this._router.navigate(['/dashboard']);
   }
 
   delete() {
-    this._courseService.deleteCourse(this.course);
+    this._courseService.deleteCourse(this.course).subscribe();
+
+    // redirect the page to the dashboard page
+    this._router.navigate(['/dashboard']);
   }
 
   toggleAssignments() {

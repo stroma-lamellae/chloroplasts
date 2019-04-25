@@ -28,7 +28,7 @@ jobs:
               - psql -c "CREATE USER clientserver WITH ENCRYPTED PASSWORD 'password';" -U postgres
               - psql -c 'GRANT ALL PRIVILEGES ON DATABASE clientserver TO clientserver;' -U postgres
               - sudo apt-get update
-              - sudo apt-get install python3 python3-tk
+              - sudo apt-get install python3
               - sudo apt-get install python3-pip
               - cd hook_system/client/ClientServer/scrubbing
               - pip3 install --user -r requirements.txt
@@ -46,3 +46,19 @@ jobs:
               - npm install
           script:
               - npm run test
+        - stage: run python unittests
+          before_script:
+              - sudo apt-get update
+              - sudo apt install software-properties-common
+              - sudo add-apt-repository ppa:deadsnakes/ppa -y
+              - sudo apt update
+              - sudo apt install -y python3.7 python3-pip python3-setuptools python3-virtualenv libpython3.7-dev
+              - cd hook_system/processor/Src
+              - virtualenv -p /usr/bin/python3.7 env
+              - source env/bin/activate
+              - sudo -H pip3 install --upgrade pip
+              - pip3 install git+https://github.com/yaml/pyyaml.git
+              - pip3 install -r ../requirements.txt
+          script:
+              - python3.7 hook_suite.py
+
