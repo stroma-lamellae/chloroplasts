@@ -1,7 +1,9 @@
 # Installation of the Hook System
 
-## System Administration Installation
-
 ## Client Server Installation
 
+- [Client Instructions](clientInstall.md)
+
 ## Processing Server Installation
+
+- [Processing Instructions](serverInstall.md)
