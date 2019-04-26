@@ -133,7 +133,6 @@ namespace ClientServer.Services
             if (resultsResponse.Status.Equals("Ok")) {
                 resultsResponse.Result = await _xmlService.ParseXMLFile(package, resultsResponse.Results);
             } else {
-                Console.WriteLine(responseText);
                 if (resultsResponse.Wait != "")
                 {
                     resultsResponse.EstimatedCompletion = DateTime.Parse(resultsResponse.Wait);

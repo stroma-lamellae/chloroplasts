@@ -83,9 +83,13 @@ namespace ClientServer.Controllers
             var result = await _processingService.InitiateUpload(package); 
             
             if (result.StatusCode != HttpStatusCode.OK) {
+                package.Status = "Error: " + result.Status;
+                _context.Entry(package).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 return BadRequest($"Processing Server Response: {result.Status}");
             }
             // Otherwise, the upload was successful
+            package.Status = "Queued";
             package.JobId = result.JobId;
             package.EstimatedCompletion = result.EstimatedCompletionTime;
             _context.Entry(package).State = EntityState.Modified;
@@ -117,11 +121,16 @@ namespace ClientServer.Controllers
             var response = await _processingService.RequestResults(package);
 
             if (response.StatusCode != HttpStatusCode.OK) {
+                package.Status = "Error: " + response.Status;
+                _context.Entry(package).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 return BadRequest($"Processing Server Response: {response.Status}");
             } 
             if (response.Status.Equals("Ok")) {
+                package.Status = "Completed";
                 package.Result = response.Result;
             } else {
+                package.Status = "Queued";
                 package.EstimatedCompletion = response.EstimatedCompletion;
             }
             _context.Entry(package).State = EntityState.Modified;

@@ -42,6 +42,7 @@ export class PreviousAssignment {
 export class Package {
   packageId: number;
   assignmentId: number;
+  status: string;
   estimatedCompletion: Date;
   assignment: Assignment;
   result: Result;
