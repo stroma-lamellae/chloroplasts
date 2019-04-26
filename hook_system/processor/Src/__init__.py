@@ -16,17 +16,25 @@ app = connexion.App(__name__, specification_dir='./')
 # Read the swagger.yml file to configure the routes
 app.add_api('swagger.yml')
 
-#TODO this will be in a config file where the results are stored
 if not os.path.exists(os.path.join(config["DISK"]["RESULT"], "Results")):
     os.mkdir(os.path.join(config["DISK"]["RESULT"], "Results"))
 
 if not os.path.exists(os.path.join(config["DISK"]["Queue"], "Queue")):
     os.mkdir(os.path.join(config["DISK"]["Queue"], "Queue"))
 
-thread = Thread(target=submissionQueue.processQueue)
-thread.start()
+MAX_THREADS = 4
+
+threadList = []
+
+for i in range(MAX_THREADS):
+    threadList.append(Thread(target=submissionQueue.processQueue))
+
+for i in range(len(threadList)):
+    threadList[i].start()
 
 # If we're running in stand alone mode, run the application
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)
-    thread.join()
+    
+    for i in range(len(threadList)):
+        threadList[i].join()
