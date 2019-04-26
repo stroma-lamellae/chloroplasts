@@ -27,6 +27,4 @@ export class AssignmentService {
       this._apiEndpoint + '/' + assignment.assignmentId
     );
   }
-
-
 }
