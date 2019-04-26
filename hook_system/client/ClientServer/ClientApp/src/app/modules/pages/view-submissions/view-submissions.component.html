@@ -1,3 +1,75 @@
-<p>
-  view-submissions works!
-</p>
+<div class="vs">
+  <div class="vs__header">
+    View Submissions
+  </div>
+  <div class="vs__filter">
+    <div class="vs__input">
+      <div class="form-group">
+        <label>Current Year</label>
+        <select [(ngModel)]="selectedYear" (change)="yearUpdate()">
+          <option
+            [value]="course.year"
+            *ngFor="let course of (courses | unique: 'year')"
+            >{{ course.year }}</option
+          >
+        </select>
+      </div>
+    </div>
+    <div class="vs__input">
+      <div class="form-group">
+        <label>Semester</label>
+        <select [(ngModel)]="selectedSemester" (change)="semesterUpdate()">
+          <option
+            [value]="course.semester"
+            *ngFor="let course of (courses | unique: 'semester')"
+            >{{ course.semester }}</option
+          >
+        </select>
+      </div>
+    </div>
+    <div class="vs__input" *ngIf="selectedSemester">
+      <div class="form-group">
+        <label>Program Code</label>
+        <select [(ngModel)]="selectedProgramCode" (change)="programUpdate()">
+          <option
+            [value]="course.programCode"
+            *ngFor="let course of (filteredSemCourses | unique: 'programCode')"
+            >{{ course.programCode }}</option
+          >
+        </select>
+      </div>
+    </div>
+    <div class="vs__input" *ngIf="selectedProgramCode">
+      <div class="form-group">
+        <label>Course Code</label>
+        <select [(ngModel)]="selectedCourseCode" (change)="updateAssignments()">
+          <option
+            [value]="course.courseCode"
+            *ngFor="
+              let course of (filteredProgramCourses | unique: 'courseCode')
+            "
+            >{{ course.courseCode }}</option
+          >
+        </select>
+      </div>
+    </div>
+    <div class="vs__input" *ngIf="selectedCourse">
+      <div class="form-group">
+        <label>Assignment</label>
+        <select
+          [(ngModel)]="selectedAssignmentId"
+          (change)="selectAssignment()"
+        >
+          <option value=-1> </option>
+          <option
+            [value]="assignment.assignmentId"
+            *ngFor="let assignment of selectedCourse.assignments"
+            >{{ assignment.name }}</option
+          >
+        </select>
+      </div>
+    </div>
+  </div>
+  <app-submission-display [assignmentId]="selectedAssignmentId"></app-submission-display>
+</div>
+

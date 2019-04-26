@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpRequest,
+  HttpEventType,
+  HttpResponse,
+  HttpErrorResponse
+} from '@angular/common/http';
 import { Submission } from '../../shared/models/submission';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { FileUpload } from '../../shared/models/file-upload';
 import { finalize } from 'rxjs/operators';
 import { UploadStatus } from 'src/app/shared/models/upload-status.enum';
-
 
 // File upload stuff from:
 //  https://medium.com/makonis/queue-multiple-files-for-uploading-with-angular-and-asp-net-core-2-1-e4aad2c52bf
@@ -14,7 +19,7 @@ import { UploadStatus } from 'src/app/shared/models/upload-status.enum';
 })
 export class SubmissionService {
   private _apiEndpoint = '/api/submission';
-  
+
   private _isUploading: boolean;
   private _currentlyUploading: BehaviorSubject<boolean>;
   private _files: FileUpload[] = [];
@@ -55,7 +60,8 @@ export class SubmissionService {
     queuedUploadFile.updateProgress(0);
 
     const request = this.createRequest(queuedUploadFile);
-    this._httpClient.request(request)
+    this._httpClient
+      .request(request)
       .pipe(
         finalize(() => {
           // Upload finished. Whether successful or failed.
@@ -63,34 +69,38 @@ export class SubmissionService {
           this.checkAndUploadNextFile();
         })
       )
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          const percentDone = Math.round(100 * event.loaded / event.total);
-          queuedUploadFile.updateProgress(percentDone);
-        } else if (event instanceof HttpResponse) {
-          queuedUploadFile.completed();
-        }
+      .subscribe(
+        event => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round((100 * event.loaded) / event.total);
+            queuedUploadFile.updateProgress(percentDone);
+          } else if (event instanceof HttpResponse) {
+            queuedUploadFile.completed();
+          }
 
-        this._uploadQueue.next(this._files);
-      }, (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          // A client-side or network error occurred. Handle it accordingly.
-          queuedUploadFile.failed();
-        } else {
-          // The backend returned an unsuccessful response code.
-          queuedUploadFile.failed();
-        }
+          this._uploadQueue.next(this._files);
+        },
+        (err: HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            queuedUploadFile.failed();
+          } else {
+            // The backend returned an unsuccessful response code.
+            queuedUploadFile.failed();
+          }
 
-        // Try 3 times to upload this file, before keeping it as failed
-        queuedUploadFile.attempts+=1;
-        if (queuedUploadFile.attempts < 3) {
-          queuedUploadFile.status = UploadStatus.NotStarted;
-        }
+          // Try 3 times to upload this file, before keeping it as failed
+          queuedUploadFile.attempts += 1;
+          if (queuedUploadFile.attempts < 3) {
+            queuedUploadFile.status = UploadStatus.NotStarted;
+          }
 
-        this._uploadQueue.next(this._files);
-      }, () => {
-        console.info("completed!");
-      });
+          this._uploadQueue.next(this._files);
+        },
+        () => {
+          console.info('completed!');
+        }
+      );
   }
 
   private set isUploading(value: boolean) {
@@ -101,10 +111,14 @@ export class SubmissionService {
   private createRequest(queuedUploadFile: FileUpload) {
     const formData = new FormData();
     formData.append('files', queuedUploadFile.file);
-    const uri = this._apiEndpoint + "/" + queuedUploadFile.submission.submissionId + "/files";
+    const uri =
+      this._apiEndpoint +
+      '/' +
+      queuedUploadFile.submission.submissionId +
+      '/files';
     const request = new HttpRequest('PUT', uri, formData, {
-        reportProgress: true
-      });
+      reportProgress: true
+    });
     return request;
   }
 
@@ -126,8 +140,28 @@ export class SubmissionService {
 
   uploadBulkSubmission(file: File, assignmentId: number): Observable<any> {
     let formData = new FormData();
-    formData.append("file", file);
-    
-    return this._httpClient.post(this._apiEndpoint + "/bulk/" + assignmentId, formData);
+    formData.append('file', file);
+    return this._httpClient.post(
+      this._apiEndpoint + '/bulk/' + assignmentId,
+      formData
+    );
+  }
+
+  getSubmissionsForAssignment(assignmentId: number): Observable<Submission[]> {
+    return this._httpClient.get<Submission[]>(
+      this._apiEndpoint + '/' + assignmentId + '/assignment'
+    );
+  }
+
+  getFolderListing(submissionId: number): Observable<string[]> {
+    return this._httpClient.get<string[]>(
+      this._apiEndpoint + '/' + submissionId + '/filelist'
+    );
+  }
+
+  getFileContents(filename: string, submissionId: number): Observable<string[]> {
+    return this._httpClient.get<string[]>(
+      this._apiEndpoint + '/' + submissionId + '/' + filename
+    );
   }
 }

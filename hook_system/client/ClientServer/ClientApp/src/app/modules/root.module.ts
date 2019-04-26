@@ -18,6 +18,7 @@ import { UploadComponent } from './pages/upload/upload.component';
 import { RouterModule } from '@angular/router';
 import { ResultListComponent } from './pages/result-list/result-list.component';
 import { ResultComponent } from './pages/result/result.component';
+import { SubmissionDisplayComponent } from './components/submission-display/submission-display.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
@@ -37,7 +38,8 @@ import { ResultComponent } from './pages/result/result.component';
     TestSubmissionComponent,
     ViewSubmissionsComponent,
     UploadComponent,
-    ResultComponent
+    ResultComponent,
+    SubmissionDisplayComponent
   ]
 })
 export class RootModule {}

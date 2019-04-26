@@ -38,7 +38,20 @@ namespace ClientServer.Controllers
             }
             return submission;
         }
+        
+        // GET: api/submission/#/assignment
 
+        [HttpGet("{id}/assignment")]
+        public async Task<ActionResult<List<Submission>>> GetSubmissionByAssignmentId(long id)
+        {
+            var submissions = await _context.Submission.Where(s => s.AssignmentId == id).ToListAsync();
+
+            if (submissions == null)
+            {
+                return NotFound();
+            }
+            return submissions;
+        }
         // POST: api/submission
         // Adds a submission to the database, and stores all of the files
         // File stuff is based off of:
@@ -188,6 +201,23 @@ namespace ClientServer.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("{id}/filelist")]
+        public async Task<string[]> GetFileList(long id)
+        {
+            var submission = await _context.Submission.FindAsync(id);
+
+            return  _fileService.GetFolderListing(submission.FilePath);    
+        }
+
+        [HttpGet("{id}/{filename}")]
+        public async Task<string[]> GetFileContents(long id, string filename)
+        {
+            var submission = await _context.Submission.FindAsync(id);
+            var filepath = Path.Join(submission.FilePath, filename);
+
+            return await _fileService.ReadFileFromStorageAsync(filepath);
         }
     }
 
