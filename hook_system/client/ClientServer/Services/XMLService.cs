@@ -176,7 +176,7 @@ namespace ClientServer.Services
                     line.SubmissionId = await DeHash(package, sub.Hash);
                     line.LineStart = sub.LineStart;
                     line.LineEnd = sub.LineFinish;
-                    line.FilePath = sub.File.Split(sub.Hash)[1].Substring(1);
+                    line.FilePath = sub.File.Split($"_{sub.Hash}")[1].Substring(1);
                     modelMatch.Lines.Add(line);
                 }
                 

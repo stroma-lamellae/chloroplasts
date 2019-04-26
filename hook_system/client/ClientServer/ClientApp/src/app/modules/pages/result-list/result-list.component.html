@@ -3,7 +3,7 @@
   <div class="results__container">
     <table class="results__list">
       <tr class="results__list--header">
-        <th>Date</th>
+        <th>Estimated Completion Time</th>
         <th>Course</th>
         <th>Title</th>
         <th>Matches</th>
@@ -24,7 +24,40 @@
         <td *ngIf="package.result !== null">
           {{ package.result.matches.length }}
         </td>
-        <td>A</td>
+        <td *ngIf="package.status; then checkStatus else checkResult"></td>
+        <ng-template #checkStatus>
+          <td>
+            <span 
+              *ngIf="package.status.startsWith('Error')" 
+              class="results__list--dot results__list--dot-error" 
+              title="Error: {{package.status}}">
+            </span>
+            <span
+              *ngIf="package.status == 'Queued'"
+              class="results__list--dot results__list--dot-queued" 
+              title="Queued">
+            </span>
+            <span
+              *ngIf="package.status == 'Completed'"
+              class="results__list--dot results__list--dot-completed" 
+              title="Completed">
+            </span>
+          </td>
+        </ng-template>
+        <ng-template #checkResult>
+          <td>
+            <span
+              *ngIf="package.result === null"
+              class="results__list--dot results__list--dot-queued" 
+              title="Queued">
+            </span>
+            <span
+              *ngIf="package.result !== null"
+              class="results__list--dot results__list--dot-completed" 
+              title="Completed">
+            </span>
+          </td>
+        </ng-template>
       </tr>
     </table>
   </div>

@@ -92,16 +92,21 @@ namespace ClientServer.Controllers
 
                 if (response.StatusCode != HttpStatusCode.OK) 
                 {
+                    package.Status = "Error: " + response.Status;
+                    _context.Entry(package).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
                     return BadRequest($"Processing Server Response: {response.Status}");
                 } 
                 if (response.Status.Equals("Ok")) 
                 {
+                    package.Status = "Completed";
                     package.Result = response.Result;
                     _context.Entry(package).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 } 
                 else 
                 {
+                    package.Status = "Queued";
                     package.EstimatedCompletion = response.EstimatedCompletion;
                     _context.Entry(package).State = EntityState.Modified;
                     await _context.SaveChangesAsync();

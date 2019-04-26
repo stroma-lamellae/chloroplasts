@@ -34,5 +34,26 @@
                 padding-bottom: 10px;
             }
         }
+
+        &--dot{
+            height: 14px;
+            width: 14px;
+            margin-left: 15px;
+            border-radius: 50%;
+
+            display: inline-block;
+
+            &-completed{
+                background-color: #00c48c;
+            }
+
+            &-queued{
+                background-color: #f93;
+            }
+
+            &-error{
+                background-color: #ff647c;
+            }
+        }
     }
 }

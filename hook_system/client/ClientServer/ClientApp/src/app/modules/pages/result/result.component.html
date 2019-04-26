@@ -11,7 +11,7 @@
     >
       <div class="result__header" (click)="toggleMatch(j)">
         <span>Match {{ j + 1 }}</span>
-        <span>{{ match.maxPercentage }}% Matching</span>
+        <span>{{ match.maxLines }} Lines / {{ match.maxPercentage }}% Matching</span>
         <span>{{ match.lines.length }} Matching Files</span>
       </div>
       <div class="result__match--container" *ngIf="toggles[j]">

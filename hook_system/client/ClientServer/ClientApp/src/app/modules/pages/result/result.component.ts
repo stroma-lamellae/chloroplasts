@@ -52,6 +52,7 @@ export class ResultComponent implements OnInit {
       this.rightToggles.fill(false);
       for (let i = 0; i < this.result.matches.length; i++) {
         this.result.matches[i].maxPercentage = "0";
+        this.result.matches[i].maxLines = 0;
         for (let j = 0; j < this.result.matches[i].lines.length; j++) {
           const path = this.result.matches[i].lines[j].filePath;
           const submissionId = this.result.matches[i].lines[j].submissionId;
@@ -61,9 +62,13 @@ export class ResultComponent implements OnInit {
           );
           // Find out how much of the file this match is
           line.percentage = (((line.lineEnd - line.lineStart) / line.viewFile.lines.length)*100).toFixed(0);
+          line.numLines = line.lineEnd - line.lineStart;
           // Save the highest percentage into the match
           if (parseInt(line.percentage) > parseInt(this.result.matches[i].maxPercentage)) {
             this.result.matches[i].maxPercentage = line.percentage;
+          }
+          if (line.numLines > this.result.matches[i].maxLines) {
+            this.result.matches[i].maxLines = line.numLines;
           }
 
           // Try and fix test naming, so that the TA doesn't get confused by
@@ -81,7 +86,7 @@ export class ResultComponent implements OnInit {
         }
       }
       this.result.matches.sort((a,b) => {
-        return parseInt(b.maxPercentage) - parseInt(a.maxPercentage);
+        return b.maxLines - a.maxLines;
       });
       this.loading = false;
     }, err => {
