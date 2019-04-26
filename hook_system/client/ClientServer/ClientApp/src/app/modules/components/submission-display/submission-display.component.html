@@ -1,0 +1,37 @@
+<div class="sd" *ngIf="_assignmentId !== undefined && assignmentId !== null && assignmentId != -1">
+  <div class="sd__header"></div>
+  <div class="sd__container">
+    <div class="sd__student-list" *ngIf="!studentIsSelected">
+      <table>
+        <tr>
+          <th class="sd__cell-left">Student Name</th>
+          <th class="sd__cell-right">Student Number</th>
+        </tr>
+        <tr
+          (click)="selectSubmission(submission)"
+          *ngFor="let submission of _submissions"
+        >
+          <td class="sd__cell-left">
+            {{ submission.studentFirstname }} {{ submission.studentLastname }}
+          </td>
+          <td class="sd__cell-right">{{ submission.studentNumber }}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="sd__student-list" *ngIf="studentIsSelected">
+      <div class="sd__back" (click)="goBack()">BACK</div>
+      <div
+        (click)="selectFile(filename, i)"
+        [class.selected]="i === _selectedFileIndex"
+        *ngFor="let filename of _fileList; let i = index"
+      >
+        {{ filename }}
+      </div>
+    </div>
+    <div class="sd__file">
+      <pre *ngFor="let line of _selectedFile; let i = index"
+        >{{ i + 1 }} {{ line }}</pre
+      >
+    </div>
+  </div>
+</div>

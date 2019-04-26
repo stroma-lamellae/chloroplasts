@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ClientServer.Helpers;
 using Microsoft.Extensions.Logging;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query.ExpressionTranslators.Internal;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using SharpCompress.Writers;
@@ -49,6 +51,11 @@ namespace ClientServer.Services
         // Reads a code file from the Temp/Scrubbed/{filePath} location
         // and returns an array of read lines
         Task<FileResult> ReadFileFromStorageAsync(long submissionId, string lineFilePath, string submissionFilePath);
+        
+        Task<string[]> ReadFileFromStorageAsync(string filepath);
+        
+        // Gets a listing of all files in a directory recusively
+        string[] GetFolderListing(string filepath);
     }
 
     public class FileService : IFileService
@@ -262,6 +269,30 @@ namespace ClientServer.Services
                 fileName = filename
             };
         }
+        
+        public async Task<string[]> ReadFileFromStorageAsync(string filepath)
+        {
+           
+            var path = Path.Join("Temp", filepath);
+            
+            var lines = await System.IO.File.ReadAllLinesAsync(path);
+
+            return lines;
+        }
+
+        public string[] GetFolderListing(string filepath)
+        {
+            var path = Path.Join(GetStorageDirectory(), filepath);
+            var filepaths = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            for (var i = 0; i < filepaths.Length; i++)
+            {
+                filepaths[i] = filepaths[i]
+                    .Substring(path.Length + 1,filepaths[i].Length - 1 - path.Length);
+            }
+            return filepaths;
+        }
+        
+        
         
         public string GetStorageDirectory() 
         {
