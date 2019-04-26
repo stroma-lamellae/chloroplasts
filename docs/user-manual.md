@@ -57,7 +57,7 @@ The current course page is the landing page once the user logs into the applicat
 
 ### How to Use the Current Courses Page
 
-The courses are conveniently separated by program code (ex. COSC or APCO). This page is also used as the dashboard for the professor. Users can edit current courses by clicking the pencil icon on the top right-hand corner of each class (an example is highlighted in yellow below). Users may also view the submissions for each assignment by clicking the assignment name (an example of this is highlighted in yellow below).
+The courses are conveniently separated by program code (ex. COSC or APCO). This page is also used as the dashboard for the professor. Users can edit current courses by clicking the pencil icon on the top right-hand corner of each class (an example is highlighted in yellow below).
 
 ![current semester](images/CurrentSemester.png)<!-- .element align="center" height="100%" width="100%" -->
 
@@ -118,15 +118,15 @@ The purpose of the View Submissions Page is to view the submissions for a partic
 
 ### How to Use the View Submissions Page
 
-To view a student’s submissions for a particular assignment, the user will have to use the year, semester, program code, course code, and assignment drop down filters to select the desired assignment. The student submissions relating to this assignment will be listed on the left hand side of the page. The right hand side will show the contents of the chosen student submission. This will work as a File Explorer Window.
+To view a student’s submissions for a particular assignment, the user will have to use the year, semester, program code, course code, and assignment drop down filters to select the desired assignment. The student submissions relating to this assignment will be listed on the left hand side of the page. 
 
 ![view submissions](images/ViewSubmissions.PNG)<!-- .element align="center" height="100%" width="100%" -->
 
-From here, the user may select to see the contents of a folder, or see a file. If the folder is selected then the breadcrumb navigation is updated to show the hierarchy of the current folder, and the user may only see the contents of that folder. If the file is selected, then the breadcrumb navigation is also updated to show what file is being viewed, and the File Explorer Window will convert into a File Viewer.
+From here, the user may select a student submisison folder, or a file. If a folder is selected then the left-hand side will update to show the contents of the selected folder. If a file is selected, the right-hand side of the page will turn into a File Viewer where the selected file will be displayed.
 
 ![view submissions](images/ViewSubmissions_FileView.PNG)<!-- .element align="center" height="100%" width="100%" -->
 
-Note: to travel up the folder hierarchy, the user must simply click the folder that they would like to see the contents of.
+Note: to travel up the folder hierarchy, the user must simply click the back button on the right-hand side.
 
 ## Upload Page
 
