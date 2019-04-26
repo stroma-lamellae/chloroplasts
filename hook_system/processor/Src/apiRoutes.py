@@ -12,10 +12,6 @@ import tarfile as tar
 import psycopg2
 import configparser
 
-# These can be removed later
-from email.message import EmailMessage
-import smtplib
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
 configFilename = os.path.join(dir_path,"config.ini")
 
@@ -25,21 +21,6 @@ config.read(configFilename)
 validFileExt = {'.java', '.cpp', '.c', '.hpp', '.h'}
 
 def submit(userId: str, email: str, data) -> str:
-
-    if email == "ss17de@brocku.ca":
-        try:
-            msg = EmailMessage()
-            msg.set_content("Please work, please.....")
-            msg["Subject"]= "4F00 TA SUBMITTED A JOB!!!!"
-            msg["To"] = str(config["EMAIL"]["NOTS"]).split(',')
-            msg["From"] = config["EMAIL"]["FromAddr"]
-            s = smtplib.SMTP_SSL(config["EMAIL"]["SMTP_Server"], config["EMAIL"]["SMTP_Port"])
-            s.login(config["EMAIL"]["FromAddr"], config["EMAIL"]["FromPassword"])
-            s.sendmail(config["EMAIL"]["FromAddr"], str(config["EMAIL"]["NOTS"]).split(','), msg.as_string())
-            s.quit()
-        except Exception as e:
-            print("Failed to send email notification")
-            print(e)#RIP Us
 
     auth_ok = authorize(userId)
     if not auth_ok[0]:
