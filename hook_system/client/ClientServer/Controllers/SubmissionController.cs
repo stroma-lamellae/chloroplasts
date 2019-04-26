@@ -211,8 +211,8 @@ namespace ClientServer.Controllers
             return  _fileService.GetFolderListing(submission.FilePath);    
         }
 
-        [HttpGet("{id}/{filename}")]
-        public async Task<string[]> GetFileContents(long id, string filename)
+        [HttpPost("{id}/getfile")]
+        public async Task<string[]> GetFileContents([FromForm] string filename ,long id)
         {
             var submission = await _context.Submission.FindAsync(id);
             var filepath = Path.Join(submission.FilePath, filename);

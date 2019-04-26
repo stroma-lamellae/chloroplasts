@@ -15,8 +15,7 @@
       }
     }
     div {
-
-        padding: 5px;
+      padding: 5px;
       &:hover {
         cursor: pointer;
       }
@@ -25,19 +24,19 @@
   &__back {
     font-weight: bold;
   }
-  
-  .selected{
-      background-color: gainsboro;
+
+  .selected {
+    background-color: gainsboro;
   }
 
-&__cell-left{
+  &__cell-left {
     padding-left: 5px;
-}
+  }
 
-&__cell-right{
+  &__cell-right {
     padding-right: 5px;
     text-align: center;
-}
+  }
   &__file {
     padding: 5px;
     width: 70%;
@@ -46,8 +45,9 @@
     overflow: scroll;
     background-color: white;
 
-    pre{
-        margin-bottom: 0px;
+    pre {
+      overflow: initial;
+      margin-bottom: 0px;
     }
   }
 }

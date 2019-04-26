@@ -160,8 +160,11 @@ export class SubmissionService {
   }
 
   getFileContents(filename: string, submissionId: number): Observable<string[]> {
-    return this._httpClient.get<string[]>(
-      this._apiEndpoint + '/' + submissionId + '/' + filename
+    let formData = new FormData();
+    formData.append('filename',filename);
+
+    return this._httpClient.post<string[]>(
+      this._apiEndpoint + '/' + submissionId + '/getfile', formData
     );
   }
 }
