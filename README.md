@@ -37,5 +37,6 @@ The system may support multiple languages. For the minimum requirement, it must 
 
 [@yinny](https://github.com/yinny)
 
-Contributions to this project are welcome. Please contact the maintainers if
+Contributions to this project are welcome. We recommend following the workflow
+specified in our [wiki](https://github.com/stroma-lamellae/chloroplasts/wiki/Github-Workflow). Please contact the maintainers if
 your pull request is not getting attention.
