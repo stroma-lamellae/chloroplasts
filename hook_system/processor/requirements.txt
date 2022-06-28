@@ -1,5 +1,5 @@
 antlr4-python3-runtime==4.7.2
-arrow==0.13.1
+arrow==0.15.1
 astroid==2.2.5
 bcrypt==3.1.6
 certifi==2018.11.29
